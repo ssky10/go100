@@ -17,10 +17,10 @@ class ClassesList extends Component {
             <div>
                 <ul>
                     <li>
-                        <Link to="classeslist/class"><a href="#" className={cx('dummy')}>Class Page</a></Link>
+                        <Link to="class"><a href="#" className={cx('dummy')}>Class Page</a></Link>
                     </li>
                     <li>
-                        <Link to="classeslist/exam"><a href="#" className={cx('dummy')}>Exam</a></Link>
+                        <Link to="exam"><a href="#" className={cx('dummy')}>Exam</a></Link>
                     </li>
                 </ul>
             </div>

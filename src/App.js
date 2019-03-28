@@ -13,8 +13,8 @@ class App extends Component {
         <div>
           <Route exact path="/" component={ Login }/>
           <Route exact path="/classeslist" component={ ClassesList }/>
-          <Route exact path="/classeslist/class" component={ Class }/>
-          <Route exact path="/classeslist/exam" component={ Exam } />
+          <Route exact path="/class" component={ Class }/>
+          <Route exact path="/exam" component={ Exam } />
         </div>
       </BrowserRouter>
     );
