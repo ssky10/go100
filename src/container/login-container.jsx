@@ -3,6 +3,9 @@ import React, { Component } from 'react';
 import classNames from "classnames/bind";
 import { Link } from "react-router-dom";
 
+//services
+import * as service from "../services/users";
+
 //stylesheet
 import styles from 'container/login-container.css';
 
@@ -23,8 +26,14 @@ class LoginContainer extends Component {
     }
 
     handleSubmit = (e) => {
-        if(e.target.name==='login')
-            alert("로그인\n"+"USER : "+this.state.USER+"\nPASSWORD : "+this.state.PASSWORD);
+        if(e.target.name==='login'){
+            const result = await service.login(this.state.USER,this.state.PASSWORD);
+            if(result.data.result){
+                
+            }else{
+
+            }
+        }
         else if(e.target.name==='guest')
             alert("게스트");
     }
@@ -46,9 +55,9 @@ class LoginContainer extends Component {
                     <form action="" onSubmit={this.handleSubmit} name="login">
                         <input name="USER" type="text" placeholder="ENTER E-MAIL" value={this.state.USER} onChange={this.handleChange}/>
                         <input name="PASSWORD" type="password" placeholder="ENTER PASSWORD" value={this.state.PASSWORD} onChange={this.handleChange}/>
-                        <Link to="/classeslist">
+
                             <button className={cx('btn-submit')} type="submit">SIGN IN</button>
-                        </Link>
+
                     </form>
                     <span className={cx('divider')}>OR</span>
                     <form action="" onSubmit={this.handleSubmit} name="guest">
