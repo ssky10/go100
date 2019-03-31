@@ -34,5 +34,17 @@
   ],
   "devDependencies": {
     "cross-env": "^5.2.0"
-  }
+  },
+  "description": "# 페이지 ## 로그인 페이지(/) ID/PW 입력창, 로그인 버튼 ## 수업리스트 페이지(/classeslist) 비밀번호 변경 버튼, 각 수업별 이동 버튼(수업명, 강사명, 수업시간, ...) ## 수업별 페이지(/class) ### 공지사항 ### QnA ### 과제제출 ### 라이브 퀴즈 ### 수업관리(강사전용)",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yg3988/go100.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yg3988/go100/issues"
+  },
+  "homepage": "https://github.com/yg3988/go100#readme"
 }
