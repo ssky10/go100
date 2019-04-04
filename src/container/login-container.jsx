@@ -71,7 +71,7 @@ class LoginContainer extends Component {
               <input
                 name="USER"
                 type="text"
-                placeholder="ENTER E-MAIL"
+                placeholder="ENTER ID"
                 value={this.state.USER}
                 onChange={this.handleChange}
               />
