@@ -1,0 +1,40 @@
+.board-nav-container{    
+    float: left;		
+}
+
+.board-nav-body{
+		width: 350px;
+    height: 500px;
+		
+		background-color: rgba(0, 0, 0, 0.548);
+		user-select: none;
+}
+
+.board-nav-body div {
+    position: relative;
+    width: inherit;
+    height: 20%;
+    
+    display: block; /* Make the links appear below each other */
+    text-decoration: none; /* Remove underline from links */
+    font-family: 'Nanum Gothic';
+    font-size: 24px;
+    font-weight: 700;
+    text-align: center;
+    color: #fff;
+
+    transition: 0.4s;
+    cursor: pointer;
+  }
+  
+  .board-nav-body div:hover{
+    background-color: rgba(204, 204, 204, 0.699); /* Dark grey background on mouse-over */
+    color: #000;
+  }
+
+  .board-nav-body div p {
+    position: absolute;
+    top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+  }

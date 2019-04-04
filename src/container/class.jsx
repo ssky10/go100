@@ -2,6 +2,10 @@
 import React, { Component } from 'react';
 import classNames from 'classnames/bind';
 
+//components
+import Navigator from "components/class/navigator";
+import Boardmenu from "components/class/board-nav";
+
 //stylesheet
 import style from 'container/class.css';
 
@@ -16,8 +20,13 @@ class Class extends Component {
     }
     render() { 
         return (
-            <div>
-                class page
+            <div className="class-container">
+                <Navigator />
+                <div className={cx('main-body')}>
+                    <div className={cx("main-top")}>
+                        <Boardmenu/>
+                    </div>
+                </div>
             </div>
         );
     }
