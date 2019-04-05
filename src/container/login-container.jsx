@@ -1,44 +1,35 @@
 //node_modules
 import React, { Component } from "react";
-import classNames from "classnames/bind";
-import { Link, Redirect } from "react-router-dom";
+import { Redirect } from "react-router-dom";
+import { connect } from "react-redux";
 
 //services
 import * as service from "../services/users";
+import { login } from "../store/modules/auth";
 
 //stylesheet
-import styles from "container/login-container.css";
-
-//
-const cx = classNames.bind(styles);
-//const isLogin = false;
+import LoginPanel from "../component/loginPanel";
 
 class LoginContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLogin: false,
       USER: "",
       PASSWORD: ""
     };
-
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
 
   handleSubmit = e => {
-    const setTrue = () => {
-      this.setState({
-        isLogin: true
-      });
-    };
+    const { login } = this.props;
     if (e.target.name === "login") {
       service
         .login(this.state.USER, this.state.PASSWORD)
         .then(function(response) {
           if (response.data.result) {
             alert(response.data.nickname + "님 환영합니다!");
-            setTrue();
+            login(response.data.nickname);
           } else {
             alert(response.data.msg);
           }
@@ -61,45 +52,34 @@ class LoginContainer extends Component {
   };
 
   render() {
+    const { isLogin } = this.props;
+    console.log(isLogin);
     return (
       <div>
-        {this.state.isLogin && <Redirect to="/classeslist" />}
-        <div className={cx("home")}>
-          <div className={cx("login-container")}>
-            <h2 className={cx("login-header")}>go100</h2>
-            <form action="" onSubmit={this.handleSubmit} name="login">
-              <input
-                name="USER"
-                type="text"
-                placeholder="ENTER ID"
-                value={this.state.USER}
-                onChange={this.handleChange}
-              />
-              <input
-                name="PASSWORD"
-                type="password"
-                placeholder="ENTER PASSWORD"
-                value={this.state.PASSWORD}
-                onChange={this.handleChange}
-              />
-
-              <button className={cx("btn-submit")} type="submit">
-                SIGN IN
-              </button>
-            </form>
-            <span className={cx("divider")}>OR</span>
-            <form action="" onSubmit={this.handleSubmit} name="guest">
-              <Link to="/classeslist">
-                <button className={cx("btn-guest")} type="submit">
-                  Enter to Guest
-                </button>
-              </Link>
-            </form>
-          </div>
-        </div>
+        {isLogin && <Redirect to="/classeslist" />}
+        <LoginPanel
+          user={this.state.USER}
+          password={this.state.PASSWORD}
+          onChange={this.handleChange}
+          onSubmit={this.handleSubmit}
+        />
       </div>
     );
   }
 }
 
-export default LoginContainer;
+const mapStateToProps = ({ auth }) => ({
+  // **** .get 을 사용해서 값 조회
+  isLogin: auth.get("isLogin"),
+  user: auth.get("user")
+});
+
+// props 로 넣어줄 액션 생성함수
+const mapDispatchToProps = dispatch => ({
+  login: user => dispatch(login(user))
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(LoginContainer);
