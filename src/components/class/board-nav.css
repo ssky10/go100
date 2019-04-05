@@ -13,7 +13,7 @@
 .board-nav-body div {
     position: relative;
     width: inherit;
-    height: 20%;
+    height: 25%;
     
     display: block; /* Make the links appear below each other */
     text-decoration: none; /* Remove underline from links */
@@ -25,6 +25,10 @@
 
     transition: 0.4s;
     cursor: pointer;
+  }
+
+  .board-nav-body-included-teacherMenu div {
+    height: 20%;
   }
   
   .board-nav-body div:hover{
