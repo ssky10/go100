@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { BrowserRouter, Route } from "react-router-dom";
 import { Provider } from "react-redux";
 //container&components
-import { Login, ClassesList, Class, Exam } from "container";
+import { Login, ClassesList, Class, Exam } from "containers";
 import store from "./store";
 //stylesheet
 import "./App.css";

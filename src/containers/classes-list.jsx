@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 
 //stylesheet
-import styles from "container/classes-list.css";
+import styles from "containers/classes-list.css";
 
 const cx = classNames.bind(styles);
 

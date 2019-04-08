@@ -8,7 +8,7 @@ import * as service from "../services/users";
 import { login } from "../store/modules/auth";
 
 //stylesheet
-import LoginPanel from "../component/loginPanel";
+import LoginPanel from "../components/loginPanel";
 
 class LoginContainer extends Component {
   constructor(props) {
