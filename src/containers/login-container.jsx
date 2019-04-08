@@ -7,7 +7,7 @@ import { Link, Redirect } from "react-router-dom";
 import * as service from "../services/users";
 
 //stylesheet
-import styles from "container/login-container.css";
+import styles from "containers/login-container.css";
 
 //
 const cx = classNames.bind(styles);
