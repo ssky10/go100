@@ -3,13 +3,6 @@ import React, { Component } from 'react';
 import classNames from "classnames/bind";
 
 //components
-/*
-import RecentBoard from "components/class/board/recentsboard";
-import NoticeBoard from "components/class/board/noticeboard";
-import WorkBoard from "components/class/board/workboard";
-import QnABoard from "components/class/board/qnaboard";
-import LiveQuizBoard from "components/class/board/livequizboard"
-*/
 import {
     RecentsBoard, 
     NoticeBoard, 
@@ -18,6 +11,7 @@ import {
     LiveQuizBoard,
     TeacherBoard
 } from "components/class/board"
+
 //stylesheet
 import style from "components/class/boards.css";
 

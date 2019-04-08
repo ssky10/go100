@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import classNames from 'classnames/bind';
 
-//styles
+//stylesheet
 import style from 'components/class/board/noticeboard.css';
 
 const cx = classNames.bind(style);

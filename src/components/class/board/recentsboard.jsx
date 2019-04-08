@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import classNames from 'classnames/bind';
 
-//styles
+//stylesheet
 import style from 'components/class/board/recentsboard.css';
 
 const cx = classNames.bind(style);

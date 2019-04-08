@@ -2,8 +2,10 @@
 import React, { Component } from 'react';
 import classNames from 'classnames/bind';
 
-//style
+//stylesheet
 import style from 'components/class/board/workboard.css';
+
+const cx = classNames.bind(style);
 
 class WorkBoard extends Component {
     constructor(props) {
