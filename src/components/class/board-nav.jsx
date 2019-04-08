@@ -12,7 +12,7 @@ class BoardNavigator extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isTeacher: true
+      isTeacher:true
     };
   }
   render() {

@@ -5,6 +5,7 @@ import classNames from "classnames/bind";
 //components
 import Navigator from "components/class/navigator";
 import Boardmenu from "components/class/board-nav";
+import Board from "components/class/boards";
 
 //stylesheet
 import style from "containers/class.css";
@@ -18,11 +19,16 @@ class Class extends Component {
   }
   render() {
     return (
-      <div className="class-container">
-        <Navigator />
+      <div className={cx("class-container")}>
+        <div className={cx("navigator")}>
+          <Navigator />
+        </div>
         <div className={cx("main-body")}>
-          <div className={cx("main-top")}>
+          <div className={cx("board-menu")}>
             <Boardmenu />
+          </div>
+          <div className={cx("board")}>
+            <Board />
           </div>
         </div>
       </div>
