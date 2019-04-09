@@ -2,6 +2,11 @@
 import React, { Component } from "react";
 import classNames from "classnames/bind";
 
+//components
+import Navigator from "components/class/navigator";
+import Boardmenu from "components/class/board-nav";
+import Board from "components/class/boards";
+
 //stylesheet
 import style from "containers/class.css";
 
@@ -13,7 +18,21 @@ class Class extends Component {
     this.state = {};
   }
   render() {
-    return <div>class page</div>;
+    return (
+      <div className={cx("class-container")}>
+        <div className={cx("navigator")}>
+          <Navigator />
+        </div>
+        <div className={cx("main-body")}>
+          <div className={cx("board-menu")}>
+            <Boardmenu />
+          </div>
+          <div className={cx("board")}>
+            <Board />
+          </div>
+        </div>
+      </div>
+    );
   }
 }
 
