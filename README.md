@@ -1,4 +1,10 @@
 # go100 (front-end)
+## Build
+
+```
+#start at localhost:3000
+npm start || yarn start
+```
 
 # 페이지
 ## 로그인 페이지(/)

@@ -3,11 +3,11 @@ import React, { Component } from 'react';
 import classNames from 'classnames/bind';
 
 //stylesheet
-import style from 'components/class/board/recentsboard.css';
+import style from 'components/class/board/mainboard.css';
 
 const cx = classNames.bind(style);
 
-class RecentsBoard extends Component {
+class MainBoard extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -16,11 +16,11 @@ class RecentsBoard extends Component {
     }
     render() { 
         return (
-            <div className={cx("recents")}>
-                Recent Board
+            <div className={cx("main-board")}>
+                Main Board
             </div>
         );
     }
 }
  
-export default RecentsBoard;
+export default MainBoard;

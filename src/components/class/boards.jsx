@@ -4,7 +4,7 @@ import classNames from "classnames/bind";
 
 //components
 import {
-    RecentsBoard, 
+    MainBoard, 
     NoticeBoard, 
     WorkBoard, 
     QnABoard, 
@@ -31,7 +31,7 @@ class Boards extends Component {
         return (
             <div className={cx('board-container')}>
                 {(isBoard == 0) && (
-                    <RecentsBoard/>
+                    <MainBoard/>
                 )}
                 {(isBoard == 1) && (
                     <NoticeBoard/>
