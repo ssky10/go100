@@ -1,0 +1,148 @@
+.home{
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    background: url('../images/login_back1.jpg') no-repeat;
+    background-size: cover;
+    background-position: 50% 50%;
+}
+
+.login-container{
+    padding: 30px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.7);
+    border: 2px solid #FFF;
+    border-radius: 5px;
+    user-select: none;
+}
+
+.login-header{
+    padding-top: 5px;
+    padding-bottom: 20px;
+    font-family: 'KoPub Batang';
+    font-weight: lighter;
+    color: #FFF;
+    text-transform: uppercase;
+    text-align: center;
+    font-size: 48px;
+}
+
+input{
+    display: block;
+    width: 320px;
+    height: 40px;
+    margin-bottom: 10px;
+    padding: 5px;
+    background-color: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(0, 0, 0, 0.7);
+    border-radius: 5px;
+    outline: none;
+    color: #FFF;
+    font-family: 'Staatliches';
+    font-weight: 100;
+    font-size: 25px;
+    text-align: center;
+}
+
+button{
+    display: block;
+    width: 332px;
+    height: 40px;
+    font-family: 'Staatliches';
+    font-weight: lighter;
+    font-size: 20px;
+    margin-bottom: 8px;
+}
+
+button:hover{
+    cursor: pointer;
+}
+
+.btn-submit{
+    background-color: #000;
+    border: none;
+    border-radius: 5px;
+    outline: none;    
+    color: #FFF;
+}
+
+.btn-guest{
+    position: relative;
+    top: -40px;
+    background-color: #fff;
+    border: none;
+    border-radius: 5px;
+    outline: none;
+    color: #000;
+}
+
+.divider{    
+    display: block;
+    position: relative;
+
+    top: 5px;
+
+    margin-top: 10px;
+    margin-bottom: 95px;
+    
+    width: 330px;
+    height: 1px;
+    font-family: 'KoPub Batang';
+    font-size: 25px;
+    color: #FFF;
+    text-align: center;
+}
+
+.divider::before{
+    content: '';
+    position: absolute;
+    width: 130px;
+    height: 1px;
+    top: 12px;
+    left: 0px;
+    border-top: 3px solid #FFF;
+}
+
+.divider::after{
+    content: '';
+    position: absolute;
+    width: 130px;
+    height: 1px;
+    top: 12px;
+    left: 201px;
+    border-top: 3px solid #FFF;
+}
+
+a{
+    font-family: 'Staatliches';
+    font-weight: lighter;
+    font-size: 17px;
+    color: #FFF;
+    text-decoration: none;
+}
+
+form a:first-child{
+    float: left;
+}
+
+form a:last-child{
+    float: right;
+}
+
+.a-signup::before{
+    content: "Sign Up";
+    color: #000;
+    position: absolute;
+    width: 0;
+    overflow: hidden;
+    transition: 0.6s;
+}
+
+a .a-signup:hover::before{
+    width: 100%;
+}
