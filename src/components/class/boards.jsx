@@ -21,41 +21,31 @@ class Boards extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isRecents: true,
-            isNotice: false,
-            isWork: false,
-            isQnA: false,
-            isLiveQuiz: false,
-            isTeacher: false
+            isBoard: 0
         }
     }
 
     render() {
-        const isRecents = this.state.isRecents;
-        const isNotice = this.state.isNotice;
-        const isWork = this.state.isWork;
-        const isQnA = this.state.isQnA;
-        const isLiveQuiz = this.state.isLiveQuiz;
-        const isTeacher = this.state.isTeacher;
+        const isBoard = this.state.isBoard;
 
         return (
             <div className={cx('board-container')}>
-                {isRecents && (
+                {(isBoard == 0) && (
                     <RecentsBoard/>
                 )}
-                {isNotice && (
+                {(isBoard == 1) && (
                     <NoticeBoard/>
                 )}
-                {isWork && (
+                {(isBoard == 2) && (
                     <WorkBoard/>
                 )}
-                {isQnA && (
+                {(isBoard == 3) && (
                     <QnABoard/>
                 )}
-                {isLiveQuiz && (
+                {(isBoard == 4) && (
                     <LiveQuizBoard/>
                 )}
-                {isTeacher && (
+                {(isBoard == 5) && (
                     <TeacherBoard/>
                 )}
             </div>
