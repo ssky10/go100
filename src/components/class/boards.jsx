@@ -10,10 +10,10 @@ import {
     QnABoard, 
     LiveQuizBoard,
     TeacherBoard
-} from "components/class/board"
+} from "components/class/board";
 
 //stylesheet
-import style from "components/class/boards.css";
+import style from "components/class/boards.module.css";
 
 const cx = classNames.bind(style);
 
@@ -52,5 +52,5 @@ class Boards extends Component {
         );
     }
 }
- 
+
 export default Boards;

@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import classNames from 'classnames/bind';
 
 //stylesheet
-import style from 'components/class/board/qnaboard.css';
+import style from 'components/class/board/qnaboard.module.css';
 
 const cx = classNames.bind(style);
 

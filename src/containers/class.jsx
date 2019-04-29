@@ -1,23 +1,41 @@
 //node_modules
 import React, { Component } from "react";
 import classNames from "classnames/bind";
+import { connect } from "react-redux";
 
 //components
 import Navigator from "components/class/navigator";
 import Boardmenu from "components/class/board-nav";
-import Board from "components/class/boards";
+import Boards from "components/class/boards"
+//redux-store
+
+import { chageBoard } from "store/modules/classboard";
+
+// import {
+//     MainBoard, 
+//     NoticeBoard, 
+//     WorkBoard, 
+//     QnABoard, 
+//     LiveQuizBoard,
+//     TeacherBoard
+// } from "components/class/board";
 
 //stylesheet
-import style from "containers/class.css";
+import style from "containers/class.module.css";
 
 const cx = classNames.bind(style);
 
 class Class extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      isTeacher: true,
+      board: 0
+    };
   }
   render() {
+    const { board, onChangeBoard } = this.props;
+    console.log("확인 : "+ board);
     return (
       <div className={cx("class-container")}>
         <div className={cx("navigator")}>
@@ -25,10 +43,13 @@ class Class extends Component {
         </div>
         <div className={cx("main-body")}>
           <div className={cx("board-menu")}>
-            <Boardmenu />
+            <Boardmenu 
+              onChangeBoard={onChangeBoard}
+              isTearcher={this.state.isTeacher}
+            />
           </div>
           <div className={cx("board")}>
-            <Board />
+            <Boards/>
           </div>
         </div>
       </div>
@@ -36,4 +57,17 @@ class Class extends Component {
   }
 }
 
-export default Class;
+const mapStateToProps = ({ classboard }) => ({
+  board: classboard.get("board")
+})
+
+const mapDispathToProps = dispatch => ({
+  onChangeBoard: board => dispatch(chageBoard(board))
+})
+
+export default connect(
+  mapStateToProps,
+  mapDispathToProps
+)(Class);
+
+//export default Class;

@@ -53,7 +53,7 @@ class LoginContainer extends Component {
 
   render() {
     const { isLogin } = this.props;
-    console.log(isLogin);
+    console.log("확인 : "+ isLogin);
     return (
       <div>
         {isLogin && <Redirect to="/classeslist" />}
