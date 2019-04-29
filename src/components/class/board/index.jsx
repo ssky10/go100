@@ -1,4 +1,4 @@
-export { default as RecentsBoard } from "components/class/board/recentsboard";
+export { default as MainBoard } from "components/class/board/mainboard";
 export { default as NoticeBoard } from "components/class/board/noticeboard";
 export { default as WorkBoard } from "components/class/board/workboard";
 export { default as QnABoard } from "components/class/board/qnaboard";

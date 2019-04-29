@@ -1,7 +1,7 @@
 import React from 'react';
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import style from './navigator.css';
+import style from './navigator.module.css';
 
 const cx = classNames.bind(style);
 
@@ -11,7 +11,7 @@ const Navigator = () => {
             <h2 className={cx('logo')}>
                 Go100
             </h2>
-            <input type="checkbox" id="chk"/>
+            <input type="checkbox" className={cx('chk')}/>
             <label htmlFor="chk" className={cx('show-menu-btn')}>
                 <i><FontAwesomeIcon icon="bars"/></i>
             </label>

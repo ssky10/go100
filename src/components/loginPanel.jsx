@@ -3,7 +3,7 @@ import classNames from "classnames/bind";
 import { Link } from "react-router-dom";
 
 //stylesheet
-import styles from "./loginPanel.css";
+import styles from "./loginPanel.module.css";
 import PropTypes from "prop-types";
 
 const cx = classNames.bind(styles);
@@ -29,14 +29,14 @@ const LoginPanel = ({ user, password, onSubmit, onChange }) => {
             onChange={onChange}
           />
 
-          <button className={cx("btn-submit")} type="submit">
+          <button className={cx("btn-submit","login-btns")} type="submit">
             SIGN IN
           </button>
         </form>
         <span className={cx("divider")}>OR</span>
         <form action="" onSubmit={onSubmit} name="guest">
           <Link to="/classeslist">
-            <button className={cx("btn-guest")} type="submit">
+            <button className={cx("btn-guest","login-btns")} type="submit">            
               Enter to Guest
             </button>
           </Link>

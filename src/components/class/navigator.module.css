@@ -57,9 +57,9 @@
     color: rgba(204, 204, 204, 0.699);
 }
 
-#chk{
+.chk{
     position: absolute;
-    visibility: hidden;
+    display: none;
     z-index: -1111;
 }
 
