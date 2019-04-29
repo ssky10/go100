@@ -22,7 +22,7 @@ export default function reducer(state = initialState, action) {
   switch (action.type) {
     case CHANGEBOARD:
       // **** set 으로 특정 필드의 값을 설정
-      return state.set("isBoard", action.board);
+      return state.set("board", action.board);
     default:
       return state; // 아무 일도 일어나지 않으면 현재 상태를 그대로 반환합니다.
   }

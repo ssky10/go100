@@ -29,8 +29,7 @@ class Class extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isTeacher: true,
-      board: 0
+      isTeacher: true
     };
   }
   render() {
@@ -49,7 +48,9 @@ class Class extends Component {
             />
           </div>
           <div className={cx("board")}>
-            <Boards/>
+            <Boards
+              boardNo={board}
+            />
           </div>
         </div>
       </div>

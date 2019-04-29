@@ -17,40 +17,64 @@ import style from "components/class/boards.module.css";
 
 const cx = classNames.bind(style);
 
-class Boards extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            isBoard: 0
-        }
-    }
-
-    render() {
-        const isBoard = this.state.isBoard;
-
+const Boards = ({boardNo}) => {
         return (
             <div className={cx('board-container')}>
-                {(isBoard == 0) && (
+                {(boardNo == 0) && (
                     <MainBoard/>
                 )}
-                {(isBoard == 1) && (
+                {(boardNo == 1) && (
                     <NoticeBoard/>
                 )}
-                {(isBoard == 2) && (
+                {(boardNo == 2) && (
                     <WorkBoard/>
                 )}
-                {(isBoard == 3) && (
+                {(boardNo == 3) && (
                     <QnABoard/>
                 )}
-                {(isBoard == 4) && (
+                {(boardNo == 4) && (
                     <LiveQuizBoard/>
                 )}
-                {(isBoard == 5) && (
+                {(boardNo == 5) && (
                     <TeacherBoard/>
                 )}
             </div>
         );
-    }
 }
+// class Boards extends Component {
+//     constructor(props) {
+//         super(props);
+//         this.state = {
+//             boardNo: 0
+//         }
+//     }
+
+//     render() {
+//         const boardNo = this.state.boardNo;
+
+//         return (
+//             <div className={cx('board-container')}>
+//                 {(boardNo == 0) && (
+//                     <MainBoard/>
+//                 )}
+//                 {(boardNo == 1) && (
+//                     <NoticeBoard/>
+//                 )}
+//                 {(boardNo == 2) && (
+//                     <WorkBoard/>
+//                 )}
+//                 {(boardNo == 3) && (
+//                     <QnABoard/>
+//                 )}
+//                 {(boardNo == 4) && (
+//                     <LiveQuizBoard/>
+//                 )}
+//                 {(boardNo == 5) && (
+//                     <TeacherBoard/>
+//                 )}
+//             </div>
+//         );
+//     }
+// }
 
 export default Boards;
