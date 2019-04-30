@@ -17,7 +17,18 @@ class MainBoard extends Component {
     render() { 
         return (
             <div className={cx("main-board")}>
-                Main Board
+                <div className={cx("recent-notice")}>
+                    최근 공지
+                </div>
+                <div className={cx("recent-work")}>
+                    최근 과제
+                </div>
+                <div className={cx("recent-qna")}>
+                    최근 물음
+                </div>
+                <div className={cx("recent-livequiz")}>
+                    최근 XX
+                </div>
             </div>
         );
     }

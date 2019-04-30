@@ -7,18 +7,10 @@ import { connect } from "react-redux";
 import Navigator from "components/class/navigator";
 import Boardmenu from "components/class/board-nav";
 import Boards from "components/class/boards"
-//redux-store
 
+//redux-store
 import { chageBoard } from "store/modules/classboard";
 
-// import {
-//     MainBoard, 
-//     NoticeBoard, 
-//     WorkBoard, 
-//     QnABoard, 
-//     LiveQuizBoard,
-//     TeacherBoard
-// } from "components/class/board";
 
 //stylesheet
 import style from "containers/class.module.css";
@@ -38,7 +30,9 @@ class Class extends Component {
     return (
       <div className={cx("class-container")}>
         <div className={cx("navigator")}>
-          <Navigator />
+          <Navigator 
+            onChangeBoard={onChangeBoard}
+          />
         </div>
         <div className={cx("main-body")}>
           <div className={cx("board-menu")}>

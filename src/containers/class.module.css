@@ -11,14 +11,19 @@ body {
     height: fit-content;
 }
 .main-body{
-    margin: 20px 200px;
+    padding: 20px 200px;
 }
 
 .board-menu{
-    float: left;
+    width: inherit;
 }
 
 .board{
     margin-left: 370px;
 }
 
+@media screen and (min-width: 1024px){
+    .board-menu{
+        float: left;
+    }
+}

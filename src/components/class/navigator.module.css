@@ -29,10 +29,13 @@
 
 .menu a{
     color: #fff;
+    font-family: 'Staatliches';
+    font-size: 20px;
     text-transform: uppercase;
     text-decoration: none;
     padding: 0 10px;
     transition: 0.4s;
+    cursor: pointer;
 }
 
 .show-menu-btn,
@@ -59,11 +62,11 @@
 
 .chk{
     position: absolute;
-    display: none;
+    visibility: hidden;
     z-index: -1111;
 }
 
-@media screen and (max-width:800px){
+@media screen and (max-width:1024px){
     .show-menu-btn,
     .hide-menu-btn {
         display: block;
@@ -91,7 +94,7 @@
         right: 40px;
     }
 
-    #chk:checked ~ .menu{
+    .chk:checked ~ .menu{
         right: 0;
     }
 }
