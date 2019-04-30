@@ -19,11 +19,14 @@ const Navigator = ({onChangeBoard}) => {
             </label>
             <ul className={cx('menu')}>
                 <a
+                    className={cx('menu-a-tag')}
                     onClick={()=>onChangeBoard(0)}
                 >
                 Home
                 </a>
-                <a href="#">About</a>
+                <a 
+                    className={cx('menu-a-tag')}
+                >About</a>
                 <label htmlFor="chk" className={cx('hide-menu-btn')}>
                     <i><FontAwesomeIcon icon="times"/></i>
                 </label>
