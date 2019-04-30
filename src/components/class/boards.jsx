@@ -41,40 +41,5 @@ const Boards = ({boardNo}) => {
             </div>
         );
 }
-// class Boards extends Component {
-//     constructor(props) {
-//         super(props);
-//         this.state = {
-//             boardNo: 0
-//         }
-//     }
-
-//     render() {
-//         const boardNo = this.state.boardNo;
-
-//         return (
-//             <div className={cx('board-container')}>
-//                 {(boardNo == 0) && (
-//                     <MainBoard/>
-//                 )}
-//                 {(boardNo == 1) && (
-//                     <NoticeBoard/>
-//                 )}
-//                 {(boardNo == 2) && (
-//                     <WorkBoard/>
-//                 )}
-//                 {(boardNo == 3) && (
-//                     <QnABoard/>
-//                 )}
-//                 {(boardNo == 4) && (
-//                     <LiveQuizBoard/>
-//                 )}
-//                 {(boardNo == 5) && (
-//                     <TeacherBoard/>
-//                 )}
-//             </div>
-//         );
-//     }
-// }
 
 export default Boards;
