@@ -76,6 +76,7 @@ class Exam extends Component {
               in={this.state.open === index}
               timeout="auto"
               unmountOnExit
+              style={{ backgroundColor: "#ffffff" }}
             >
               <Divider />
               <List component="div" disablePadding>
