@@ -1,6 +1,5 @@
 //node_modules
 import React, { Component } from "react";
-import classNames from "classnames/bind";
 import { connect } from "react-redux";
 import List from "@material-ui/core/List";
 import Collapse from "@material-ui/core/Collapse";
