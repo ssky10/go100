@@ -27,4 +27,3 @@ export default function reducer(state = initialState, action) {
       return state; // 아무 일도 일어나지 않으면 현재 상태를 그대로 반환합니다.
   }
 }
-
