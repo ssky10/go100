@@ -2,19 +2,11 @@ import React from "react";
 import PropTypes from "prop-types";
 import AppBar from "@material-ui/core/AppBar";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import Divider from "@material-ui/core/Divider";
 import Drawer from "@material-ui/core/Drawer";
 import Hidden from "@material-ui/core/Hidden";
 import IconButton from "@material-ui/core/IconButton";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import MailIcon from "@material-ui/icons/Mail";
 import MenuIcon from "@material-ui/icons/Menu";
 import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
 import { withStyles } from "@material-ui/core/styles";
 
 const drawerWidth = 240;
@@ -23,14 +15,16 @@ const styles = theme => ({
   root: {
     display: "flex"
   },
-  grow: {
-    flexGrow: 1
-  },
   drawer: {
     [theme.breakpoints.up("sm")]: {
       width: drawerWidth,
       flexShrink: 0
     }
+  },
+  title: {
+    ...theme.typography.h6,
+    color: "#3F688C",
+    fontSize: "1.5rem"
   },
   appBar: {
     marginLeft: drawerWidth,
@@ -46,7 +40,8 @@ const styles = theme => ({
   },
   toolbar: theme.mixins.toolbar,
   drawerPaper: {
-    width: drawerWidth
+    width: drawerWidth,
+    backgroundColor: "#C5D3D9"
   },
   content: {
     flexGrow: 1,
@@ -54,7 +49,7 @@ const styles = theme => ({
   }
 });
 
-class ResponsiveDrawer extends React.Component {
+class Template extends React.Component {
   state = {
     mobileOpen: false
   };
@@ -64,24 +59,7 @@ class ResponsiveDrawer extends React.Component {
   };
 
   render() {
-    const { classes, theme } = this.props;
-
-    const drawer = (
-      <div>
-        <div className={classes.toolbar} />
-        <Divider />
-        <List>
-          {["국어", "영어", "수학", "사회", "과학"].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List>
-      </div>
-    );
+    const { classes, theme, drawer, title } = this.props;
 
     return (
       <div className={classes.root}>
@@ -96,15 +74,12 @@ class ResponsiveDrawer extends React.Component {
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant="h6" color="inherit" noWrap>
-              Go100 Exam
-            </Typography>
-            <div className={classes.grow} />
-            {/* AppBar 우측 버튼 목록 위치 */}
+            <div className={classes.title}>{title}</div>
           </Toolbar>
         </AppBar>
         <nav className={classes.drawer}>
-          <Hidden smUp implementation="css">
+          {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
+          <Hidden smUp implementation="js">
             <Drawer
               container={this.props.container}
               variant="temporary"
@@ -115,10 +90,11 @@ class ResponsiveDrawer extends React.Component {
                 paper: classes.drawerPaper
               }}
             >
+              <div className={classes.toolbar} />
               {drawer}
             </Drawer>
           </Hidden>
-          <Hidden xsDown implementation="css">
+          <Hidden xsDown implementation="js">
             <Drawer
               classes={{
                 paper: classes.drawerPaper
@@ -126,16 +102,21 @@ class ResponsiveDrawer extends React.Component {
               variant="permanent"
               open
             >
+              <div className={classes.toolbar} />
               {drawer}
             </Drawer>
           </Hidden>
         </nav>
+        <main className={classes.content}>
+          <div className={classes.toolbar} />
+          {this.props.children}
+        </main>
       </div>
     );
   }
 }
 
-ResponsiveDrawer.propTypes = {
+Template.propTypes = {
   classes: PropTypes.object.isRequired,
   // Injected by the documentation to work in an iframe.
   // You won't need it on your project.
@@ -143,4 +124,4 @@ ResponsiveDrawer.propTypes = {
   theme: PropTypes.object.isRequired
 };
 
-export default withStyles(styles, { withTheme: true })(ResponsiveDrawer);
+export default withStyles(styles, { withTheme: true })(Template);

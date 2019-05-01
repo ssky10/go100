@@ -1,24 +1,20 @@
 body {
-    padding: 0px;
-    margin: 0;
-    background: linear-gradient(45deg,
-    #EEEEEE 46%, #BEBEBE 0,#BEBEBE 50%, 
-    #EEEEEE 0, #EEEEEE 96%,#BEBEBE 0);
-    background-size: 20px 20px;
+  padding: 0px;
+  margin: 0;
+  background-color: white;
 }
 
-.class-container{
-    height: fit-content;
+.class-container {
+  height: fit-content;
 }
-.main-body{
-    margin: 20px 200px;
-}
-
-.board-menu{
-    float: left;
+.main-body {
+  margin: 20px 200px;
 }
 
-.board{
-    margin-left: 370px;
+.board-menu {
+  float: left;
 }
 
+.board {
+  margin-left: 370px;
+}
