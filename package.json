@@ -8,6 +8,7 @@
     "@fortawesome/react-fontawesome": "^0.1.4",
     "axios": "^0.18.0",
     "classnames": "^2.2.6",
+    "firebase": "^5.11.0",
     "grommet": "^2.6.5",
     "grommet-icons": "^4.2.0",
     "immutable": "^4.0.0-rc.12",
