@@ -21,15 +21,11 @@ import SocietyIcon from "icons/societyIcon";
 import ScienceIcon from "icons/scienceIcon";
 
 //components
-import Template from "components/exam/template";
+import Template from "components/template";
 import ExamBoard from "components/exam/examBoard";
 
 //stores
 import { changeSubject } from "../store/modules/exam";
-
-//stylesheet
-import style from "containers/exam.module.css";
-const cx = classNames.bind(style);
 
 class Exam extends Component {
   constructor(props) {
@@ -46,11 +42,11 @@ class Exam extends Component {
     const subjectNames = ["국어", "영어", "수학", "한국사", "사회", "과학"];
     const subjectIcons = [
       <HangleIcon size="24" />,
-      <EngIcon />,
+      <EngIcon size="24" />,
       <MathIcon size="24" />,
-      <HistoryIcon />,
-      <SocietyIcon />,
-      <ScienceIcon />
+      <HistoryIcon size="24" />,
+      <SocietyIcon size="24" />,
+      <ScienceIcon size="24" />
     ];
     const subsubjectNames = [
       ["중등국어", "공통국어", "화법과 작문", "언어와 매체", "독서", "문학"],
@@ -98,11 +94,9 @@ class Exam extends Component {
 
     const { theme, subject, changeSubject } = this.props;
     return (
-      <div className={cx("class-container")}>
-        <Template theme={theme} drawer={drawer} title="Go100 Exam">
-          <ExamBoard subject={subject} />
-        </Template>
-      </div>
+      <Template theme={theme} drawer={drawer} title="Go100 Exam">
+        <ExamBoard subject={subject} />
+      </Template>
     );
   }
 }

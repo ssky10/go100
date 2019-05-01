@@ -27,6 +27,9 @@ const styles = theme => ({
     fontSize: "1.5rem",
     fontWeight: 900
   },
+  wideAppBar: {
+    width: "100%"
+  },
   appBar: {
     marginLeft: drawerWidth,
     [theme.breakpoints.up("sm")]: {
@@ -51,6 +54,10 @@ const styles = theme => ({
 });
 
 class Template extends React.Component {
+  defaultProps = {
+    drawer: false
+  };
+
   state = {
     mobileOpen: false
   };
@@ -65,49 +72,56 @@ class Template extends React.Component {
     return (
       <div className={classes.root}>
         <CssBaseline />
-        <AppBar position="fixed" className={classes.appBar}>
+        <AppBar
+          position="fixed"
+          className={drawer ? classes.appBar : classes.wideAppBar}
+        >
           <Toolbar>
-            <IconButton
-              color="inherit"
-              aria-label="Open drawer"
-              onClick={this.handleDrawerToggle}
-              className={classes.menuButton}
-            >
-              <MenuIcon />
-            </IconButton>
+            {drawer && (
+              <IconButton
+                color="inherit"
+                aria-label="Open drawer"
+                onClick={this.handleDrawerToggle}
+                className={classes.menuButton}
+              >
+                <MenuIcon />
+              </IconButton>
+            )}
             <div className={classes.title}>{title}</div>
           </Toolbar>
         </AppBar>
-        <nav className={classes.drawer}>
-          {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
-          <Hidden smUp implementation="js">
-            <Drawer
-              container={this.props.container}
-              variant="temporary"
-              anchor={theme.direction === "rtl" ? "right" : "left"}
-              open={this.state.mobileOpen}
-              onClose={this.handleDrawerToggle}
-              classes={{
-                paper: classes.drawerPaper
-              }}
-            >
-              <div className={classes.toolbar} />
-              {drawer}
-            </Drawer>
-          </Hidden>
-          <Hidden xsDown implementation="js">
-            <Drawer
-              classes={{
-                paper: classes.drawerPaper
-              }}
-              variant="permanent"
-              open
-            >
-              <div className={classes.toolbar} />
-              {drawer}
-            </Drawer>
-          </Hidden>
-        </nav>
+        {drawer && (
+          <nav className={classes.drawer}>
+            {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
+            <Hidden smUp implementation="js">
+              <Drawer
+                container={this.props.container}
+                variant="temporary"
+                anchor={theme.direction === "rtl" ? "right" : "left"}
+                open={this.state.mobileOpen}
+                onClose={this.handleDrawerToggle}
+                classes={{
+                  paper: classes.drawerPaper
+                }}
+              >
+                <div className={classes.toolbar} />
+                {drawer}
+              </Drawer>
+            </Hidden>
+            <Hidden xsDown implementation="js">
+              <Drawer
+                classes={{
+                  paper: classes.drawerPaper
+                }}
+                variant="permanent"
+                open
+              >
+                <div className={classes.toolbar} />
+                {drawer}
+              </Drawer>
+            </Hidden>
+          </nav>
+        )}
         <main className={classes.content}>
           <div className={classes.toolbar} />
           {this.props.children}

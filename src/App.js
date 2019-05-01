@@ -54,9 +54,9 @@ class App extends Component {
         <BrowserRouter>
           <div>
             <Route exact path="/" component={Login} />
-            <Route exact path="/classeslist" component={ClassesList} />
-            <Route exact path="/class" component={Class} />
             <MuiThemeProvider theme={theme}>
+              <Route exact path="/classeslist" component={ClassesList} />
+              <Route exact path="/class" component={Class} />
               <Route exact path="/exam" component={Exam} />
             </MuiThemeProvider>
           </div>

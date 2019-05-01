@@ -3,6 +3,12 @@ import React, { Component } from "react";
 import classNames from "classnames/bind";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
+
+//components
+import Template from "components/template";
 
 //stylesheet
 import styles from "containers/classes-list.module.css";
@@ -15,28 +21,22 @@ class ClassesList extends Component {
     this.state = {};
   }
   render() {
-    const { isLogin, user } = this.props;
+    const { theme, isLogin, user } = this.props;
 
     return (
-      <div>
-        {isLogin && <h1>{user}의 클래스 목록입니다.</h1>}
-        <ul>
-          <li>
-            <Link to="class">
-              <a href="#" className={cx("dummy")}>
-                Class Page
-              </a>
-            </Link>
-          </li>
-          <li>
-            <Link to="exam">
-              <a href="#" className={cx("dummy")}>
-                Exam
-              </a>
-            </Link>
-          </li>
-        </ul>
-      </div>
+      <Template theme={theme} title="클래스 목록">
+        <div>
+          {isLogin && <h1>{user}의 클래스 목록입니다.</h1>}
+          <List component="nav">
+            <ListItem button component={Link} to="class">
+              <ListItemText primary="Class Page" />
+            </ListItem>
+            <ListItem button component={Link} to="exam">
+              <ListItemText primary="Exam" />
+            </ListItem>
+          </List>
+        </div>
+      </Template>
     );
   }
 }
