@@ -24,7 +24,8 @@ const styles = theme => ({
   title: {
     ...theme.typography.h6,
     color: "#3F688C",
-    fontSize: "1.5rem"
+    fontSize: "1.5rem",
+    fontWeight: 900
   },
   appBar: {
     marginLeft: drawerWidth,
