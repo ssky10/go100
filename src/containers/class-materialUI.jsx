@@ -1,9 +1,6 @@
 //node_modules
 import React, { Component } from "react";
-import classNames from "classnames/bind";
 import { connect } from "react-redux";
-import List from "@material-ui/core/List";
-import Collapse from "@material-ui/core/Collapse";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
@@ -11,12 +8,12 @@ import Divider from "@material-ui/core/Divider";
 import SvgIcon from "@material-ui/core/SvgIcon";
 
 //SVGIcon
-import HangleIcon from "icons/hangul-icon";
-import EngIcon from "icons/eng-icon";
-import MathIcon from "icons/math-icon";
-import HistoryIcon from "icons/history-icon";
-import SocietyIcon from "icons/society-icon";
-import ScienceIcon from "icons/science-icon";
+import HomeIcon from "@material-ui/icons/Home";
+import NoticeIcon from "@material-ui/icons/Announcement";
+import QNAIcon from "@material-ui/icons/QuestionAnswer";
+import CreateIcon from "@material-ui/icons/Create"
+import TeacherIcon from "@material-ui/icons/School";
+import WorkIcon from "@material-ui/icons/Event";
 
 //components
 import Template from "components/class/template";
@@ -29,28 +26,32 @@ class ClassMaterialUI extends Component {
   constructor(props) {
     super(props);
     this.state = {
-			isTeacher: false
+			isTeacher: true
 		};
   }
 
   render() {
-    const subjectNames = ["Main","공지사항", "과제", "Q&A", "LiveQuiz", "강사"];
-    const subjectIcons = [
-      <HangleIcon size="24" />,
-      <EngIcon size="24" />,
-      <MathIcon size="24" />,
-      <HistoryIcon size="24" />,
-      <SocietyIcon size="24" />,
-			<ScienceIcon size="24" />
+    let boardNames = ["Main","공지사항", "과제", "Q&A", "LiveQuiz"];
+    
+    //강사로그인일 경우
+    this.state.isTeacher ? boardNames.push("강사") : boardNames = boardNames;
+
+    const boardIcons = [
+      <HomeIcon />,
+      <NoticeIcon />,
+      <WorkIcon />,
+      <QNAIcon />,
+      <CreateIcon />,
+			<TeacherIcon />
 		];
 
-		const ListItems = (text, index) => (
+		const ListItems = (text, index) => ( 
 			<ListItem 
 				button 
 				onClick={() => onChangeBoard(index)}
 			>
         <ListItemIcon>
-        <SvgIcon>{subjectIcons[index]}</SvgIcon>
+        <SvgIcon>{boardIcons[index]}</SvgIcon>
         </ListItemIcon>
         <ListItemText 
           inset 
@@ -61,10 +62,10 @@ class ClassMaterialUI extends Component {
 
     const drawer = (
       <div>
-        {subjectNames.map((text, index) => (
+        {boardNames.map((text, index) => (
           <div>
             <Divider />
-						{ListItems(text, index)} 
+              {ListItems(text, index)}
           </div>
         ))}
       </div>
