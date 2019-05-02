@@ -23,7 +23,8 @@ const styles = theme => ({
   },
   title: {
     ...theme.typography.h6,
-    color: "#3F688C",
+    color: "#FFFFFF",
+    fontFamily: "Nanum Gothic",
     fontSize: "1.5rem",
     fontWeight: 900
   },

@@ -26,7 +26,8 @@ class ClassMaterialUI extends Component {
   constructor(props) {
     super(props);
     this.state = {
-			isTeacher: true
+      isTeacher: true,
+      title: '학원이름'
 		};
   }
 
@@ -43,8 +44,8 @@ class ClassMaterialUI extends Component {
       <QNAIcon />,
       <CreateIcon />,
 			<TeacherIcon />
-		];
-
+    ];
+    
 		const ListItems = (text, index) => ( 
 			<ListItem 
 				button 
@@ -72,12 +73,10 @@ class ClassMaterialUI extends Component {
     );
 
 		const { theme, board, onChangeBoard } = this.props;
-		const isTeacher = this.state.isTeacher;
-
+    const title = this.state.title;
     return (
-      <Template theme={theme} drawer={drawer} title="Go100 Exam">
+      <Template theme={theme} drawer={drawer} title={title}>
         <Boards
-					isTeacher={isTeacher}
           boardNo={board}
         />
       </Template>

@@ -17,7 +17,7 @@ import style from "components/class/boards.module.css";
 
 const cx = classNames.bind(style);
 
-const Boards = ({isTeacher, boardNo}) => {
+const Boards = ({boardNo}) => {
         return (
             <div className={cx('board-container')}>
                 {(boardNo == 0) && (
