@@ -1,7 +1,3 @@
-* {
-    margin: 0;
-    padding: 0;
-}
 .nav-header {
     height: 73px;
     background: #000000d0;
@@ -27,12 +23,15 @@
     line-height: 80px;
 }
 
-.menu a{
+.menu .menu-a-tag{
     color: #fff;
+    font-family: 'Staatliches';
+    font-size: 20px;
     text-transform: uppercase;
     text-decoration: none;
     padding: 0 10px;
     transition: 0.4s;
+    cursor: pointer;
 }
 
 .show-menu-btn,
@@ -51,7 +50,7 @@
     line-height: 76px;
 }
 
-.menu a:hover,
+.menu .menu-a-tag:hover,
 .show-menu-btn:hover,
 .hide-menu-btn:hover{
     color: rgba(204, 204, 204, 0.699);
@@ -59,11 +58,11 @@
 
 .chk{
     position: absolute;
-    display: none;
+    visibility: hidden;
     z-index: -1111;
 }
 
-@media screen and (max-width:800px){
+@media screen and (max-width:1024px){
     .show-menu-btn,
     .hide-menu-btn {
         display: block;
@@ -91,7 +90,7 @@
         right: 40px;
     }
 
-    #chk:checked ~ .menu{
+    .chk:checked ~ .menu{
         right: 0;
     }
 }
