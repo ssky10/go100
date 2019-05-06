@@ -8,8 +8,13 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import Divider from "@material-ui/core/Divider";
 import SvgIcon from "@material-ui/core/SvgIcon";
+import IconButton from "@material-ui/core/IconButton";
+import MenuItem from "@material-ui/core/MenuItem";
+import Menu from "@material-ui/core/Menu";
+import Avatar from "@material-ui/core/Avatar";
 
 //SVGIcon
+import AccountCircle from "@material-ui/icons/AccountCircle";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import HangleIcon from "icons/hangleIcon";
@@ -29,7 +34,7 @@ import { changeSubject } from "../store/modules/exam";
 class Exam extends Component {
   constructor(props) {
     super(props);
-    this.state = { open: -1 };
+    this.state = { open: -1, anchorEl: null };
   }
 
   handleClick = subject => {
@@ -37,7 +42,17 @@ class Exam extends Component {
     else this.setState(state => ({ open: subject }));
   };
 
+  handleMenu = event => {
+    this.setState({ anchorEl: event.currentTarget });
+  };
+
+  handleClose = () => {
+    this.setState({ anchorEl: null });
+  };
+
   render() {
+    const { theme, subject, changeSubject, isLogin, user } = this.props;
+    const open = Boolean(this.state.anchorEl);
     const subjectNames = ["국어", "영어", "수학", "한국사", "사회", "과학"];
     const subjectIcons = [
       <HangleIcon size="24" />,
@@ -90,18 +105,53 @@ class Exam extends Component {
         ))}
       </div>
     );
+    const appBarMenu = (
+      <div>
+        <IconButton
+          aria-owns={open ? "menu-appbar" : undefined}
+          aria-haspopup="true"
+          onClick={this.handleMenu}
+          color="inherit"
+        >
+          {isLogin ? <Avatar>{user[0]}</Avatar> : <AccountCircle />}
+        </IconButton>
+        <Menu
+          id="menu-appbar"
+          anchorEl={this.state.anchorEl}
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "right"
+          }}
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "right"
+          }}
+          open={open}
+          onClose={this.handleClose}
+        >
+          <MenuItem onClick={this.handleClose}>{user} Profile</MenuItem>
+          <MenuItem onClick={this.handleClose}>Logout</MenuItem>
+        </Menu>
+      </div>
+    );
 
-    const { theme, subject, changeSubject } = this.props;
     return (
-      <Template theme={theme} drawer={drawer} title="Go100 Exam">
+      <Template
+        theme={theme}
+        drawer={drawer}
+        title="Go100 Exam"
+        menu={appBarMenu}
+      >
         <ExamBoard subject={subject} />
       </Template>
     );
   }
 }
 
-const mapStateToProps = ({ exam }) => ({
-  subject: exam.get("subject")
+const mapStateToProps = ({ exam, auth }) => ({
+  subject: exam.get("subject"),
+  isLogin: auth.get("isLogin"),
+  user: auth.get("user")
 });
 
 const mapDispatchToProps = dispatch => ({

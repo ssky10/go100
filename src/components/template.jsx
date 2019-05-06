@@ -25,7 +25,8 @@ const styles = theme => ({
     ...theme.typography.h6,
     color: "#3F688C",
     fontSize: "1.5rem",
-    fontWeight: 900
+    fontWeight: 900,
+    flexGrow: 1
   },
   wideAppBar: {
     width: "100%"
@@ -67,7 +68,7 @@ class Template extends React.Component {
   };
 
   render() {
-    const { classes, theme, drawer, title } = this.props;
+    const { classes, theme, drawer, title, menu } = this.props;
 
     return (
       <div className={classes.root}>
@@ -88,6 +89,7 @@ class Template extends React.Component {
               </IconButton>
             )}
             <div className={classes.title}>{title}</div>
+            {menu}
           </Toolbar>
         </AppBar>
         {drawer && (
