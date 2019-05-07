@@ -67,7 +67,7 @@ yarn add cross-env --dev
 * 문윤기
 
 ## Back-end
-* Back-end Repo: [https://gitlab.com/golony6449/go100] (https://gitlab.com/golony6449/go100)
+* Back-end Repo: [https://gitlab.com/golony6449/go100](https://gitlab.com/golony6449/go100)
 * URL 디자인: [문서참고](https://gitlab.com/golony6449/go100/blob/develop/url_design.md)
 * 박성흠
 * 이영일
