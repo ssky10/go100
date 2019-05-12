@@ -16,6 +16,7 @@ firebase.initializeApp(config);
 
 const messaging = firebase.messaging();
 
+/*
 messaging.setBackgroundMessageHandler(function(payload) {
   console.log(
     "[firebase-messaging-sw.js] Received background message ",
@@ -33,6 +34,7 @@ messaging.setBackgroundMessageHandler(function(payload) {
     notificationOptions
   );
 });
+*/
 
 self.addEventListener("push", function(event) {
   console.log("[Service Worker] Push Received.");
