@@ -7,8 +7,11 @@ import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 
+
 //component
-import Notice from 'components/class/notice/notice-post';
+import NoticeCard from 'components/class/board/mainboard-contents/notice-card/notice-cardpost';
+import WorkCard from 'components/class/board/mainboard-contents/work-card/work-cardpost';
+import QnACard from 'components/class/board/mainboard-contents/qna-card/qna-cardpost';
 
 const styles = theme => ({
     root:{
@@ -22,7 +25,12 @@ const styles = theme => ({
     noticepaper:{
         padding: theme.spacing.unit * 1,
         textAlign: "center",
-        height: "373px",
+        height: "380px",
+    },
+    posts:{
+        width: "100%",
+        height: "26vh",
+        overflow: "auto"
     },
     noticeposts:{
         height: "315px",
@@ -42,9 +50,16 @@ const boardTitle = [
 ];
 
 const noticePosts = [
-    
+    'notice1'
 ]
 
+const workPosts = [
+    'work1'
+]
+
+const qnaPosts = [
+    'qna1'
+]
 class MainBoard extends Component {
     constructor(props) {
         super(props);
@@ -88,16 +103,16 @@ class MainBoard extends Component {
                                 className={classes.noticeposts}
                             >
                             {noticePosts.map(post => (
-                                <Notice>
+                                <NoticeCard>
                                     {post}
-                                </Notice>
+                                </NoticeCard>
                             ))}
                             </div>                            
                         </Paper>
                     </Grid>
                     <Grid 
                         item 
-                        xs={6}
+                        xs={2}
                     >
                         <Paper
                             className={classes.paper}
@@ -115,11 +130,20 @@ class MainBoard extends Component {
                             <Divider
                                 className={classes.divider}
                             />
+                            <div
+                                className={classes.posts}
+                            >
+                                {workPosts.map(post => (
+                                    <WorkCard>
+                                        {post}
+                                    </WorkCard>
+                                ))}
+                            </div>   
                         </Paper>
                     </Grid>
                     <Grid 
                         item 
-                        xs={6} 
+                        xs={10} 
                     >
                         <Paper
                             className={classes.paper}
@@ -137,6 +161,15 @@ class MainBoard extends Component {
                             <Divider
                                 className={classes.divider}
                             />
+                            <div
+                                className={classes.posts}
+                            >
+                                {qnaPosts.map(post => (
+                                    <QnACard>
+                                        {post}
+                                    </QnACard>
+                                ))}
+                            </div> 
                         </Paper>
                     </Grid>
                 </Grid>

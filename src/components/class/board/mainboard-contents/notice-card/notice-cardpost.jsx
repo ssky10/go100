@@ -27,7 +27,7 @@ const styles = theme => ({
     }
 });
 
-const NoticePost = (props) => {
+const NoticeCardPost = (props) => {
     const { classes } = props;
     return (  
         <div className={classes.layout}>
@@ -58,8 +58,8 @@ const NoticePost = (props) => {
     );
 }
 
-NoticePost.propTypes = {
+NoticeCardPost.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(NoticePost);
+export default withStyles(styles)(NoticeCardPost);
