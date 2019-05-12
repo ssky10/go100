@@ -22,6 +22,7 @@ import ScienceIcon from "icons/scienceIcon";
 //components
 import Template from "components/template";
 import ExamBoard from "components/exam/examBoard";
+import WriteExam from "components/exam/writeExam";
 
 //stores
 import { changeSubject } from "../store/modules/exam";
@@ -102,7 +103,8 @@ class Exam extends Component {
         isLogin={true} //{isLogin}
         user={"user1"} //{user}
       >
-        <ExamBoard subject={subject} />
+        {/*<ExamBoard subject={subject} />*/}
+        <WriteExam />
       </Template>
     );
   }
