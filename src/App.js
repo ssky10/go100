@@ -12,7 +12,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 //container&components
-import { Login, ClassesList, Class, Exam } from "containers";
+import { Login, ClassesList, Class, ClassNoMaterialUI, Exam } from "containers";
 import store from "./store";
 
 //stylesheet
@@ -54,11 +54,18 @@ class App extends Component {
         <BrowserRouter>
           <div>
             <Route exact path="/" component={Login} />
+<<<<<<< HEAD
             <MuiThemeProvider theme={theme}>
               <Route exact path="/classeslist" component={ClassesList} />
               <Route exact path="/class" component={Class} />
               <Route exact path="/exam" component={Exam} />
             </MuiThemeProvider>
+=======
+            <Route exact path="/classeslist" component={ClassesList} />
+            <Route exact path="/class" component={Class} />
+            <Route exact path="/classno" component={ClassNoMaterialUI} />
+            <Route exact path="/exam" component={Exam} />
+>>>>>>> class_mainpage_layout
           </div>
         </BrowserRouter>
       </Provider>
