@@ -10,13 +10,14 @@
     "@material-ui/icons": "^3.0.2",
     "axios": "^0.18.0",
     "classnames": "^2.2.6",
-    "grommet": "^2.6.5",
+    "firebase": "^5.11.0",
+    "grommet": "^2.7.0",
     "grommet-icons": "^4.2.0",
     "immutable": "^4.0.0-rc.12",
     "node-sass": "^4.12.0",
     "react": "^16.8.5",
     "react-dom": "^16.8.5",
-    "react-redux": "^6.0.1",
+    "react-redux": "^7.0.3",
     "react-router-dom": "^5.0.0",
     "react-scripts": "^3.0.0",
     "redux": "^4.0.1",
@@ -51,6 +52,5 @@
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/yg3988/go100/issues"
-  },
-  "homepage": "https://github.com/yg3988/go100#readme"
+  }
 }
