@@ -56,13 +56,13 @@ const mapStateToProps = ({ classboard }) => ({
   board: classboard.get("board")
 })
 
-const mapDispathToProps = dispatch => ({
+const mapDispatchToProps = dispatch => ({
   onChangeBoard: board => dispatch(chageBoard(board))
 })
 
 export default connect(
   mapStateToProps,
-  mapDispathToProps
+  mapDispatchToProps
 )(Class);
 
 //export default Class;
