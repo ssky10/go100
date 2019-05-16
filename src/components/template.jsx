@@ -48,8 +48,7 @@ const styles = theme => ({
     backgroundColor: "#C5D3D9"
   },
   content: {
-    flexGrow: 1,
-    padding: theme.spacing.unit * 3
+    flexGrow: 1
   }
 });
 

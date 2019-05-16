@@ -1,21 +1,26 @@
 //node_modules
 import React, { Component } from 'react';
+import { fromJS, List } from 'immutable';
 import PropTypes from "prop-types";
+import { connect } from "react-redux";
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 
+//service
+import * as service from "services/notice";
+import { getPostList } from "store/modules/post";
 
 //component
-import NoticeCard from 'components/class/board/mainboard-contents/notice-card/notice-cardpost';
-import WorkCard from 'components/class/board/mainboard-contents/work-card/work-cardpost';
-import QnACard from 'components/class/board/mainboard-contents/qna-card/qna-cardpost';
+import NoticeCard from 'components/class/board-contents/mainboard/mainboard-contents/notice-card/notice-cardpost';
+import WorkCard from 'components/class/board-contents/mainboard/mainboard-contents/work-card/work-cardpost';
+import QnACard from 'components/class/board-contents/mainboard/mainboard-contents/qna-card/qna-cardpost';
 
 const styles = theme => ({
     root:{
-        padding: theme.spacing.unit * 2,
+        padding: theme.spacing.unit * 1,
         flexGrow: 1
     },
     paper: { 
@@ -49,9 +54,7 @@ const boardTitle = [
     '묻고 답하기'
 ];
 
-const noticePosts = [
-    'notice1'
-]
+let noticePosts = List();
 
 const workPosts = [
     'work1'
@@ -60,17 +63,73 @@ const workPosts = [
 const qnaPosts = [
     'qna1'
 ]
+
 class MainBoard extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            spacing: '16'
+            spacing: '16',
+            isUpdate: false
+        }
+    }
+
+    displayPostList = () => {
+        const { getPostList } = this.props;
+        getPostList();
+    }
+
+    componentDidMount(){
+        this.displayPostList();
+        console.log("componentDidMount 실행")
+        
+        {this.forceUpdate()}
+    }
+    
+    componentWillUpdate(nextProps, nextState) {
+        console.log("componentWillUpdate 실행")
+    }
+
+    componentDidUpdate(prevProps, prevState){
+        if (prevProps.page !== this.props.gage) {
+            this.displayPostList();
+            console.log("componentDidUpdate 실행")
         }
     }
     
     render() { 
-        const { classes } = this.props;
+        const { classes, postList } = this.props;
+        if((typeof postList.size) !== "number"){
+            postList.then(res => {
+                if (res.data.result) {
+                    noticePosts = fromJS(res.data.result)
+                    if(this.state.isUpdate === false){
+                        this.setState(
+                            {
+                                isUpdate: true
+                            }
+                        )
+                    }                    
+                }
+            })
+        }
         
+        console.log(noticePosts);
+        
+        const noticePostsList = noticePosts.map(
+            (post) => {
+                const { idx, title, contents, date} = post.toJS();
+                console.log("noticePostsList실행");
+                return (
+                    <NoticeCard 
+                        key={idx}
+                        title={title}
+                        contents={contents}
+                        date={date}
+                    />
+                )
+            }
+        );
+
         return (
             <div
                 className={classes.root}
@@ -102,12 +161,8 @@ class MainBoard extends Component {
                             <div
                                 className={classes.noticeposts}
                             >
-                            {noticePosts.map(post => (
-                                <NoticeCard>
-                                    {post}
-                                </NoticeCard>
-                            ))}
-                            </div>                            
+                                {(noticePostsList)}
+                            </div>                     
                         </Paper>
                     </Grid>
                     <Grid 
@@ -134,10 +189,9 @@ class MainBoard extends Component {
                                 className={classes.posts}
                             >
                                 {workPosts.map(post => (
-                                    <WorkCard>
-                                        {post}
-                                    </WorkCard>
-                                ))}
+                                    <WorkCard key={post.toString}/>
+                                ))
+                                }
                             </div>   
                         </Paper>
                     </Grid>
@@ -165,9 +219,7 @@ class MainBoard extends Component {
                                 className={classes.posts}
                             >
                                 {qnaPosts.map(post => (
-                                    <QnACard>
-                                        {post}
-                                    </QnACard>
+                                    <QnACard key = {post.toString}/>
                                 ))}
                             </div> 
                         </Paper>
@@ -195,4 +247,18 @@ class MainBoard extends Component {
 MainBoard.propTypes = {
     classes: PropTypes.object.isRequired
 }
-export default withStyles(styles)(MainBoard);
+
+const mapStateToProps = ({ post }) => ({
+    // **** .get 을 사용해서 값 조회
+    postList: post.get("postList")
+});
+  
+  // props 로 넣어줄 액션 생성함수
+const mapDispatchToProps = dispatch => ({
+    getPostList: board => dispatch(getPostList(board))
+});
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(withStyles(styles)(MainBoard));

@@ -50,7 +50,7 @@ const NoticeCardPost = (props) => {
                 </Grid>
                 <Grid item xs={12} zeroMinWidth>
                     <Typography >
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Nulla posuere sollicitudin aliquam ultrices sagittis orci a scelerisque purus. Sit amet dictum sit amet justo. Semper eget duis at tellus. Mauris a diam maecenas sed enim ut. Dui faucibus in ornare quam. Tempor nec feugiat nisl pretium fusce id velit. Morbi tristique senectus et netus et malesuada fames. Urna cursus eget nunc scelerisque viverra mauris in aliquam. Nec feugiat in fermentum posuere urna nec tincidunt praesent semper. Interdum varius sit amet mattis vulputate enim. In ante metus dictum at tempor commodo ullamcorper a lacus. Ac auctor augue mauris augue neque gravida in.
+                    ㅎㅇ
                     </Typography>
                 </Grid>
             </Grid>
