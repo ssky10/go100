@@ -1,6 +1,5 @@
 //node_modules
 import React, { Component } from "react";
-import classNames from "classnames/bind";
 import { connect } from "react-redux";
 import List from "@material-ui/core/List";
 import Collapse from "@material-ui/core/Collapse";
@@ -30,7 +29,7 @@ import { changeSubject } from "../store/modules/exam";
 class Exam extends Component {
   constructor(props) {
     super(props);
-    this.state = { open: -1 };
+    this.state = { open: -1, anchorEl: null };
   }
 
   handleClick = subject => {
@@ -39,6 +38,7 @@ class Exam extends Component {
   };
 
   render() {
+    const { theme, subject, changeSubject, isLogin, user } = this.props;
     const subjectNames = ["국어", "영어", "수학", "한국사", "사회", "과학"];
     const subjectIcons = [
       <HangleIcon size="24" />,
@@ -91,18 +91,27 @@ class Exam extends Component {
         ))}
       </div>
     );
+    const appBarMenu = <div />;
 
-    const { theme, subject, changeSubject } = this.props;
     return (
-      <Template theme={theme} drawer={drawer} title="Go100 Exam">
+      <Template
+        theme={theme}
+        drawer={drawer}
+        title="Go100 Exam"
+        menu={appBarMenu}
+        isLogin={true} //{isLogin}
+        user={"user1"} //{user}
+      >
         <ExamBoard subject={subject} />
       </Template>
     );
   }
 }
 
-const mapStateToProps = ({ exam }) => ({
-  subject: exam.get("subject")
+const mapStateToProps = ({ exam, auth }) => ({
+  subject: exam.get("subject"),
+  isLogin: auth.get("isLogin"),
+  user: auth.get("user")
 });
 
 const mapDispatchToProps = dispatch => ({
