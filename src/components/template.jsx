@@ -29,7 +29,7 @@ const styles = theme => ({
   },
   title: {
     ...theme.typography.h6,
-    color: "#3F688C",
+    color: "#007CFF",
     fontSize: "1.5rem",
     fontWeight: 900,
     flexGrow: 1
@@ -52,7 +52,7 @@ const styles = theme => ({
   toolbar: theme.mixins.toolbar,
   drawerPaper: {
     width: drawerWidth,
-    backgroundColor: "#C5D3D9"
+    backgroundColor: "#7cb6f3"
   },
   content: {
     flexGrow: 1
@@ -81,6 +81,8 @@ class Template extends React.Component {
   handleClose = () => {
     this.setState({ anchorEl: null });
   };
+
+  handleNotiToggle = () => {};
 
   render() {
     const { classes, theme, drawer, title, menu, isLogin, user } = this.props;
@@ -114,7 +116,7 @@ class Template extends React.Component {
                   onClick={this.handleMenu}
                   color="inherit"
                 >
-                  <Avatar>{user[0]}</Avatar>
+                  <Avatar>{user.slice(0, 2)}</Avatar>
                 </IconButton>
                 <Menu
                   id="menu-appbar"
