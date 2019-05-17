@@ -19,8 +19,9 @@ import HistoryIcon from "icons/historyIcon";
 import SocietyIcon from "icons/societyIcon";
 import ScienceIcon from "icons/scienceIcon";
 
+import TemplateContainer from "containers/template-container";
+
 //components
-import Template from "components/template";
 import ExamBoard from "components/exam/examBoard";
 import WriteExam from "components/exam/writeExam";
 
@@ -95,7 +96,7 @@ class Exam extends Component {
     const appBarMenu = <div />;
 
     return (
-      <Template
+      <TemplateContainer
         theme={theme}
         drawer={drawer}
         title="Go100 Exam"
@@ -103,9 +104,8 @@ class Exam extends Component {
         isLogin={true} //{isLogin}
         user={"user1"} //{user}
       >
-        {/*<ExamBoard subject={subject} />*/}
-        <WriteExam />
-      </Template>
+        <ExamBoard subject={subject} />
+      </TemplateContainer>
     );
   }
 }

@@ -8,7 +8,7 @@
       "type": "image/x-icon"
     }
   ],
-  "start_url": "http://localhost:3000/",
+  "start_url": "https://golony.dev",
   "display": "standalone",
   "theme_color": "#f8f0f0",
   "background_color": "#3F688C",

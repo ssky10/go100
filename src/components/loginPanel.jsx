@@ -1,47 +1,138 @@
 import React from "react";
-import classNames from "classnames/bind";
+import Divider from "@material-ui/core/Divider";
 import { Link } from "react-router-dom";
+import Typography from "@material-ui/core/Typography";
+import FormControl from "@material-ui/core/FormControl";
+import Input from "@material-ui/core/Input";
+import InputLabel from "@material-ui/core/InputLabel";
+import Button from "@material-ui/core/Button";
+import withStyles from "@material-ui/core/styles/withStyles";
+import Paper from "@material-ui/core/Paper";
+import CssBaseline from "@material-ui/core/CssBaseline";
 
 //stylesheet
-import styles from "./loginPanel.module.css";
 import PropTypes from "prop-types";
 
-const cx = classNames.bind(styles);
+const styles = theme => ({
+  home: {
+    width: "auto",
+    display: "block", // Fix IE 11 issue.
+    marginLeft: theme.spacing.unit * 3,
+    marginRight: theme.spacing.unit * 3,
+    [theme.breakpoints.up(400 + theme.spacing.unit * 3 * 2)]: {
+      width: 400,
+      marginLeft: "auto",
+      marginRight: "auto"
+    }
+  },
+  loginContainer: {
+    marginTop: theme.spacing.unit * 8,
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme
+      .spacing.unit * 3}px`
+  },
+  header: {
+    fontFamily: "NanumSquare",
+    fontWeight: "bold",
+    background: "-webkit-linear-gradient(0deg, #007CFF 20%, #21CBF3 80%)",
+    WebkitBackgroundClip: "text",
+    WebkitTextFillColor: "transparent",
+    textTransform: "uppercase",
+    textAlign: "center"
+  },
+  form: {
+    width: "100%", // Fix IE 11 issue.
+    marginTop: theme.spacing.unit
+  },
+  input: { fontFamily: "NanumGothic" },
+  submit: {
+    marginTop: theme.spacing.unit * 3,
+    background: "#2196F3",
+    color: "#fff"
+  },
+  guest: {
+    marginTop: theme.spacing.unit,
+    background: "#43e58f",
+    color: "#fff"
+  },
+  divider: {
+    display: "block",
+    position: "relative",
+    top: "5px",
+    marginTop: "10px",
+    marginBottom: "10px",
+    width: "100%",
+    fontSize: "25px",
+    color: "#000",
+    textAlign: "center"
+  }
+});
 
-const LoginPanel = ({ user, password, onSubmit, onChange }) => {
+const LoginPanel = ({ ID, password, onSubmit, onChange, classes }) => {
   return (
-    <div className={cx("home")}>
-      <div className={cx("login-container")}>
-        <h2 className={cx("login-header")}>go100</h2>
-        <form action="" onSubmit={onSubmit} name="login">
-          <input
-            name="USER"
-            type="text"
-            placeholder="ENTER ID"
-            value={user}
-            onChange={onChange}
-          />
-          <input
-            name="PASSWORD"
-            type="password"
-            placeholder="ENTER PASSWORD"
-            value={password}
-            onChange={onChange}
-          />
-
-          <button className={cx("btn-submit","login-btns")} type="submit">
-            SIGN IN
-          </button>
+    <div className={classes.home}>
+      <CssBaseline />
+      <Paper className={classes.loginContainer}>
+        <Typography className={classes.header} variant="h2">
+          go100
+        </Typography>
+        <form className={classes.form} onSubmit={onSubmit} name="login">
+          <FormControl margin="normal" required fullWidth>
+            <InputLabel htmlFor="id">ID</InputLabel>
+            <Input
+              id="id"
+              name="ID"
+              placeholder="ENTER ID"
+              color="primary"
+              autoFocus
+              onChange={onChange}
+              value={ID}
+            />
+          </FormControl>
+          <FormControl margin="normal" required fullWidth>
+            <InputLabel htmlFor="password">Password</InputLabel>
+            <Input
+              name="PASSWORD"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+              placeholder="ENTER PASSWORD"
+              onChange={onChange}
+              value={password}
+              className={classes.input}
+            />
+          </FormControl>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={classes.submit}
+          >
+            Sign in
+          </Button>
         </form>
-        <span className={cx("divider")}>OR</span>
-        <form action="" onSubmit={onSubmit} name="guest">
-          <Link to="/classeslist">
-            <button className={cx("btn-guest","login-btns")} type="submit">            
-              Enter to Guest
-            </button>
-          </Link>
+        <Divider className={classes.divider} variant="middle" />
+        <form
+          className={classes.form}
+          action=""
+          onSubmit="return false"
+          name="guest"
+        >
+          <Button
+            fullWidth
+            variant="contained"
+            color="primary"
+            component={Link}
+            to="classeslist"
+            className={classes.guest}
+          >
+            Enter to Guest
+          </Button>
         </form>
-      </div>
+      </Paper>
     </div>
   );
 };
@@ -49,6 +140,7 @@ const LoginPanel = ({ user, password, onSubmit, onChange }) => {
 LoginPanel.propTypes = {
   user: PropTypes.string,
   password: PropTypes.string,
+  classes: PropTypes.object.isRequired,
   onSubmit: PropTypes.func,
   onChange: PropTypes.func
 };
@@ -60,4 +152,4 @@ LoginPanel.defaultProps = {
   onChange: () => console.warn("onChange not defined")
 };
 
-export default LoginPanel;
+export default withStyles(styles)(LoginPanel);
