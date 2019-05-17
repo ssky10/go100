@@ -28,9 +28,6 @@ import {
   TeacherBoard
 } from "containers/board";
 
-//service
-import * as service from "services/notice";
-
 //stores
 import { changeBoard } from "store/modules/classboard";
 

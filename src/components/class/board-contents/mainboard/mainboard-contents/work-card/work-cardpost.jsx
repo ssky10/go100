@@ -1,5 +1,5 @@
 //node_module
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
@@ -19,60 +19,86 @@ const styles = theme => ({
     }
 });
 
-const WorkCardPost = (props) => {
-    const { classes } = props;
-    return (
-        <div className={classes.layout}>
-            <Grid
-                container
-                spacing={24}
-            >
+class WorkCardPost extends Component {
+    constructor(props) {
+        super(props);
+    }
+    render() {
+        const { classes, posts } = this.props;
+
+        const PostItems = ({ title, subject, date }) => {
+            return(
                 <Grid
-                    item
-                    xs={12}
+                    container
+                    spacing={24}
                 >
-                    <Typography
-                        className={classes.title}
-                        variant="h6"
+                    <Grid
+                        item
+                        xs={12}
                     >
-                        Title
-                    </Typography>
-                    <Typography
-                        className={classes.title}
-                        variant="subtitle2"
+                        <Typography
+                            className={classes.title}
+                            variant="h6"
+                        >
+                            {subject}
+                        </Typography>
+                        <Typography
+                            className={classes.title}
+                            variant="subtitle2"
+                        >
+                            {title}
+                        </Typography>
+                    </Grid>
+                    <Grid
+                        item
+                        xs={4}
                     >
-                        Subtitle
-                    </Typography>
+                        <Typography
+                            variant="subtitle1"
+                        >
+                            Date
+                        </Typography>
+                    </Grid> 
+                    <Grid
+                        item
+                        xs={8}
+                    >
+                        <Typography
+                            variant="overline"
+                        >
+                            ~{date}
+                        </Typography>
+                    </Grid>             
                 </Grid>
-                <Grid
-                    item
-                    xs={4}
-                >
-                    <Typography
-                        variant="subtitle1"
-                    >
-                        Date
-                    </Typography>
-                </Grid> 
-                <Grid
-                    item
-                    xs={8}
-                >
-                    <Typography
-                        variant="overline"
-                    >
-                        ~MM.DD
-                    </Typography>
-                </Grid>             
-            </Grid>
-        </div>
-    );
+            )
+        }
+        
+        const PostList = posts.map(
+            (post) => {
+                const { idx, title, subject, date} = post.toJS();
+                console.log("noticePostsList실행");
+                console.log("idx : "+idx+", title : "+title+", subject : "+subject+", date : "+date);
+                return (
+                    <PostItems 
+                        key={idx}
+                        title={title}
+                        subject={subject}
+                        date={date}
+                    />
+                )
+            }
+        )
+
+        return (            
+            <div className={classes.layout}>
+                {PostList}
+            </div>
+        );
+    }
 }
+ 
 
 WorkCardPost.propTypes = {
-    classes: PropTypes.object.isRequired,
-};
-WorkCardPost.defaultProps = {
     classes: PropTypes.object.isRequired,
 };
 export default withStyles(styles)(WorkCardPost);

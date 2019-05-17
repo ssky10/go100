@@ -1,5 +1,5 @@
 //node_module
-import React from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
@@ -26,54 +26,82 @@ const styles = theme => ({
 
 const isNewPost = true;
 
-const QnaCardPost = (props) => {
-    const { classes } = props;
+class QnaCardPost extends Component {
+    constructor(props) {
+        super(props);
+    }
+    render() { 
+        const { classes, posts } = this.props;
 
-    return ( 
-        <div className={classes.layout}>
-            <Grid
-                container
-                spacing={24}
-            >
+        console.log("QnACard:"+posts);
+        const PostItems = ({date, contents}) => {
+            return(
                 <Grid
-                    item
-                    xs={1}                    
+                    container
+                    spacing={24}
                 >
-                    <Typography                    >
-                        Idx
-                    </Typography>
-                </Grid>
-                <Grid
-                    item
-                    xs={1}
-                >                    
-                    {isNewPost && 
-                        (<NewIcons/>)
-                    }
-                </Grid>
-                <Grid
-                    item
-                    xs={8}
-                >
-                    <Typography
-                        variant="h6"
+                    <Grid
+                        item
+                        xs={1}  
                     >
-                        Title
-                    </Typography>
-                </Grid>
-                <Grid
-                    item
-                    xs={2}
-                >
-                    <Typography
+                        <Typography>
+                            Idx
+                        </Typography>
+                    </Grid>
+                    <Grid
+                        item
+                        xs={1}
+                    >                    
+                        {isNewPost && 
+                            (<NewIcons/>)
+                        }
+                    </Grid>
+                    <Grid
+                        item
+                        xs={8}
                     >
-                        MM-DD
-                    </Typography>
+                        <Typography
+                            variant="h6"
+                        >
+                            Title
+                        </Typography>
+                    </Grid>
+                    <Grid
+                        item
+                        xs={2}
+                    >
+                        <Typography
+                        >
+                            MM-DD
+                        </Typography>
+                    </Grid>
                 </Grid>
-            </Grid>
-            <Divider/>
-        </div>
-    );
+            )
+        }
+        
+        const PostList = posts.map(
+            (post) => {
+                const { idx, title, contents, date} = post.toJS();
+                console.log("noticePostsList실행");
+                console.log("idx : "+idx+", title : "+title+", contents : "+contents+", date : "+date);
+                return (
+                    <PostItems 
+                        key={idx}
+                        title={title}
+                        contents={contents}
+                        date={date}
+                    />
+                )
+            }
+        )
+        
+        
+        return (
+            <div className={classes.layout}>
+                {PostList}
+            </div>
+        );
+    }
 }
 
 QnaCardPost.propTypes = {

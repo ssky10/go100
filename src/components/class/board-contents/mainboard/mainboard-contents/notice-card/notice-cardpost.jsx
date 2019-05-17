@@ -1,5 +1,5 @@
 //node_module
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
@@ -27,36 +27,65 @@ const styles = theme => ({
     }
 });
 
-const NoticeCardPost = (props) => {
-    const { classes } = props;
-    return (  
-        <div className={classes.layout}>
-            <Grid
-                container
-                spacing={24}
-            >
-                <Grid item xs={10}>
-                    <Avatar
-                        className={classes.avatar}
-                    >T
-                    </Avatar>
+class NoticeCardPost extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {  }
+    }
+    render() { 
+        const { classes, posts } = this.props;
+
+        const PostItems = ({date, contents}) => {
+            return(
+                <Grid
+                    container
+                    spacing={24}
+                >
+                    <Grid item xs={10}>
+                        <Avatar
+                            className={classes.avatar}
+                        >T
+                        </Avatar>
+                    </Grid>
+                    <Grid item xs={2}>
+                        <Typography
+                            className={classes.typography}
+                        >
+                            {date}
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={12} zeroMinWidth>
+                        <Typography >
+                            {contents}
+                        </Typography>
+                    </Grid>
                 </Grid>
-                <Grid item xs={2}>
-                    <Typography
-                        className={classes.typography}
-                    >
-                        Date
-                    </Typography>
-                </Grid>
-                <Grid item xs={12} zeroMinWidth>
-                    <Typography >
-                    ㅎㅇ
-                    </Typography>
-                </Grid>
-            </Grid>
-        </div>
-    );
+            )
+        }
+        
+        const PostList = posts.map(
+            (post) => {
+                const { idx, title, contents, date} = post.toJS();
+                console.log("noticePostsList실행");
+                console.log("idx : "+idx+", title : "+title+", contents : "+contents+", date : "+date);
+                return (
+                    <PostItems 
+                        key={idx}
+                        title={title}
+                        contents={contents}
+                        date={date}
+                    />
+                )
+            }
+        )
+        return (
+            <div className={classes.layout}>
+                {PostList}
+            </div>
+        );
+    }
 }
+
 
 NoticeCardPost.propTypes = {
     classes: PropTypes.object.isRequired,
