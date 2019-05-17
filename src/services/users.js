@@ -8,7 +8,7 @@ export function _login(id, pw) {
 }
 
 export function login(id, pw) {
-  return axios.post("https://golony.dev/api/login", {
+  return axios.post("https://golony.dev/api/auth/login", {
     Origin: window.location.hostname,
     email: id,
     password: pw
@@ -16,7 +16,7 @@ export function login(id, pw) {
 }
 
 export function sendToken(token) {
-  return axios.post("https://golony.dev/api/add_token", {
+  return axios.post("https://golony.dev/api/auth/add_token", {
     Origin: window.location.hostname,
     token: token
   });
