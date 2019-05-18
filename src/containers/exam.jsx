@@ -101,8 +101,8 @@ class Exam extends Component {
         drawer={drawer}
         title="Go100 Exam"
         menu={appBarMenu}
-        isLogin={true} //{isLogin}
-        user={"user1"} //{user}
+        isLogin={isLogin}
+        user={user}
       >
         <ExamBoard subject={subject} />
       </TemplateContainer>

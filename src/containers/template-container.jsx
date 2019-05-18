@@ -76,8 +76,8 @@ class TemplateContainer extends React.Component {
         drawer={drawer}
         title={title}
         menu={appBarMenu}
-        isLogin={true} //{isLogin}
-        user={"user1"} //{user}
+        isLogin={isLogin}
+        user={user}
       >
         {this.props.children}
       </Template>
