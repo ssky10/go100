@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import IconButton from "@material-ui/core/IconButton";
 import NotiIcon from "@material-ui/icons/Notifications";
 import NotiOffIcon from "@material-ui/icons/NotificationsOff";
+import Tooltip from "@material-ui/core/Tooltip";
 import {
   requestPermission,
   upDatePermissionState,
@@ -60,13 +61,15 @@ class TemplateContainer extends React.Component {
     const appBarMenu = (
       <div>
         {menu}
-        <IconButton
-          color="inherit"
-          aria-label="set Notification"
-          onClick={this.handleNotiToggle}
-        >
-          {isNoti ? <NotiIcon /> : <NotiOffIcon />}
-        </IconButton>
+        <Tooltip title={isNoti ? "알림취소" : "알림설정"}>
+          <IconButton
+            color="inherit"
+            aria-label="set Notification"
+            onClick={this.handleNotiToggle}
+          >
+            {isNoti ? <NotiIcon /> : <NotiOffIcon />}
+          </IconButton>
+        </Tooltip>
       </div>
     );
 

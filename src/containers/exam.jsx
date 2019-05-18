@@ -104,7 +104,13 @@ class Exam extends Component {
         isLogin={isLogin}
         user={user}
       >
-        <ExamBoard subject={subject} />
+        <ExamBoard
+          subject={
+            subsubjectNames[parseInt(subject / 100)][
+              subject - parseInt(subject / 100) * 100
+            ]
+          }
+        />
       </TemplateContainer>
     );
   }
