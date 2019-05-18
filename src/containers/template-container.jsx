@@ -25,11 +25,17 @@ class TemplateContainer extends React.Component {
   state = {};
 
   handleNotiToggle = () => {
-    const { notiRegister, notiUnRegister, isNoti } = this.props;
+    const { notiRegister, notiUnRegister, isNoti, token } = this.props;
     if (isNoti) {
-      deleteToken().then(function(result) {
-        if (result) {
-          notiUnRegister();
+      service.deleteToken(token).then(function(response) {
+        if (response.data.status) {
+          deleteToken().then(function(result) {
+            if (result) {
+              notiUnRegister();
+            }
+          });
+        } else {
+          alert(response.data.msg);
         }
       });
     } else {

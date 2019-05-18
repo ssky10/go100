@@ -21,3 +21,10 @@ export function sendToken(token) {
     token: token
   });
 }
+
+export function deleteToken(token) {
+  return axios.post("https://golony.dev/api/auth/delete_token", {
+    Origin: window.location.hostname,
+    token: token
+  });
+}
