@@ -10,6 +10,7 @@
     "@material-ui/icons": "^3.0.2",
     "axios": "^0.18.0",
     "classnames": "^2.2.6",
+    "firebase": "^5.11.0",
     "grommet": "^2.7.0",
     "grommet-icons": "^4.2.0",
     "immutable": "^4.0.0-rc.12",
@@ -24,8 +25,9 @@
     "typescript": "^3.4.5"
   },
   "scripts": {
+    "fix-sw": "node ./src/sw-fix.js",
     "start": "cross-env NODE_PATH=src react-scripts start",
-    "build": "cross-env NODE_PATH=src react-scripts build",
+    "build": "cross-env NODE_PATH=src react-scripts build && npm run fix-sw",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
@@ -51,6 +53,5 @@
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/yg3988/go100/issues"
-  },
-  "homepage": "https://github.com/yg3988/go100#readme"
+  }
 }

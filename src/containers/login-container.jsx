@@ -7,14 +7,14 @@ import { connect } from "react-redux";
 import * as service from "../services/users";
 import { login } from "../store/modules/auth";
 
-//stylesheet
+//components
 import LoginPanel from "../components/loginPanel";
 
 class LoginContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      USER: "",
+      ID: "",
       PASSWORD: ""
     };
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -25,7 +25,7 @@ class LoginContainer extends Component {
     const { login } = this.props;
     if (e.target.name === "login") {
       service
-        .login(this.state.USER, this.state.PASSWORD)
+        .login(this.state.ID, this.state.PASSWORD)
         .then(function(response) {
           if (response.data.result) {
             alert(response.data.nickname + "님 환영합니다!");
@@ -45,6 +45,7 @@ class LoginContainer extends Component {
   handleChange = e => {
     const target = e.target;
     const name = target.name;
+    console.log(target.value);
     this.setState({
       [name]: target.value
     });
@@ -52,12 +53,12 @@ class LoginContainer extends Component {
 
   render() {
     const { isLogin } = this.props;
-    console.log("확인 : "+ isLogin);
+    console.log("확인 : " + isLogin);
     return (
       <div>
         {isLogin && <Redirect to="/classeslist" />}
         <LoginPanel
-          user={this.state.USER}
+          ID={this.state.ID}
           password={this.state.PASSWORD}
           onChange={this.handleChange}
           onSubmit={this.handleSubmit}
@@ -70,12 +71,12 @@ class LoginContainer extends Component {
 const mapStateToProps = ({ auth }) => ({
   // **** .get 을 사용해서 값 조회
   isLogin: auth.get("isLogin"),
-  user: auth.get("user")
+  ID: auth.get("ID")
 });
 
 // props 로 넣어줄 액션 생성함수
 const mapDispatchToProps = dispatch => ({
-  login: user => dispatch(login(user))
+  login: ID => dispatch(login(ID))
 });
 
 export default connect(
