@@ -1,11 +1,16 @@
 //node_modules
 import React, { Component } from 'react';
 import PropTypes from "prop-types";
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
+import { Grid } from '@material-ui/core';
+
+//components
+import NoticeCard from 'components/class/board-contents/noticeboard/notice-card';
+import NoticeWrite from 'components/class/board-contents/noticeboard/notice-write';
+
+//sevices
+import * as axios from "services/post";
 
 const styles = theme => ({
     root:{
@@ -15,76 +20,96 @@ const styles = theme => ({
         paddingRight: theme.spacing.unit * 2,
         flexGrow: 1
     },
+    title:{
+        marginBottom: theme.spacing.unit * 2
+    },
+    contents:{        
+        marginTop: theme.spacing.unit * 3,
+        marginLeft: theme.spacing.unit * 10,
+        marginRight: theme.spacing.unit * 10,
+    },
+    write:{
+        marginBottom: theme.spacing.unit * 2
+    }
 })
 
 class NoticeBoard extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            title: "Notice"
+            title: "Notice",
+            isTeacher: true,
+            textfield: ''
         }
     }
+
+    handleSumbit = e => {
+        const target = e.target;
+        console.log("전송 시작");
+        if (target.name === "post") {
+            axios
+                .setNoticePost(this.props.boardIdx, new Date(), this.state.textfield);
+        }
+    }
+
+    handleContentsChange = e => {
+        this.setState({
+            textfield: e.target.value
+        });
+    };
+
     render() { 
         const { classes } = this.props;
         const title = this.state.title;
-        
+        const isTeacher = this.state.isTeacher;
         return (
             <div className={classes.root}>
                 <Grid
                     container
-                    spacing = {24}
+                    spacing={0}
                 >
                     <Grid
                         item
                         xs={12}
                     >
                         <Typography
+                            className={classes.title}
                             variant="h5"
                         >
                             {title}
                         </Typography>
                     </Grid>
                     <Grid
+                        className={classes.contents}
                         container
                         item
                         xs={12}
                     >
+                        {isTeacher && 
+                        <Grid
+                            className={classes.write}
+                            item
+                            xs={12}
+                        >
+                            <NoticeWrite
+                                contents={this.state.textfield}
+                                onChange={this.handleContentsChange}
+                                onSubmit={this.handleSumbit}
+                            />
+                        </Grid>
+                        }
                         <Grid
                             item
-                            xs={1}
+                            xs={12}
                         >
-                            <Typography
-                                variant="h6"
-                                align="center"
-                            >
-                                idx
-                            </Typography>
+                            <NoticeCard
+                                user="teacher"
+                                date="MM-DD"
+                                contents="test"
+                            />
                         </Grid>
-                        <Grid
-                            item
-                            xs={8}
-                        >
-                            <Typography
-                                variant="h6"
-                                align="center"
-                            >
-                                title
-                            </Typography>
-                        </Grid>
-                        <Grid
-                            item
-                            xs={3}
-                        >
-                            <Typography
-                                variant="h6"
-                                align="center"
-                            >
-                                date
-                            </Typography>
-                        </Grid>
-                    </Grid>
-                    <Divider/>
-                </Grid>
+                    </Grid>                    
+                </Grid>               
             </div>
         );
     }

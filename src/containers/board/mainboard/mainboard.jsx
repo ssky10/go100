@@ -204,7 +204,6 @@ class MainBoard extends Component {
                             <div
                                 className={classes.posts}
                             >
-
                             </div>
                         </Paper>
                     </Grid>

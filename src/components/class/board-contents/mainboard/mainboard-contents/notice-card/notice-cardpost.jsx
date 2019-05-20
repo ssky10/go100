@@ -5,18 +5,21 @@ import { withStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
+import { Card } from '@material-ui/core';
 
 const styles = theme => ({
     layout:{
         flexGrow: 1,
-        backgroundColor: `${theme.palette.grey[200]}`,
         width: 'auto',
         height: `auto`,
-        border: `3px solid ${theme.palette.common.black}`,
-        borderRadius: `8px`,
         padding: theme.spacing.unit,
         margin: theme.spacing.unit,
         overflow: 'hidden'
+    },
+    card:{
+        backgroundColor: `${theme.palette.grey[200]}`,
+        marginBottom: theme.spacing.unit,
+        padding: theme.spacing.unit,
     },
     grid:{
         padding: theme.spacing.unit,
@@ -37,29 +40,33 @@ class NoticeCardPost extends Component {
 
         const PostItems = ({date, contents}) => {
             return(
-                <Grid
-                    container
-                    spacing={24}
+                <Card
+                    className={classes.card}
                 >
-                    <Grid item xs={10}>
-                        <Avatar
-                            className={classes.avatar}
-                        >T
-                        </Avatar>
+                    <Grid
+                        container
+                        spacing={24}
+                    >
+                        <Grid item xs={10}>
+                            <Avatar
+                                className={classes.avatar}
+                            >T
+                            </Avatar>
+                        </Grid>
+                        <Grid item xs={2}>
+                            <Typography
+                                className={classes.typography}
+                            >
+                                {date}
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={12} zeroMinWidth>
+                            <Typography >
+                                {contents}
+                            </Typography>
+                        </Grid>
                     </Grid>
-                    <Grid item xs={2}>
-                        <Typography
-                            className={classes.typography}
-                        >
-                            {date}
-                        </Typography>
-                    </Grid>
-                    <Grid item xs={12} zeroMinWidth>
-                        <Typography >
-                            {contents}
-                        </Typography>
-                    </Grid>
-                </Grid>
+                </Card>
             )
         }
         

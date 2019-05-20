@@ -27,7 +27,9 @@ const Boards = ({boardNo}) => {
                     />
                 )}
                 {(boardNo == 1) && (
-                    <NoticeBoard/>
+                    <NoticeBoard
+                        boardIdx={boardNo}
+                    />
                 )}
                 {(boardNo == 2) && (
                     <WorkBoard/>
