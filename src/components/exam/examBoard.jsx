@@ -13,8 +13,11 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import Slide from "@material-ui/core/Slide";
 import Button from "@material-ui/core/Button";
+import IconButton from "@material-ui/core/IconButton";
 import BackIcon from "@material-ui/icons/ArrowBackIos";
 import NextIcon from "@material-ui/icons/ArrowForwardIos";
+import CreateIcon from "@material-ui/icons/Create";
+import Tooltip from "@material-ui/core/Tooltip";
 
 const styles = theme => ({
   content: {
@@ -101,6 +104,11 @@ const ExamBoard = ({
           <Grid item xs={9}>
             <Typography className={classes.title} variant="h4" gutterBottom>
               {subject}
+              <Tooltip title="문제 만들기">
+                <IconButton aria-label="Create">
+                  <CreateIcon />
+                </IconButton>
+              </Tooltip>
             </Typography>
           </Grid>
           <Grid item xs={3}>
