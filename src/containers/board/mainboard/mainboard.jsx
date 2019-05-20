@@ -1,24 +1,28 @@
 //node_modules
 import React, { Component } from 'react';
+import { fromJS, List } from 'immutable';
 import PropTypes from "prop-types";
+import { connect } from "react-redux";
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 
+//service
+import { getNoticePostList, getWorkPostList } from "store/modules/post";
 
 //component
-import NoticeCard from 'components/class/board/mainboard-contents/notice-card/notice-cardpost';
-import WorkCard from 'components/class/board/mainboard-contents/work-card/work-cardpost';
-import QnACard from 'components/class/board/mainboard-contents/qna-card/qna-cardpost';
+import NoticeCard from 'components/class/board-contents/mainboard/mainboard-contents/notice-card/notice-cardpost';
+import WorkCard from 'components/class/board-contents/mainboard/mainboard-contents/work-card/work-cardpost';
+import QnACard from 'components/class/board-contents/mainboard/mainboard-contents/qna-card/qna-cardpost';
 
 const styles = theme => ({
     root:{
-        padding: theme.spacing.unit * 2,
+        padding: theme.spacing.unit * 1,
         flexGrow: 1
     },
-    paper: { 
+    paper: {
         padding: theme.spacing.unit * 1,
         textAlign: "center"
     },
@@ -35,9 +39,9 @@ const styles = theme => ({
     noticeposts:{
         height: "315px",
         overflow: "auto"
-    },    
+    },
     title: {
-        margin: theme.spacing.unit,    
+        margin: theme.spacing.unit,
     },
     divider: {
     }
@@ -49,38 +53,81 @@ const boardTitle = [
     '묻고 답하기'
 ];
 
-const noticePosts = [
-    'notice1'
-]
+let noticePosts = List();
 
-const workPosts = [
-    'work1'
-]
+let workPosts = List();
 
 const qnaPosts = [
     'qna1'
 ]
+
 class MainBoard extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            spacing: '16'
+            spacing: '16',
+            isUpdate: false
         }
     }
-    
-    render() { 
-        const { classes } = this.props;
-        
+
+    displayPostList = () => {
+        const { getNoticePostList, getWorkPostList } = this.props;
+        getNoticePostList();
+        getWorkPostList();
+    }
+
+    componentDidMount(){
+        this.displayPostList();
+        console.log("componentDidMount 실행")
+    }
+
+    componentWillUpdate(nextProps, nextState) {
+        console.log("componentWillUpdate 실행")
+    }
+
+    componentDidUpdate(prevProps, prevState){
+        if (prevProps.page !== this.props.gage) {
+            this.displayPostList();
+            console.log("componentDidUpdate 실행")
+        }
+    }
+
+    render() {
+        const { classes, noticePostList, workPostList } = this.props;
+
+        if((typeof noticePostList.size) !== "number"){
+            noticePostList.then(res => {
+                if (res.data.result) {
+                    noticePosts = fromJS(res.data.result)
+                }
+            })
+            workPostList.then(res => {
+                if (res.data.result) {
+                    workPosts = fromJS(res.data.result)
+                }
+                if(this.state.isUpdate === false){
+                    this.setState(
+                        {
+                            isUpdate: true
+                        }
+                    )
+                }
+            })
+        }
+
+        console.log("notice: "+ noticePosts);
+        console.log("work: "+workPosts);
+
         return (
             <div
                 className={classes.root}
              >
-                <Grid 
-                    container 
+                <Grid
+                    container
                     spacing={24}
                 >
-                    <Grid 
-                        item 
+                    <Grid
+                        item
                         xs={12}
                     >
                         <Paper
@@ -102,16 +149,12 @@ class MainBoard extends Component {
                             <div
                                 className={classes.noticeposts}
                             >
-                            {noticePosts.map(post => (
-                                <NoticeCard>
-                                    {post}
-                                </NoticeCard>
-                            ))}
-                            </div>                            
+                                {<NoticeCard posts={noticePosts}/>}
+                            </div>
                         </Paper>
                     </Grid>
-                    <Grid 
-                        item 
+                    <Grid
+                        item
                         xs={2}
                     >
                         <Paper
@@ -133,17 +176,14 @@ class MainBoard extends Component {
                             <div
                                 className={classes.posts}
                             >
-                                {workPosts.map(post => (
-                                    <WorkCard>
-                                        {post}
-                                    </WorkCard>
-                                ))}
-                            </div>   
+                                {<WorkCard posts={workPosts}/>
+                                }
+                            </div>
                         </Paper>
                     </Grid>
-                    <Grid 
-                        item 
-                        xs={10} 
+                    <Grid
+                        item
+                        xs={10}
                     >
                         <Paper
                             className={classes.paper}
@@ -164,19 +204,19 @@ class MainBoard extends Component {
                             <div
                                 className={classes.posts}
                             >
-                                {qnaPosts.map(post => (
-                                    <QnACard>
-                                        {post}
-                                    </QnACard>
-                                ))}
-                            </div> 
+                            </div>
                         </Paper>
                     </Grid>
                 </Grid>
-            </div>            
+            </div>
         );
     }
 }
+
+// {qnaPosts.map(post => (
+//     <QnACard key = {post.toString}/>
+// ))}
+
 /* <div className={cx("main-board")}>
 <div className={cx("recent-notice")}>
     최근 공지
@@ -195,4 +235,20 @@ class MainBoard extends Component {
 MainBoard.propTypes = {
     classes: PropTypes.object.isRequired
 }
-export default withStyles(styles)(MainBoard);
+
+const mapStateToProps = ({ post }) => ({
+    // **** .get 을 사용해서 값 조회
+    noticePostList: post.get("noticePostList"),
+    workPostList: post.get("workPostList")
+});
+
+  // props 로 넣어줄 액션 생성함수
+const mapDispatchToProps = dispatch => ({
+    getNoticePostList: board => dispatch(getNoticePostList(board)),
+    getWorkPostList: board => dispatch(getWorkPostList(board))
+});
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(withStyles(styles)(MainBoard));
