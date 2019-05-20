@@ -45,9 +45,12 @@ class LoginContainer extends Component {
   handleChange = e => {
     const target = e.target;
     const name = target.name;
+<<<<<<< HEAD
 
     console.log(target.value);
 
+=======
+>>>>>>> 60a1e280f817c38016ca3abc44e4d31795971cb4
     this.setState({
       [name]: target.value
     });

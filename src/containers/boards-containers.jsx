@@ -1,7 +1,6 @@
 //node_module
 import React, { Component } from 'react';
 import classNames from "classnames/bind";
-
 //components
 import {
     MainBoard, 
@@ -12,14 +11,25 @@ import {
     TeacherBoard
 } from "containers/board";
 
+
+//stylesheet
+import style from "containers/boards-containers.module.css";
+
+const cx = classNames.bind(style);
+
 const Boards = ({boardNo}) => {
+    
         return (
-            <div className={('board-container')}>
+            <div className={cx('board-container')}>
                 {(boardNo == 0) && (
-                    <MainBoard/>
+                    <MainBoard
+                        boardNo = {boardNo}
+                    />
                 )}
                 {(boardNo == 1) && (
-                    <NoticeBoard/>
+                    <NoticeBoard
+                        boardIdx={boardNo}
+                    />
                 )}
                 {(boardNo == 2) && (
                     <WorkBoard/>
