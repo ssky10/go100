@@ -40,6 +40,7 @@ class Exam extends Component {
 
   render() {
     const { theme, subject, changeSubject, isLogin, user } = this.props;
+    
     const subjectNames = ["국어", "영어", "수학", "한국사", "사회", "과학"];
     const subjectIcons = [
       <HangleIcon size="24" />,

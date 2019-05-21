@@ -1,11 +1,11 @@
 import { Map } from "immutable";
-
+import * as service from "../../services/users"
 // 액션 타입을 정의해줍니다.
-const CHANGEBOARD = "classboars/CHANGEBOARD"
+const CHANGEBOARD = "classboards/CHANGEBOARD"
 
 // 액션 생성 함수를 만듭니다.
 // 이 함수들은 나중에 다른 파일에서 불러와야 하므로 내보내줍니다.
-export const chageBoard = (board) => ({
+export const changeBoard = (board) => ({
   type: CHANGEBOARD,
   board
 })
