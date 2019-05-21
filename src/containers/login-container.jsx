@@ -5,7 +5,8 @@ import { connect } from "react-redux";
 
 //services
 import * as service from "../services/users";
-import { login } from "../store/modules/auth";
+import { storeLogin } from "../store/modules/auth";
+import { useAuth } from "../context/loginProvider";
 
 //components
 import LoginPanel from "../components/loginPanel";
@@ -22,14 +23,14 @@ class LoginContainer extends Component {
   }
 
   handleSubmit = e => {
-    const { login } = this.props;
+    const { setLogin } = this.props;
     if (e.target.name === "login") {
       service
         .login(this.state.ID, this.state.PASSWORD)
         .then(function(response) {
-          if (response.data.result) {
+          if (response.data.status) {
             alert(response.data.nickname + "님 환영합니다!");
-            login(response.data.nickname);
+            setLogin(response.data.token);
           } else {
             alert(response.data.msg);
           }
@@ -70,16 +71,16 @@ class LoginContainer extends Component {
 
 const mapStateToProps = ({ auth }) => ({
   // **** .get 을 사용해서 값 조회
-  isLogin: auth.get("isLogin"),
+  //isLogin: auth.get("isLogin"),
   ID: auth.get("ID")
 });
 
 // props 로 넣어줄 액션 생성함수
 const mapDispatchToProps = dispatch => ({
-  login: ID => dispatch(login(ID))
+  storeLogin: ID => dispatch(storeLogin(ID))
 });
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(LoginContainer);
+)(useAuth(LoginContainer));
