@@ -8,6 +8,6 @@ export function deleteToken() {
 
 export function getToken() {
   const user_token = localStorage.getItem("user_token");
-  if (user_token != null) return false;
+  if (user_token == null) return false;
   return user_token;
 }

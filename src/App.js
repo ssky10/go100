@@ -13,6 +13,7 @@ import {
 
 //container&components
 import { Login, ClassesList, Class, ClassNoMaterialUI, Exam } from "containers";
+import { LoginProvider } from "./context/loginProvider";
 import store from "./store";
 
 //stylesheet
@@ -52,7 +53,7 @@ class App extends Component {
     return (
       <Provider store={store}>
         <BrowserRouter>
-          <div>
+          <LoginProvider>
             <Route exact path="/classno" component={ClassNoMaterialUI} />
             <MuiThemeProvider theme={theme}>
               <Route exact path="/" component={Login} />
@@ -60,7 +61,7 @@ class App extends Component {
               <Route exact path="/class" component={Class} />
               <Route exact path="/exam" component={Exam} />
             </MuiThemeProvider>
-          </div>
+          </LoginProvider>
         </BrowserRouter>
       </Provider>
     );
