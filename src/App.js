@@ -54,7 +54,6 @@ class App extends Component {
       <Provider store={store}>
         <BrowserRouter>
           <LoginProvider>
-            <Route exact path="/classno" component={ClassNoMaterialUI} />
             <MuiThemeProvider theme={theme}>
               <Route exact path="/" component={Login} />
               <Route exact path="/classeslist" component={ClassesList} />

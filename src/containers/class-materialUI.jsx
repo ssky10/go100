@@ -1,5 +1,7 @@
 //node_modules
 import React, { Component } from "react";
+import classNames from "classnames/bind";
+import { fromJS, List } from 'immutable';
 import { connect } from "react-redux";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
@@ -16,22 +18,38 @@ import TeacherIcon from "@material-ui/icons/School";
 import WorkIcon from "@material-ui/icons/Event";
 
 //components
-import Template from "components/class/template";
-import Boards from "components/class/boards"
+import Template from "components/template";
+import {
+  MainBoard, 
+  NoticeBoard, 
+  WorkBoard, 
+  QnABoard, 
+  LiveQuizBoard,
+  TeacherBoard
+} from "containers/board";
 
 //stores
-import { chageBoard } from "store/modules/classboard";
+import { changeBoard } from "store/modules/classboard";
+
+//styles
+import style from "containers/class-materialUI.module.css";
+
+const cx = classNames.bind(style);
 
 class ClassMaterialUI extends Component {
   constructor(props) {
     super(props);
     this.state = {
       isTeacher: true,
-      title: '학원이름'
-		};
+      isLogined: true,
+      title: '학원이름',
+    };
   }
 
   render() {
+    const { theme, board, onChangeBoard } = this.props;
+    const title = this.state.title;
+    const isLogined = this.state.isLogined;
     let boardNames = ["Main","공지사항", "과제", "Q&A", "LiveQuiz"];
     
     //강사로그인일 경우
@@ -49,7 +67,10 @@ class ClassMaterialUI extends Component {
 		const ListItems = (text, index) => ( 
 			<ListItem 
 				button 
-				onClick={() => onChangeBoard(index)}
+				onClick={(e) => {
+          onChangeBoard(index);
+          }
+        }
 			>
         <ListItemIcon>
         <SvgIcon>{boardIcons[index]}</SvgIcon>
@@ -60,11 +81,11 @@ class ClassMaterialUI extends Component {
         />
       </ListItem>
 		)
-
+    
     const drawer = (
       <div>
         {boardNames.map((text, index) => (
-          <div>
+          <div key = {index*10}>
             <Divider />
               {ListItems(text, index)}
           </div>
@@ -72,11 +93,35 @@ class ClassMaterialUI extends Component {
       </div>
     );
 
-		const { theme, board, onChangeBoard } = this.props;
-    const title = this.state.title;
+    const BoardsContainer = ({ boardNo }) => {
+      return (
+        <div className={cx('board-container')}>
+                {(boardNo == 0) && (
+                    <MainBoard/>
+                )}
+                {(boardNo == 1) && (
+                    <NoticeBoard
+                      boardIdx={boardNo}
+                    />
+                )}
+                {(boardNo == 2) && (
+                    <WorkBoard/>
+                )}
+                {(boardNo == 3) && (
+                    <QnABoard/>
+                )}
+                {(boardNo == 4) && (
+                    <LiveQuizBoard/>
+                )}
+                {(boardNo == 5) && (
+                    <TeacherBoard/>
+                )}
+            </div>
+      )
+    }
     return (
       <Template theme={theme} drawer={drawer} title={title}>
-        <Boards
+        <BoardsContainer
           boardNo={board}
         />
       </Template>
@@ -89,7 +134,7 @@ const mapStateToProps = ({ classboard }) => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  onChangeBoard: board => dispatch(chageBoard(board))
+  onChangeBoard: board => dispatch(changeBoard(board))
 })
 
 export default connect(

@@ -3,11 +3,11 @@ import React, { Component } from 'react';
 import classNames from 'classnames/bind';
 
 //stylesheet
-import style from 'components/class/board/teacherboard.module.css'
+import style from 'containers/board/workboard/workboard.module.css';
 
 const cx = classNames.bind(style);
 
-class TeacherBoard extends Component {
+class WorkBoard extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -16,11 +16,11 @@ class TeacherBoard extends Component {
     }
     render() { 
         return (
-            <div className="teacher-board">
-                Teacher Board
+            <div className="work-board">
+                Work Board
             </div>
         );
     }
 }
  
-export default TeacherBoard;
+export default WorkBoard;

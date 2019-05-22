@@ -3,7 +3,7 @@ name: API Request template
 about: 서버 API 요청 양식
 title: "[API]"
 labels: API 요청
-assignees: golony6449
+assignees: golony6449, Y0ung-i1
 
 ---
 
