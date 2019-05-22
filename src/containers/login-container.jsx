@@ -30,7 +30,7 @@ class LoginContainer extends Component {
         .then(function(response) {
           if (response.data.status) {
             alert(response.data.nickname + "님 환영합니다!");
-            setLogin(response.data.token);
+            setLogin(response.data.user_token);
           } else {
             alert(response.data.msg);
           }

@@ -1,8 +1,6 @@
 import axios from "axios";
 
-const URL = "http://203.255.3.223/";
-
-export const enter=()=> axios.post(URL+"board.php");
+const URL = "https://golony.dev/api/";
 
 export const setNoticePost = (boardIdx, date, contents) => 
 {
@@ -30,7 +28,7 @@ export const setNoticePost = (boardIdx, date, contents) =>
 }
 
 export const getNoticePostList = (board) => {
-  return axios.get(URL+"board.php");
+  return axios.get(URL+"post/getNoticePosts");
 }
 
 export const getWorkPostList = (board) => {

@@ -18,7 +18,7 @@ import TeacherIcon from "@material-ui/icons/School";
 import WorkIcon from "@material-ui/icons/Event";
 
 //components
-import Template from "components/template";
+import TemplateContainer from "containers/template-container";
 import {
   MainBoard, 
   NoticeBoard, 
@@ -97,7 +97,9 @@ class ClassMaterialUI extends Component {
       return (
         <div className={cx('board-container')}>
                 {(boardNo == 0) && (
-                    <MainBoard/>
+                    <MainBoard
+                      boardIdx={boardNo}
+                    />
                 )}
                 {(boardNo == 1) && (
                     <NoticeBoard
@@ -105,26 +107,40 @@ class ClassMaterialUI extends Component {
                     />
                 )}
                 {(boardNo == 2) && (
-                    <WorkBoard/>
+                    <WorkBoard
+                      boardIdx={boardNo}
+                    />
                 )}
                 {(boardNo == 3) && (
-                    <QnABoard/>
+                    <QnABoard
+                      boardIdx={boardNo}
+                    />
                 )}
                 {(boardNo == 4) && (
-                    <LiveQuizBoard/>
+                    <LiveQuizBoard
+                      boardIdx={boardNo}
+                    />
                 )}
                 {(boardNo == 5) && (
-                    <TeacherBoard/>
+                    <TeacherBoard
+                      boardIdx={boardNo}
+                    />
                 )}
             </div>
       )
     }
     return (
-      <Template theme={theme} drawer={drawer} title={title}>
+      <TemplateContainer 
+        theme={theme}
+        drawer={drawer}
+        title={title}
+        isLogin={true}
+        user={"user1"}
+      >
         <BoardsContainer
           boardNo={board}
         />
-      </Template>
+      </TemplateContainer>
     );
   }
 }
