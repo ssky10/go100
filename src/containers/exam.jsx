@@ -31,7 +31,7 @@ import { changeSubject } from "../store/modules/exam";
 class Exam extends Component {
   constructor(props) {
     super(props);
-    this.state = { open: -1, anchorEl: null };
+    this.state = { open: -1, anchorEl: null, isWrite: true };
   }
 
   handleClick = subject => {
@@ -104,13 +104,23 @@ class Exam extends Component {
         isLogin={isLogin}
         user={user}
       >
-        <ExamBoard
-          subject={
-            subsubjectNames[parseInt(subject / 100)][
-              subject - parseInt(subject / 100) * 100
-            ]
-          }
-        />
+        {this.state.isWrite ? (
+          <WriteExam
+            subject={
+              subsubjectNames[parseInt(subject / 100)][
+                subject - parseInt(subject / 100) * 100
+              ]
+            }
+          />
+        ) : (
+          <ExamBoard
+            subject={
+              subsubjectNames[parseInt(subject / 100)][
+                subject - parseInt(subject / 100) * 100
+              ]
+            }
+          />
+        )}
       </TemplateContainer>
     );
   }
