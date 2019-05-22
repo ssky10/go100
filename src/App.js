@@ -2,23 +2,15 @@
 import React, { Component } from "react";
 import { BrowserRouter, Route } from "react-router-dom";
 import { Provider } from "react-redux";
-import { library } from "@fortawesome/fontawesome-svg-core";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
-import {
-  faBars,
-  faTimes,
-  faAngleLeft,
-  faAngleRight
-} from "@fortawesome/free-solid-svg-icons";
 
 //container&components
 import { Login, ClassesList, Class, ClassNoMaterialUI, Exam } from "containers";
+import { LoginProvider } from "./context/loginProvider";
 import store from "./store";
 
 //stylesheet
 import "./App.css";
-
-library.add(faBars, faTimes, faAngleLeft, faAngleRight);
 
 const theme = createMuiTheme({
   typography: {
@@ -52,18 +44,14 @@ class App extends Component {
     return (
       <Provider store={store}>
         <BrowserRouter>
-          <div>
-<<<<<<< HEAD
-=======
-            <Route exact path="/" component={Login} />
->>>>>>> 60a1e280f817c38016ca3abc44e4d31795971cb4
+          <LoginProvider>
             <MuiThemeProvider theme={theme}>
               <Route exact path="/" component={Login} />
               <Route exact path="/classeslist" component={ClassesList} />
               <Route exact path="/class" component={Class} />
               <Route exact path="/exam" component={Exam} />
             </MuiThemeProvider>
-          </div>
+          </LoginProvider>
         </BrowserRouter>
       </Provider>
     );
