@@ -26,6 +26,7 @@ import ExamBoard from "components/exam/examBoard";
 
 //stores
 import { changeSubject } from "../store/modules/exam";
+import { useAuth } from "../context/loginProvider";
 
 class Exam extends Component {
   constructor(props) {
@@ -39,8 +40,8 @@ class Exam extends Component {
   };
 
   render() {
-    const { theme, subject, changeSubject, isLogin, user } = this.props;
-    
+    const { theme, subject, changeSubject, isLogin, token } = this.props;
+
     const subjectNames = ["국어", "영어", "수학", "한국사", "사회", "과학"];
     const subjectIcons = [
       <HangleIcon size="24" />,
@@ -101,8 +102,9 @@ class Exam extends Component {
         drawer={drawer}
         title="Go100 Exam"
         menu={appBarMenu}
-        isLogin={true} //{isLogin}
+        isLogin={isLogin}
         user={"user1"} //{user}
+        token={token}
       >
         <ExamBoard subject={subject} />
       </TemplateContainer>
@@ -110,17 +112,17 @@ class Exam extends Component {
   }
 }
 
-const mapStateToProps = ({ exam, auth }) => ({
-  subject: exam.get("subject"),
-  isLogin: auth.get("isLogin"),
-  user: auth.get("user")
+const mapStateToProps = ({ exam }) => ({
+  subject: exam.get("subject")
 });
 
 const mapDispatchToProps = dispatch => ({
   changeSubject: subject => dispatch(changeSubject(subject))
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Exam);
+export default useAuth(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(Exam)
+);
