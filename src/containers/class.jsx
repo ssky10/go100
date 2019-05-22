@@ -9,7 +9,7 @@ import Boardmenu from "components/class/board-nav";
 import Boards from "components/class/boards"
 
 //redux-store
-import { chageBoard } from "store/modules/classboard";
+import { changeBoard } from "store/modules/classboard";
 
 
 //stylesheet
@@ -57,7 +57,7 @@ const mapStateToProps = ({ classboard }) => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  onChangeBoard: board => dispatch(chageBoard(board))
+  onChangeBoard: board => dispatch(changeBoard(board))
 })
 
 export default connect(

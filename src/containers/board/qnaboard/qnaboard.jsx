@@ -3,11 +3,11 @@ import React, { Component } from 'react';
 import classNames from 'classnames/bind';
 
 //stylesheet
-import style from 'components/class/board/livequizboard.module.css'
+import style from 'containers/board/qnaboard/qnaboard.module.css';
 
 const cx = classNames.bind(style);
 
-class LiveQuizBoard extends Component {
+class QnABoard extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -16,11 +16,11 @@ class LiveQuizBoard extends Component {
     }
     render() { 
         return (
-            <div className="livequiz-board">
-                LiveQuiz Board
+            <div className="qna-board">
+                Q&A Board
             </div>
         );
     }
 }
  
-export default LiveQuizBoard;
+export default QnABoard;
