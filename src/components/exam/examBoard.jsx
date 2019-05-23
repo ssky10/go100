@@ -18,6 +18,8 @@ import BackIcon from "@material-ui/icons/ArrowBackIos";
 import NextIcon from "@material-ui/icons/ArrowForwardIos";
 import CreateIcon from "@material-ui/icons/Create";
 import Tooltip from "@material-ui/core/Tooltip";
+import TextField from "@material-ui/core/TextField";
+import SadIcon from "@material-ui/icons/SentimentDissatisfied";
 
 const styles = theme => ({
   content: {
@@ -84,7 +86,6 @@ const ExamBoard = ({
   subject,
   classes,
   question,
-  examples,
   onclickExample,
   onclickBack,
   onclickNext
@@ -96,7 +97,6 @@ const ExamBoard = ({
   //     "//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML";
   //   document.body.appendChild(scriptjqMath);
   // }
-
   return (
     <main className={classes.content}>
       <Paper className={classes.paper} elevation={1}>
@@ -129,43 +129,66 @@ const ExamBoard = ({
       </Paper>
       <Slide direction="left" in={true} mountOnEnter unmountOnExit>
         <Paper className={classes.paper} elevation={1}>
-          <Typography className={classes.title} variant="h6" gutterBottom>
-            {question}
-          </Typography>
-          <List className={classes.root}>
-            <ListItem alignItems="flex-start">
-              <Chip
-                className={classes.example}
-                avatar={<Avatar>1</Avatar>}
-                onClick={() => onclickExample(1)}
-                label={examples[0]}
-              />
-            </ListItem>
-            <ListItem alignItems="flex-start">
-              <Chip
-                className={classes.example}
-                avatar={<Avatar>2</Avatar>}
-                onClick={() => onclickExample(2)}
-                label={examples[1]}
-              />
-            </ListItem>
-            <ListItem alignItems="flex-start">
-              <Chip
-                className={classes.example}
-                avatar={<Avatar>3</Avatar>}
-                onClick={() => onclickExample(3)}
-                label={examples[2]}
-              />
-            </ListItem>
-            <ListItem alignItems="flex-start">
-              <Chip
-                className={classes.example}
-                avatar={<Avatar>4</Avatar>}
-                onClick={() => onclickExample(4)}
-                label={examples[3]}
-              />
-            </ListItem>
-          </List>
+          {question === false ? (
+            <div style={{ textAlign: "center" }}>
+              <SadIcon style={{ fontSize: "15em", color: "rgba(0,0,0,0.1)" }} />
+              <Typography className={classes.title} variant="h6" gutterBottom>
+                현재 만들어진 문제가 없어요.... 문제를 만들어 주세요!
+              </Typography>
+            </div>
+          ) : (
+            <div>
+              <Typography className={classes.title} variant="h6" gutterBottom>
+                {question.get("context")}
+              </Typography>
+              {question.get("type") ? (
+                <List className={classes.root}>
+                  <ListItem alignItems="flex-start">
+                    <Chip
+                      className={classes.example}
+                      avatar={<Avatar>1</Avatar>}
+                      onClick={() =>
+                        onclickExample(question.get("examples")[0].code)
+                      }
+                      label={question.get("examples")[0].Context}
+                    />
+                  </ListItem>
+                  <ListItem alignItems="flex-start">
+                    <Chip
+                      className={classes.example}
+                      avatar={<Avatar>2</Avatar>}
+                      onClick={() =>
+                        onclickExample(question.get("examples")[1].code)
+                      }
+                      label={question.examples[1].Context}
+                    />
+                  </ListItem>
+                  <ListItem alignItems="flex-start">
+                    <Chip
+                      className={classes.example}
+                      avatar={<Avatar>3</Avatar>}
+                      onClick={() =>
+                        onclickExample(question.get("examples")[2].code)
+                      }
+                      label={question.examples[2].Context}
+                    />
+                  </ListItem>
+                  <ListItem alignItems="flex-start">
+                    <Chip
+                      className={classes.example}
+                      avatar={<Avatar>4</Avatar>}
+                      onClick={() =>
+                        onclickExample(question.get("examples")[3].code)
+                      }
+                      label={question.examples[3].Context}
+                    />
+                  </ListItem>
+                </List>
+              ) : (
+                <TextField id="standard-dense" label="정답" margin="dense" />
+              )}
+            </div>
+          )}
         </Paper>
       </Slide>
       <Paper className={classes.paper} elevation={1}>
