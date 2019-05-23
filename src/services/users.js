@@ -1,16 +1,9 @@
 import axios from "axios";
 
-export function _login(id, pw) {
-  return axios.post("https://kakaoplus.ml/dummy/userCheck.php", {
-    email: id,
-    password: pw
-  });
-}
-
 export function login(id, pw) {
   return axios.post("https://golony.dev/api/auth/login", {
     Origin: window.location.hostname,
-    email: id,
+    id: id,
     password: pw
   });
 }
