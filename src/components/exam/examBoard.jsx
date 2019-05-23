@@ -148,9 +148,9 @@ const ExamBoard = ({
                       className={classes.example}
                       avatar={<Avatar>1</Avatar>}
                       onClick={() =>
-                        onclickExample(question.get("examples")[0].code)
+                        onclickExample(question.get("example")[0].ex_code)
                       }
-                      label={question.get("examples")[0].Context}
+                      label={question.get("example")[0].ex_context}
                     />
                   </ListItem>
                   <ListItem alignItems="flex-start">
@@ -158,9 +158,9 @@ const ExamBoard = ({
                       className={classes.example}
                       avatar={<Avatar>2</Avatar>}
                       onClick={() =>
-                        onclickExample(question.get("examples")[1].code)
+                        onclickExample(question.get("example")[1].ex_code)
                       }
-                      label={question.examples[1].Context}
+                      label={question.get("example")[1].ex_context}
                     />
                   </ListItem>
                   <ListItem alignItems="flex-start">
@@ -168,9 +168,9 @@ const ExamBoard = ({
                       className={classes.example}
                       avatar={<Avatar>3</Avatar>}
                       onClick={() =>
-                        onclickExample(question.get("examples")[2].code)
+                        onclickExample(question.get("example")[2].ex_code)
                       }
-                      label={question.examples[2].Context}
+                      label={question.get("example")[2].ex_context}
                     />
                   </ListItem>
                   <ListItem alignItems="flex-start">
@@ -178,9 +178,19 @@ const ExamBoard = ({
                       className={classes.example}
                       avatar={<Avatar>4</Avatar>}
                       onClick={() =>
-                        onclickExample(question.get("examples")[3].code)
+                        onclickExample(question.get("example")[3].ex_code)
                       }
-                      label={question.examples[3].Context}
+                      label={question.get("example")[3].ex_context}
+                    />
+                  </ListItem>
+                  <ListItem alignItems="flex-start">
+                    <Chip
+                      className={classes.example}
+                      avatar={<Avatar>5</Avatar>}
+                      onClick={() =>
+                        onclickExample(question.get("example")[4].ex_code)
+                      }
+                      label={question.get("example")[4].ex_context}
                     />
                   </ListItem>
                 </List>
