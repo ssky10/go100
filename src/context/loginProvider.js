@@ -27,7 +27,6 @@ class LoginProvider extends Component {
 
   componentDidMount() {
     const token = getToken();
-    console.log(token);
     if (token) {
       this.setState({ token: token, isLogin: true });
     }
