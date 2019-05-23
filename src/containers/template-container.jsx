@@ -30,12 +30,14 @@ class TemplateContainer extends React.Component {
 
   handleNotiToggle = () => {
     const { token } = this.props;
+    const { setStateNotiToken } = this;
     if (this.state.notiToken !== false) {
       service.deleteToken(token, this.state.notiToken).then(function(response) {
         if (response.data.status) {
           deleteToken().then(function(result) {
             if (result) {
               saveNotiToken("");
+              setStateNotiToken(false);
             }
           });
         } else {
@@ -51,7 +53,7 @@ class TemplateContainer extends React.Component {
               .then(function(response) {
                 if (response.data.status) {
                   saveNotiToken(permissionState.token);
-                  this.setState({ notiToken: permissionState.token });
+                  setStateNotiToken(permissionState.token);
                 } else {
                   deleteToken().then(function(result) {
                     if (result) {
