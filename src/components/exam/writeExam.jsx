@@ -120,7 +120,11 @@ const writeExam = ({
   //   document.body.appendChild(scriptjqMath);
   // }
   const excuteEditButton = exc => {
-    document.execCommand(exc, false, "");
+    var focus = document.getElementById("editorQ").shadowRoot.host;
+    console.log(focus);
+    if (focus.id === "editorQ") {
+      document.execCommand(exc, false, "");
+    }
   };
 
   return (
@@ -222,7 +226,7 @@ const writeExam = ({
                 <Divider />
                 <div
                   className={classes.editorDiv}
-                  id="editor"
+                  id="editorQ"
                   contenteditable="true"
                 >
                   문제를 작성하세요.
