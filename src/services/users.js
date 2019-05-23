@@ -4,7 +4,6 @@ export function login(id, pw) {
   return axios.post("https://golony.dev/api/auth/login", {
     Origin: window.location.hostname,
     id: id,
-    email: id,
     password: pw
   });
 }
