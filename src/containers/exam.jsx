@@ -49,26 +49,15 @@ class Exam extends Component {
     };
   }
 
+  componentDidMount() {
+    this.updateAllQ(0, this.props.token);
+  }
+
   componentWillReceiveProps(nextProps) {
-    const {
-      isLogin: newIsLogin,
-      token: newToken,
-      subject: newSubject
-    } = nextProps;
-    const {
-      isLogin: oldIsLogin,
-      token: oldToken,
-      subject: oldSubject
-    } = this.props;
-    console.log("isLogin: " + newIsLogin);
-    if (newIsLogin) {
-      if (
-        newIsLogin !== oldIsLogin ||
-        newToken !== oldToken ||
-        newSubject !== oldSubject
-      ) {
-        this.updateAllQ(newSubject, newToken);
-      }
+    const { subject: newSubject, token } = nextProps;
+    const { subject: oldSubject } = this.props;
+    if (newSubject !== oldSubject) {
+      this.updateAllQ(newSubject, token);
     }
   }
 
@@ -89,6 +78,7 @@ class Exam extends Component {
           setState(state => ({ ID: response.data.id, total: array.length }));
         }
       }
+      setState(state => ({ ID: response.data.id }));
     });
   };
 
