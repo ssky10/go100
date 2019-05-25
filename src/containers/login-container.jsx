@@ -54,9 +54,9 @@ class LoginContainer extends Component {
 
   render() {
     const { isLogin } = this.props;
-    console.log("확인 : " + isLogin);
     return (
       <div>
+        {console.log(this.props)}
         {isLogin && <Redirect to="/classeslist" />}
         <LoginPanel
           ID={this.state.ID}
