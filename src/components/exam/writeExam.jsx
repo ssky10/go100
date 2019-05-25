@@ -26,6 +26,8 @@ import UnderLineIcon from "@material-ui/icons/FormatUnderlined";
 import ItalicIcon from "@material-ui/icons/FormatItalic";
 import FncIcon from "@material-ui/icons/Functions";
 
+import Editor from "./editor";
+
 const styles = theme => ({
   content: {
     flexGrow: 1,
@@ -88,15 +90,6 @@ const styles = theme => ({
   button: {
     width: "100%",
     marginTop: theme.spacing.unit * 2
-  },
-  editorButton: {
-    marginRight: theme.spacing.unit,
-    marginBottom: theme.spacing.unit,
-    backgroundColor: "white"
-  },
-  editorDiv: {
-    marginTop: theme.spacing.unit,
-    backgroundColor: "white"
   }
 });
 
@@ -119,13 +112,6 @@ const writeExam = ({
   //     "//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML";
   //   document.body.appendChild(scriptjqMath);
   // }
-  const excuteEditButton = exc => {
-    var focus = document.getElementById("editorQ").shadowRoot.host;
-    console.log(focus);
-    if (focus.id === "editorQ") {
-      document.execCommand(exc, false, "");
-    }
-  };
 
   return (
     <main className={classes.content}>
@@ -178,60 +164,7 @@ const writeExam = ({
                 </FormGroup>
               </RadioGroup>
               <FormLabel component="legend">문제</FormLabel>
-              <Paper
-                className={classes.paper}
-                elevation={1}
-                style={{
-                  backgroundColor: "rgba(0,0,0,0.07)",
-                  marginLeft: "5px",
-                  marginRight: "5px",
-                  marginTop: "8px"
-                }}
-              >
-                <Button
-                  onClick={() => excuteEditButton("bold")}
-                  className={classes.editorButton}
-                  variant="contained"
-                  size="small"
-                >
-                  <BoldIcon />
-                  진하게
-                </Button>
-                <Button
-                  className={classes.editorButton}
-                  onClick={() => excuteEditButton("underline")}
-                  variant="contained"
-                  size="small"
-                >
-                  <UnderLineIcon />
-                  밑줄
-                </Button>
-                <Button
-                  className={classes.editorButton}
-                  onClick={() => excuteEditButton("italic")}
-                  variant="contained"
-                  size="small"
-                >
-                  <ItalicIcon />
-                  기울이기
-                </Button>
-                <Button
-                  className={classes.editorButton}
-                  variant="contained"
-                  size="small"
-                >
-                  <FncIcon />
-                  수식입력
-                </Button>
-                <Divider />
-                <div
-                  className={classes.editorDiv}
-                  id="editorQ"
-                  contenteditable="true"
-                >
-                  문제를 작성하세요.
-                </div>
-              </Paper>
+              <Editor id="editorQ" />
 
               <List className={classes.root}>
                 <ListItem alignItems="flex-start">
@@ -239,9 +172,11 @@ const writeExam = ({
                     className={classes.example}
                     avatar={<Avatar>1</Avatar>}
                     label={
-                      <div id="editor" contenteditable="true">
-                        보기1번
-                      </div>
+                      <div
+                        id="example1"
+                        contenteditable="true"
+                        style={{ minWidth: "53px" }}
+                      />
                     }
                   />
                 </ListItem>
@@ -250,9 +185,11 @@ const writeExam = ({
                     className={classes.example}
                     avatar={<Avatar>2</Avatar>}
                     label={
-                      <div id="editor" contenteditable="true">
-                        보기2번
-                      </div>
+                      <div
+                        id="example1"
+                        contenteditable="true"
+                        style={{ minWidth: "53px" }}
+                      />
                     }
                   />
                 </ListItem>
@@ -261,9 +198,11 @@ const writeExam = ({
                     className={classes.example}
                     avatar={<Avatar>3</Avatar>}
                     label={
-                      <div id="editor" contenteditable="true">
-                        보기3번
-                      </div>
+                      <div
+                        id="example1"
+                        contenteditable="true"
+                        style={{ minWidth: "53px" }}
+                      />
                     }
                   />
                 </ListItem>
@@ -272,28 +211,17 @@ const writeExam = ({
                     className={classes.example}
                     avatar={<Avatar>4</Avatar>}
                     label={
-                      <div id="editor" contenteditable="true">
-                        보기4번
-                      </div>
+                      <div
+                        id="example1"
+                        contenteditable="true"
+                        style={{ minWidth: "53px" }}
+                      />
                     }
                   />
                 </ListItem>
               </List>
               <FormLabel component="legend">해설</FormLabel>
-              <Paper
-                className={classes.paper}
-                elevation={1}
-                style={{
-                  backgroundColor: "rgba(0,0,0,0.07)",
-                  marginLeft: "5px",
-                  marginRight: "5px",
-                  marginTop: "8px"
-                }}
-              >
-                <div id="editor" contenteditable="true">
-                  해설을 작성하세요.
-                </div>
-              </Paper>
+              <Editor id="editorR" />
               <Divider />
               <Button
                 size="small"

@@ -12,7 +12,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 //container&components
-import { Login, ClassesList, Class, ClassNoMaterialUI, Exam } from "containers";
+import { Login, ClassesList, Class, Exam } from "containers";
 import { LoginProvider } from "./context/loginProvider";
 import store from "./store";
 

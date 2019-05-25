@@ -88,7 +88,8 @@ const ExamBoard = ({
   question,
   onclickExample,
   onclickBack,
-  onclickNext
+  onclickNext,
+  onclickCreate
 }) => {
   // if (!document.getElementById("jqMath")) {
   //   const scriptjqMath = document.createElement("script");
@@ -105,7 +106,7 @@ const ExamBoard = ({
             <Typography className={classes.title} variant="h4" gutterBottom>
               {subject}
               <Tooltip title="문제 만들기">
-                <IconButton aria-label="Create">
+                <IconButton aria-label="Create" onClick={onclickCreate}>
                   <CreateIcon />
                 </IconButton>
               </Tooltip>
@@ -141,16 +142,16 @@ const ExamBoard = ({
               <Typography className={classes.title} variant="h6" gutterBottom>
                 {question.get("context")}
               </Typography>
-              {question.get("type") ? (
+              {question.get("choiceable") ? (
                 <List className={classes.root}>
                   <ListItem alignItems="flex-start">
                     <Chip
                       className={classes.example}
                       avatar={<Avatar>1</Avatar>}
                       onClick={() =>
-                        onclickExample(question.get("example")[0].ex_code)
+                        onclickExample(question.get("example")[0].code)
                       }
-                      label={question.get("example")[0].ex_context}
+                      label={question.get("example")[0].context}
                     />
                   </ListItem>
                   <ListItem alignItems="flex-start">
@@ -158,9 +159,9 @@ const ExamBoard = ({
                       className={classes.example}
                       avatar={<Avatar>2</Avatar>}
                       onClick={() =>
-                        onclickExample(question.get("example")[1].ex_code)
+                        onclickExample(question.get("example")[1].code)
                       }
-                      label={question.get("example")[1].ex_context}
+                      label={question.get("example")[1].context}
                     />
                   </ListItem>
                   <ListItem alignItems="flex-start">
@@ -168,9 +169,9 @@ const ExamBoard = ({
                       className={classes.example}
                       avatar={<Avatar>3</Avatar>}
                       onClick={() =>
-                        onclickExample(question.get("example")[2].ex_code)
+                        onclickExample(question.get("example")[2].code)
                       }
-                      label={question.get("example")[2].ex_context}
+                      label={question.get("example")[2].context}
                     />
                   </ListItem>
                   <ListItem alignItems="flex-start">
@@ -178,9 +179,9 @@ const ExamBoard = ({
                       className={classes.example}
                       avatar={<Avatar>4</Avatar>}
                       onClick={() =>
-                        onclickExample(question.get("example")[3].ex_code)
+                        onclickExample(question.get("example")[3].code)
                       }
-                      label={question.get("example")[3].ex_context}
+                      label={question.get("example")[3].context}
                     />
                   </ListItem>
                   <ListItem alignItems="flex-start">
@@ -188,9 +189,9 @@ const ExamBoard = ({
                       className={classes.example}
                       avatar={<Avatar>5</Avatar>}
                       onClick={() =>
-                        onclickExample(question.get("example")[4].ex_code)
+                        onclickExample(question.get("example")[4].code)
                       }
-                      label={question.get("example")[4].ex_context}
+                      label={question.get("example")[4].context}
                     />
                   </ListItem>
                 </List>
@@ -227,7 +228,8 @@ ExamBoard.propTypes = {
   onclickExample: PropTypes.func,
   examples: PropTypes.array,
   onclickBack: PropTypes.func,
-  onclickNext: PropTypes.func
+  onclickNext: PropTypes.func,
+  onclickCreate: PropTypes.func
 };
 
 ExamBoard.defaultProps = {
@@ -236,7 +238,8 @@ ExamBoard.defaultProps = {
   onclickExample: num => alert(num + "번 보기 선택"),
   examples: ["보기 1 번", "보기 2 번", "보기 3 번", "보기 4 번"],
   onclickBack: () => alert("이전 문제 클릭"),
-  onclickNext: () => alert("다음 문제 클릭")
+  onclickNext: () => alert("다음 문제 클릭"),
+  onclickCreate: () => alert("문제 풀기 선택")
 };
 
 export default withStyles(styles, { withTheme: true })(ExamBoard);
