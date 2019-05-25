@@ -10,10 +10,14 @@ const { Provider, Consumer: LoginConsumer } = Context;
 
 // Provider 에서 state 를 사용하기 위해서 컴포넌트를 새로 만들어줍니다.
 class LoginProvider extends Component {
-  state = {
-    token: "",
-    isLogin: false
-  };
+  constructor(props) {
+    super(props);
+    const token = getToken();
+    this.state = {
+      token: token,
+      isLogin: token ? true : false
+    };
+  }
 
   // 여기서 actions 라는 객체는 우리가 임의로 설정하는 객체입니다.
   // 나중에 변화를 일으키는 함수들을 전달해줄때, 함수 하나하나 일일히 전달하는 것이 아니라,
@@ -24,14 +28,6 @@ class LoginProvider extends Component {
       this.setState({ token: token, isLogin: true });
     }
   };
-
-  componentDidMount() {
-    const token = getToken();
-    console.log(token);
-    if (token) {
-      this.setState({ token: token, isLogin: true });
-    }
-  }
 
   render() {
     const { state, actions } = this;
