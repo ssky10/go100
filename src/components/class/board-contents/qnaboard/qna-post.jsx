@@ -35,7 +35,11 @@ const styles = theme => ({
         borderBottom: '1px solid #e9e9e9',
         borderRight: '1px solid #e9e9e9'
     },
-
+    body:{
+        height:'400px',
+        padding: theme.spacing.unit * 1,
+        borderBottom: '1px solid #e9e9e9',
+    }
 
 })
 
@@ -125,7 +129,7 @@ class QnAPost extends Component{
                         </Grid>
                         
                         <Grid
-                            className={classes.grid}
+                            className={classes.body}
                             item
                             xs={12}
                         >

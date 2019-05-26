@@ -5,7 +5,7 @@ import { fromJS, List } from 'immutable';
 import { connect } from 'react-redux'
 import PropTypes from "prop-types";
 import { withStyles, Paper, Grid, Typography, Divider } from '@material-ui/core';
-import { QuestionAnswer } from '@material-ui/icons';
+import { QuestionAnswer, Create } from '@material-ui/icons';
 
 //services
 import { getQnAPostList } from "store/modules/post";
@@ -158,10 +158,10 @@ class QnABoard extends Component {
                 return (
                     <Link
                         className={classes.link}
+                        key={idx}
                         to={`/class/qna/post/${idx}`}
                     >
                         <PostItems
-                            key={idx}
                             idx={idx}
                             isAnswered={isAnswered}
                             title={title}
@@ -190,6 +190,16 @@ class QnABoard extends Component {
                         >
                             QnABoard
                         </Typography>
+                    </Grid>
+                    <Grid
+                        item
+                        xs={11}
+                    />
+                    <Grid
+                        item
+                        xs={1}
+                    >
+                        <Create/>
                     </Grid>
                     <Grid                        
                         container
