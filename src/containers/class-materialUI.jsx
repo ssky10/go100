@@ -1,7 +1,7 @@
 //node_modules
 import React, { Component } from "react";
-import classNames from "classnames/bind";
-import { fromJS, List } from 'immutable';
+import classNames from 'classnames/bind';
+import { Link } from 'react-router-dom';
 import { connect } from "react-redux";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
@@ -93,37 +93,37 @@ class ClassMaterialUI extends Component {
       </div>
     );
 
-    const BoardsContainer = ({ boardNo }) => {
+    const BoardsContainer = ({ boardIdx }) => {
       return (
         <div className={cx('board-container')}>
-                {(boardNo == 0) && (
+                {(boardIdx == 0) && (
                     <MainBoard
-                      boardIdx={boardNo}
+                      boardIdx={boardIdx}
                     />
                 )}
-                {(boardNo == 1) && (
+                {(boardIdx == 1) && (
                     <NoticeBoard
-                      boardIdx={boardNo}
+                      boardIdx={boardIdx}
                     />
                 )}
-                {(boardNo == 2) && (
+                {(boardIdx == 2) && (
                     <WorkBoard
-                      boardIdx={boardNo}
+                      boardIdx={boardIdx}
                     />
                 )}
-                {(boardNo == 3) && (
+                {(boardIdx == 3) && (
                     <QnABoard
-                      boardIdx={boardNo}
+                      boardIdx={boardIdx}
                     />
                 )}
-                {(boardNo == 4) && (
+                {(boardIdx == 4) && (
                     <LiveQuizBoard
-                      boardIdx={boardNo}
+                      boardIdx={boardIdx}
                     />
                 )}
-                {(boardNo == 5) && (
+                {(boardIdx == 5) && (
                     <TeacherBoard
-                      boardIdx={boardNo}
+                      boardIdx={boardIdx}
                     />
                 )}
             </div>
@@ -138,7 +138,7 @@ class ClassMaterialUI extends Component {
         user={"user1"}
       >
         <BoardsContainer
-          boardNo={board}
+          boardIdx={board}
         />
       </TemplateContainer>
     );

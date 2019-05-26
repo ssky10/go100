@@ -3,14 +3,10 @@ import React, { Component } from 'react';
 import { fromJS, List } from 'immutable';
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import { withStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
+import { withStyles, Grid, Paper, Typography, Divider } from '@material-ui/core';
 
 //service
-import { getNoticePostList, getWorkPostList } from "store/modules/post";
+import { getNoticePostList, getWorkPostList, getQnAPostList } from "store/modules/post";
 
 //component
 import NoticeCard from 'components/class/board-contents/mainboard/mainboard-contents/notice-card/notice-cardpost';
@@ -19,7 +15,9 @@ import QnACard from 'components/class/board-contents/mainboard/mainboard-content
 
 const styles = theme => ({
     root:{
+        marginLeft: theme.spacing.unit * 1,
         padding: theme.spacing.unit * 1,
+        paddingTop: theme.spacing.unit * 2,
         flexGrow: 1
     },
     paper: {
@@ -47,19 +45,11 @@ const styles = theme => ({
     }
 })
 
-const boardTitle = [
-    '최근 공지',
-    '최근 과제',
-    '묻고 답하기'
-];
-
 let noticePosts = List();
 
 let workPosts = List();
 
-const qnaPosts = [
-    'qna1'
-]
+let qnaPosts = List();
 
 class MainBoard extends Component {
     constructor(props) {
@@ -70,14 +60,15 @@ class MainBoard extends Component {
         }
     }
 
-    displayPostList = () => {
-        const { getNoticePostList, getWorkPostList } = this.props;
-        getNoticePostList();
-        getWorkPostList();
-    }
-
     componentDidMount(){
-        this.displayPostList();
+        const { getNoticePostList, getWorkPostList, getQnAPostList, boardIdx } = this.props;
+
+        console.log(boardIdx);
+
+        getNoticePostList(boardIdx);
+        getWorkPostList(boardIdx);
+        getQnAPostList(boardIdx);
+
         console.log("componentDidMount 실행")
     }
 
@@ -93,9 +84,10 @@ class MainBoard extends Component {
     }
 
     render() {
-        const { classes, noticePostList, workPostList } = this.props;
+        const { classes, noticePostList, workPostList,qnaPostList } = this.props;
 
-        if((typeof noticePostList.size) !== "number"){
+        if(((typeof noticePostList.size) !== "number") && ((typeof workPostList.size) !== "number")  && ((typeof qnaPostList.size) !== "number"))
+        {
             noticePostList.then(res => {
                 if (res.data.result) {
                     noticePosts = fromJS(res.data.result)
@@ -104,6 +96,11 @@ class MainBoard extends Component {
             workPostList.then(res => {
                 if (res.data.result) {
                     workPosts = fromJS(res.data.result)
+                }
+            })
+            qnaPostList.then(res => {
+                if (res.data.result) {
+                    qnaPosts = fromJS(res.data.result)
                 }
                 if(this.state.isUpdate === false){
                     this.setState(
@@ -114,9 +111,6 @@ class MainBoard extends Component {
                 }
             })
         }
-
-        console.log("notice: "+ noticePosts);
-        console.log("work: "+workPosts);
 
         return (
             <div
@@ -132,7 +126,7 @@ class MainBoard extends Component {
                     >
                         <Paper
                             className={classes.noticepaper}
-                            elevation={0}
+                            elevation={1}
                             square={true}
                         >
                             <Typography
@@ -159,7 +153,7 @@ class MainBoard extends Component {
                     >
                         <Paper
                             className={classes.paper}
-                            elevation={0}
+                            elevation={1}
                             square={true}
                         >
                             <Typography
@@ -187,7 +181,7 @@ class MainBoard extends Component {
                     >
                         <Paper
                             className={classes.paper}
-                            elevation={0}
+                            elevation={1}
                             square={true}
                         >
                             <Typography
@@ -204,6 +198,9 @@ class MainBoard extends Component {
                             <div
                                 className={classes.posts}
                             >
+                                <QnACard 
+                                posts={qnaPosts}
+                                />
                             </div>
                         </Paper>
                     </Grid>
@@ -213,25 +210,6 @@ class MainBoard extends Component {
     }
 }
 
-// {qnaPosts.map(post => (
-//     <QnACard key = {post.toString}/>
-// ))}
-
-/* <div className={cx("main-board")}>
-<div className={cx("recent-notice")}>
-    최근 공지
-</div>
-<div className={cx("recent-work")}>
-    최근 과제
-</div>
-<div className={cx("recent-qna")}>
-    최근 물음
-</div>
-<div className={cx("recent-livequiz")}>
-    최근 XX
-</div>
-</div> */
-
 MainBoard.propTypes = {
     classes: PropTypes.object.isRequired
 }
@@ -239,13 +217,15 @@ MainBoard.propTypes = {
 const mapStateToProps = ({ post }) => ({
     // **** .get 을 사용해서 값 조회
     noticePostList: post.get("noticePostList"),
-    workPostList: post.get("workPostList")
+    workPostList: post.get("workPostList"),
+    qnaPostList: post.get("qnaPostList")
 });
 
   // props 로 넣어줄 액션 생성함수
 const mapDispatchToProps = dispatch => ({
     getNoticePostList: board => dispatch(getNoticePostList(board)),
-    getWorkPostList: board => dispatch(getWorkPostList(board))
+    getWorkPostList: board => dispatch(getWorkPostList(board)),
+    getQnAPostList: board => dispatch(getQnAPostList(board))
 });
 
 export default connect(

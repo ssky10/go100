@@ -3,6 +3,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles, Card, Grid, Avatar, Typography, Button, Divider, TextField } from '@material-ui/core';
 
+//stylesheet
+import './notice-write.css'
+
 const styles = theme => ({
     layout:{
         
@@ -45,14 +48,6 @@ const styles = theme => ({
     footerdivider:{
         marginBottom: theme.spacing.unit * 2
     },
-    buttons:{
-        '&':{
-            marginLeft: theme.spacing.unit * 4,
-        },
-        '& + &': {
-            marginLeft: theme.spacing.unit * 2,
-        }
-    },
     checkbox:{
         position: "absolute",
         visibility: "hidden",
@@ -84,6 +79,58 @@ class NoticeWrite extends Component {
                 >   
                     Click for writing something that sharing in your class....
                 </Typography>
+            )
+        }
+        
+        const btnClose = () => {
+            return(
+                <Button
+                    className="buttons"
+                    variant="contained"
+                    onClick={this.handleChange}
+                >
+                    Cancle
+                </Button>
+            )
+        }
+        
+        const btnSubmit = () => {
+            return(
+                <Button
+                    className="buttons"
+                    variant="contained"
+                    color="primary"
+                    type="submit"
+                >
+                    Post
+                </Button>
+            )
+        }
+
+        const cardWrite = () => {
+            return(
+                <Grid
+                    className={classes.footer}
+                    container
+                    item
+                    spacing={0}
+                    xs={12}
+                >
+                    <Grid
+                        className={classes.footerdivider}
+                        item
+                        xs={12}    
+                    >
+                        <Divider/>
+                    </Grid>
+                    <Grid
+                        item
+                        xs={12}
+                    >
+                        {btnSubmit()}
+                        {btnClose()}
+                    </Grid>
+                </Grid>
             )
         }
 
@@ -153,47 +200,7 @@ class NoticeWrite extends Component {
                         }
                         
                         {this.state.checked ?
-                            <Grid
-                                className={
-                                    classes.footer
-                                }
-                                container
-                                item
-                                spacing={0}
-                                xs={12}
-                            >
-                                <Grid
-                                    className={classes.footerdivider}
-                                    item
-                                    xs={12}    
-                                >                            
-                                    <Divider/>
-                                </Grid>
-                                <Grid
-                                    item
-                                    xs={10}
-                                />
-                                <Grid
-                                    item
-                                    xs={2}
-                                >
-                                    <Button
-                                        className={classes.buttons}
-                                        variant="contained"
-                                        onClick={this.handleChange}
-                                    >
-                                        Cancle
-                                    </Button>
-                                    <Button
-                                        className={classes.buttons}
-                                        variant="contained"
-                                        color="primary"
-                                        type="submit"
-                                    >
-                                        Post
-                                    </Button>
-                                </Grid>
-                            </Grid>                          
+                            cardWrite()
                             :                            
                             <Grid
                                 item

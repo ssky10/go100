@@ -1,5 +1,7 @@
 import axios from "axios";
 
+const DummyURL ="http://203.255.3.223";
+
 const URL = "https://golony.dev/api/";
 
 export const setNoticePost = (boardIdx, date, contents) => 
@@ -27,10 +29,33 @@ export const setNoticePost = (boardIdx, date, contents) =>
   });
 }
 
-export const getNoticePostList = (board) => {
-  return axios.get(URL+"post/getNoticePosts");
+export const getNoticePostList = ( classIdx, boardIdx ) => {
+  return axios.post(URL+"post/getNoticePosts",{
+    class: classIdx,
+    boardIdx: boardIdx
+  });
 }
 
-export const getWorkPostList = (board) => {
-  return axios.get(URL+"workboard.php");
-} 
+export const getWorkPostList = (classIdx, boardIdx) => {
+  return axios.post(URL+"post/getWorkBoard.php",{
+    class: classIdx,
+    boardIdx: boardIdx
+  });
+}
+
+export const setQnAPostList = () => {
+  return axios.post(DummyURL+"setQnAPostList.php",{
+  })
+}
+
+export const getQnAPostList = () => {
+  return axios.post(DummyURL+"/getQnAPostList.php",{
+
+  })
+}
+
+export const getQnAPost = (postid) => {
+  return axios.post(DummyURL+"/getqnapost.php",{
+    postid: postid
+  });
+}

@@ -5,7 +5,8 @@ import { Provider } from "react-redux";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
 
 //container&components
-import { Login, ClassesList, Class, ClassNoMaterialUI, Exam } from "containers";
+import { Login, ClassesList, Class, Exam } from "containers";
+import QnAPost from './components/class/board-contents/qnaboard/qna-post';
 import { LoginProvider } from "./context/loginProvider";
 import store from "./store";
 
@@ -49,6 +50,7 @@ class App extends Component {
               <Route exact path="/" component={Login} />
               <Route exact path="/classeslist" component={ClassesList} />
               <Route exact path="/class" component={Class} />
+              <Route path="/class/qna/post/:id" component={QnAPost}/>
               <Route exact path="/exam" component={Exam} />
             </MuiThemeProvider>
           </LoginProvider>
