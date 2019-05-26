@@ -65,6 +65,7 @@ class App extends Component {
                 <Route exact path="/classeslist" component={ClassesList} />
                 <Route exact path="/class" component={Class} />
                 <PrivateRoute exact path="/exam" component={Exam} />
+                <PrivateRoute exact path="/exam/:code" component={Exam} />
                 <Route exact component={NoMatch} />
               </Switch>
             </MuiThemeProvider>

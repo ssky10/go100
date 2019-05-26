@@ -1,17 +1,9 @@
 //node_modules
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import List from "@material-ui/core/List";
-import Collapse from "@material-ui/core/Collapse";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import Divider from "@material-ui/core/Divider";
-import SvgIcon from "@material-ui/core/SvgIcon";
+import { Redirect } from "react-router-dom";
 
 //SVGIcon
-import ExpandLess from "@material-ui/icons/ExpandLess";
-import ExpandMore from "@material-ui/icons/ExpandMore";
 import HangleIcon from "icons/hangleIcon";
 import EngIcon from "icons/engIcon";
 import MathIcon from "icons/mathIcon";
@@ -24,6 +16,7 @@ import TemplateContainer from "containers/template-container";
 //components
 import ExamBoard from "components/exam/examBoard";
 import WriteExam from "components/exam/writeExam";
+import Drawer from "components/exam/drawer";
 
 //stores
 import {
@@ -43,6 +36,7 @@ class Exam extends Component {
       open: -1,
       anchorEl: null,
       isWrite: false,
+      examHome: false,
       nowIdx: 0,
       total: 0,
       ID: "user1"
@@ -50,14 +44,19 @@ class Exam extends Component {
   }
 
   componentDidMount() {
-    this.updateAllQ(0, this.props.token);
+    this.updateAllQ(-1, this.props.token);
   }
 
   componentWillReceiveProps(nextProps) {
     const { subject: newSubject, token } = nextProps;
-    const { subject: oldSubject } = this.props;
+    const { subject: oldSubject, location } = this.props;
+    console.log(location);
     if (newSubject !== oldSubject) {
-      this.updateAllQ(newSubject, token);
+      if (location.pathname !== "/exam") {
+        this.setState(state => ({ examHome: true }));
+      } else {
+        this.updateAllQ(newSubject, token);
+      }
     }
   }
 
@@ -83,6 +82,26 @@ class Exam extends Component {
   };
 
   onclickExample = choice => {};
+
+  onclickSearch = (subject, token) => {
+    const { addQuestion, removeQuestion } = this.props;
+    const setState = this.setState.bind(this);
+    setState(state => ({ total: 0, nowIdx: 0 }));
+    service.getQuestion(token, subject, 5, -1).then(function(response) {
+      if (response.data.status) {
+        if (response.data.num !== 0) {
+          const array = response.data.data;
+
+          for (let index = 0; index < array.length; index++) {
+            const element = array[index];
+            addQuestion(element);
+          }
+          setState(state => ({ ID: response.data.id, total: array.length }));
+        }
+      }
+      setState(state => ({ ID: response.data.id }));
+    });
+  };
 
   onclickBack = () => {
     if (this.state.nowIdx === 0) {
@@ -111,6 +130,7 @@ class Exam extends Component {
 
   handleSubject = subject => {
     this.props.changeSubject(subject);
+    console.log(this.props.location.pathname);
     //this.updateAllQ(subject);
     this.setState(state => ({ isWrite: false }));
   };
@@ -136,74 +156,54 @@ class Exam extends Component {
       ["중등과학", "통합과학", "물리1/2", "화학1/2", "생명1/2", "지구과학1,2"]
     ];
     const drawer = (
-      <div>
-        {subjectNames.map((text, index) => (
-          <div>
-            <Divider />
-            <ListItem button onClick={() => this.handleClick(index)}>
-              <ListItemIcon>
-                <SvgIcon>{subjectIcons[index]}</SvgIcon>
-              </ListItemIcon>
-              <ListItemText inset primary={text} />
-              {this.state.open === index ? <ExpandLess /> : <ExpandMore />}
-            </ListItem>
-            <Collapse
-              in={this.state.open === index}
-              timeout="auto"
-              unmountOnExit
-              style={{ backgroundColor: "#ffffff" }}
-            >
-              <Divider />
-              <List component="div" disablePadding>
-                {subsubjectNames[index].map((text, subindex) => (
-                  <ListItem
-                    button
-                    key={text}
-                    onClick={() => this.handleSubject(index * 100 + subindex)}
-                  >
-                    <ListItemText primary={text} />
-                  </ListItem>
-                ))}
-              </List>
-            </Collapse>
-          </div>
-        ))}
-      </div>
+      <Drawer
+        subjectNames={subjectNames}
+        open={this.state.open}
+        onClickSubject={this.handleClick}
+        subsubjectNames={subsubjectNames}
+        onClickSubSubject={this.handleSubject}
+        subjectIcons={subjectIcons}
+      />
     );
     const appBarMenu = <div />;
 
     return (
-      <TemplateContainer
-        theme={theme}
-        drawer={drawer}
-        title="Go100 Exam"
-        menu={appBarMenu}
-        isLogin={isLogin}
-        user={ID}
-      >
-        {this.state.isWrite ? (
-          <WriteExam
-            subject={
-              subsubjectNames[parseInt(subject / 100)][
-                subject - parseInt(subject / 100) * 100
-              ]
-            }
-          />
-        ) : (
-          <ExamBoard
-            subject={
-              subsubjectNames[parseInt(subject / 100)][
-                subject - parseInt(subject / 100) * 100
-              ]
-            }
-            question={total > 0 ? questions.get(nowIdx) : false}
-            onclickExample={this.onclickExample}
-            onclickBack={this.onclickBack}
-            onclickNext={this.onclickNext}
-            onclickCreate={this.onclickCreate}
-          />
-        )}
-      </TemplateContainer>
+      <React.Fragment>
+        {/*this.state.examHome && <Redirect to="/exam" />*/}
+        <TemplateContainer
+          theme={theme}
+          drawer={drawer}
+          title="Go100 Exam"
+          menu={appBarMenu}
+          isLogin={isLogin}
+          user={ID}
+        >
+          {this.state.isWrite ? (
+            <WriteExam
+              subject={
+                subsubjectNames[parseInt(subject / 100)][
+                  subject - parseInt(subject / 100) * 100
+                ]
+              }
+            />
+          ) : (
+            <ExamBoard
+              subject={
+                subject === -1
+                  ? "오답노트"
+                  : subsubjectNames[parseInt(subject / 100)][
+                      subject - parseInt(subject / 100) * 100
+                    ]
+              }
+              question={total > 0 ? questions.get(nowIdx) : false}
+              onclickExample={this.onclickExample}
+              onclickBack={this.onclickBack}
+              onclickNext={this.onclickNext}
+              onclickCreate={this.onclickCreate}
+            />
+          )}
+        </TemplateContainer>
+      </React.Fragment>
     );
   }
 }

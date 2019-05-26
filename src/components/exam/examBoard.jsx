@@ -20,6 +20,7 @@ import CreateIcon from "@material-ui/icons/Create";
 import Tooltip from "@material-ui/core/Tooltip";
 import TextField from "@material-ui/core/TextField";
 import SadIcon from "@material-ui/icons/SentimentDissatisfied";
+import GoodIcon from "@material-ui/icons/ThumbUpAlt";
 
 const styles = theme => ({
   content: {
@@ -33,6 +34,10 @@ const styles = theme => ({
   },
   title: {
     margin: 0
+  },
+  code: {
+    margin: 0,
+    color: "rgba(0,0,0,0.5)"
   },
   search: {
     position: "relative",
@@ -101,44 +106,41 @@ const ExamBoard = ({
   return (
     <main className={classes.content}>
       <Paper className={classes.paper} elevation={1}>
-        <Grid container spacing={8}>
-          <Grid item xs={9}>
-            <Typography className={classes.title} variant="h4" gutterBottom>
-              {subject}
-              <Tooltip title="문제 만들기">
-                <IconButton aria-label="Create" onClick={onclickCreate}>
-                  <CreateIcon />
-                </IconButton>
-              </Tooltip>
-            </Typography>
-          </Grid>
-          <Grid item xs={3}>
-            <div className={classes.search}>
-              <div className={classes.searchIcon}>
-                <SearchIcon />
-              </div>
-              <InputBase
-                placeholder="문제번호"
-                classes={{
-                  root: classes.inputRoot,
-                  input: classes.inputInput
-                }}
-              />
-            </div>
-          </Grid>
-        </Grid>
+        <Typography className={classes.title} variant="h4" gutterBottom>
+          {subject}
+          {subject !== "오답노트" && (
+            <Tooltip title="문제 만들기">
+              <IconButton aria-label="Create" onClick={onclickCreate}>
+                <CreateIcon />
+              </IconButton>
+            </Tooltip>
+          )}
+        </Typography>
       </Paper>
       <Slide direction="left" in={true} mountOnEnter unmountOnExit>
         <Paper className={classes.paper} elevation={1}>
           {question === false ? (
             <div style={{ textAlign: "center" }}>
-              <SadIcon style={{ fontSize: "15em", color: "rgba(0,0,0,0.1)" }} />
+              {subject === "오답노트" ? (
+                <GoodIcon
+                  style={{ fontSize: "15em", color: "rgba(0,0,0,0.1)" }}
+                />
+              ) : (
+                <SadIcon
+                  style={{ fontSize: "15em", color: "rgba(0,0,0,0.1)" }}
+                />
+              )}
               <Typography className={classes.title} variant="h6" gutterBottom>
-                현재 만들어진 문제가 없어요.... 문제를 만들어 주세요!
+                {subject === "오답노트"
+                  ? "현재 틀린문제가 없어요!"
+                  : "현재 만들어진 문제가 없어요.... 문제를 만들어 주세요!"}
               </Typography>
             </div>
           ) : (
             <div>
+              <Typography className={classes.code} variant="h6" gutterBottom>
+                #{question.get("code")}
+              </Typography>
               <Typography className={classes.title} variant="h6" gutterBottom>
                 {question.get("context")}
               </Typography>
