@@ -7,7 +7,7 @@ import { withStyles, Grid, Paper, Typography, Divider } from '@material-ui/core'
 
 //service
 import { getNoticePostList, getWorkPostList, getQnAPostList } from "store/modules/post";
-
+import { LoginConsumer } from "context/loginProvider";
 //component
 import NoticeCard from 'components/class/board-contents/mainboard/mainboard-contents/notice-card/notice-cardpost';
 import WorkCard from 'components/class/board-contents/mainboard/mainboard-contents/work-card/work-cardpost';

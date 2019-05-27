@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 //services
 import * as service from "../services/users";
 import { storeLogin } from "../store/modules/auth";
-import { useAuth } from "../context/loginProvider";
+import { LoginConsumer, useAuth } from "../context/loginProvider";
 
 //components
 import LoginPanel from "../components/loginPanel";
@@ -64,6 +64,13 @@ class LoginContainer extends Component {
           onChange={this.handleChange}
           onSubmit={this.handleSubmit}
         />
+        <LoginConsumer>
+          {
+            ({state})=>(
+              state.changePage('login')
+            )
+          }
+        </LoginConsumer>
       </div>
     );
   }

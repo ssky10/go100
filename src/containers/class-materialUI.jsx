@@ -30,6 +30,7 @@ import {
 
 //stores
 import { changeBoard } from "store/modules/classboard";
+import { LoginConsumer } from "../context/loginProvider";
 
 //styles
 import style from "containers/class-materialUI.module.css";
@@ -52,6 +53,7 @@ class ClassMaterialUI extends Component {
     const isLogined = this.state.isLogined;
     let boardNames = ["Main","공지사항", "과제", "Q&A", "LiveQuiz"];
     
+    console.log("boardName : "+ typeof boardNames);
     //강사로그인일 경우
     this.state.isTeacher ? boardNames.push("강사") : boardNames = boardNames;
 
@@ -130,17 +132,16 @@ class ClassMaterialUI extends Component {
       )
     }
     return (
-      <TemplateContainer 
-        theme={theme}
-        drawer={drawer}
-        title={title}
-        isLogin={true}
-        user={"user1"}
-      >
+      <div>
+        <LoginConsumer>
+          {({state})=>(
+            state.changePage('class')
+          )}
+        </LoginConsumer>
         <BoardsContainer
           boardIdx={board}
         />
-      </TemplateContainer>
+      </div>
     );
   }
 }

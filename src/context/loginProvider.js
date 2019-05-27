@@ -13,9 +13,18 @@ class LoginProvider extends Component {
   constructor(props) {
     super(props);
     const token = getToken();
+    this._changePage = (pageURL) => {
+      if(!(this.state.pwd===pageURL)){
+        this.setState({
+          pwd: pageURL,
+        });
+      }
+    }
     this.state = {
       token: token,
-      isLogin: token ? true : false
+      isLogin: token ? true : false,
+      pwd: 'login',
+      changePage: this._changePage,
     };
   }
 

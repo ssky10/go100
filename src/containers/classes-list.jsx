@@ -22,7 +22,7 @@ class ClassesList extends Component {
     // const { classes }= this.props;
 
     return (
-      <div classname={classes}>
+      <div className={classes}>
         <Template theme={theme} title="클래스 목록">
           <div>
             {isLogin && <h1>{user}의 클래스 목록입니다.</h1>}
