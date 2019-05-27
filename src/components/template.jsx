@@ -87,7 +87,6 @@ class Template extends React.Component {
   render() {
     const { classes, theme, drawer, title, menu, isLogin, user } = this.props;
     const open = Boolean(this.state.anchorEl);
-
     return (
       <div className={classes.root}>
         <CssBaseline />
