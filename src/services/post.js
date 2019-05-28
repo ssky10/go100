@@ -29,26 +29,28 @@ export const setNoticePost = (boardIdx, date, contents) =>
   });
 }
 
-export const getNoticePostList = ( classIdx, boardIdx ) => {
-  return axios.post(URL+"post/getNoticePosts",{
+export const getNoticePostList = (token, classIdx, boardIdx) => {
+  return axios.post(URL+"classroom/allnotice",{
+    user_token: token,
     class: classIdx,
-    boardIdx: boardIdx
-  });
-}
-
-export const getWorkPostList = (classIdx, boardIdx) => {
-  return axios.post(URL+"post/getWorkBoard.php",{
-    class: classIdx,
-    boardIdx: boardIdx
+    board_type: boardIdx
   });
 }
 
 export const setQnAPostList = () => {
   return axios.post(DummyURL+"setQnAPostList.php",{
-  })
+  });
 }
 
-export const getQnAPostList = () => {
+export const getWorkPostList = ( token, classIdx, boardIdx) => {
+  return axios.post(URL+"classroom/homework",{
+    user_token: token,
+    class: classIdx,
+    boardIdx: boardIdx
+  });
+}
+
+export const getQnAPostList = (token, classIdx, boardIdx) => {
   return axios.post(DummyURL+"/getQnAPostList.php",{
 
   })

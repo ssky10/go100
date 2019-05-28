@@ -7,7 +7,8 @@ import { withStyles, Grid, Paper, Typography, Divider } from '@material-ui/core'
 
 //service
 import { getNoticePostList, getWorkPostList, getQnAPostList } from "store/modules/post";
-import { LoginConsumer } from "context/loginProvider";
+import { useAuth } from "context/loginProvider";
+
 //component
 import NoticeCard from 'components/class/board-contents/mainboard/mainboard-contents/notice-card/notice-cardpost';
 import WorkCard from 'components/class/board-contents/mainboard/mainboard-contents/work-card/work-cardpost';
@@ -56,55 +57,66 @@ class MainBoard extends Component {
         super(props);
         this.state = {
             spacing: '16',
-            isUpdate: false
+            noticePosts: List(),
+            workPosts: List(),
+            qnaPosts: List()
         }
     }
 
     componentDidMount(){
-        const { getNoticePostList, getWorkPostList, getQnAPostList, boardIdx } = this.props;
+        const { getNoticePostList, getWorkPostList, getQnAPostList, boardIdx, token } = this.props;
 
-        getNoticePostList(boardIdx);
-        getWorkPostList(boardIdx);
-        getQnAPostList(boardIdx);
+        getNoticePostList(token, 1, boardIdx);
+        getWorkPostList(token, 1, boardIdx);
+        getQnAPostList(token, 1, boardIdx);
     }
 
-    componentWillUpdate(nextProps, nextState) {
-    }
+    componentWillReceiveProps(nextProps){
+        const { noticePostList:oldNoticePostList, workPostList:oldWorkPostList,qnaPostList:oldQnaPostList } = this.props;
 
-    componentDidUpdate(prevProps, prevState){
-        if (prevProps.page !== this.props.gage) {
-            this.displayPostList();
+        const { noticePostList:newNoticePostList, workPostList:newWorkPostList,qnaPostList:newQnaPostList } = nextProps;
+
+        if( oldNoticePostList!==newNoticePostList ){
+            newNoticePostList.then(res => {
+                if( res.data.notice ){
+                    this.setState({
+                        noticePosts: fromJS(res.data.notice)
+                    })
+                }
+            })
         }
-    }
 
-    render() {
-        const { classes, noticePostList, workPostList,qnaPostList } = this.props;
-
-        if(((typeof noticePostList.size) !== "number") && ((typeof workPostList.size) !== "number")  && ((typeof qnaPostList.size) !== "number"))
-        {
-            noticePostList.then(res => {
-                if (res.data.result) {
-                    noticePosts = fromJS(res.data.result)
-                }
-            })
-            workPostList.then(res => {
-                if (res.data.result) {
-                    workPosts = fromJS(res.data.result)
-                }
-            })
-            qnaPostList.then(res => {
-                if (res.data.result) {
-                    qnaPosts = fromJS(res.data.result)
-                }
-                if(this.state.isUpdate === false){
+        if( oldWorkPostList !== newWorkPostList ){
+            newWorkPostList.then(res => {
+                if (res.data.list) {
                     this.setState(
                         {
-                            isUpdate: true
+                            workPosts: fromJS(res.data.list)
                         }
                     )
                 }
             })
         }
+
+        if( oldQnaPostList !== newQnaPostList ){
+            newQnaPostList.then(res => {
+                if (res.data.result) {
+                    this.setState(
+                        {
+                            qnaPosts: fromJS(res.data.result)
+                        }
+                    ) 
+                }
+            })
+        }
+    }
+
+    render() {
+        const { classes } = this.props;
+
+        const noticePosts = this.state.noticePosts
+        const workPosts = this.state.workPosts;
+        const qnaPosts = this.state.qnaPosts;
 
         return (
             <div
@@ -217,12 +229,12 @@ const mapStateToProps = ({ post }) => ({
 
   // props 로 넣어줄 액션 생성함수
 const mapDispatchToProps = dispatch => ({
-    getNoticePostList: board => dispatch(getNoticePostList(board)),
-    getWorkPostList: board => dispatch(getWorkPostList(board)),
+    getNoticePostList: (token, classIdx, boardIdx) => dispatch(getNoticePostList(token, classIdx, boardIdx)),
+    getWorkPostList: (token, classIdx, boardIdx) => dispatch(getWorkPostList(token, classIdx, boardIdx)),
     getQnAPostList: board => dispatch(getQnAPostList(board))
 });
 
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(withStyles(styles)(MainBoard));
+)(withStyles(styles)(useAuth(MainBoard)));

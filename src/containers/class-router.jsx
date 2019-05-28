@@ -85,13 +85,25 @@ class ClassRouter extends Component {
                 user={"user1"}
             >
                 <Switch>
-                    <Route exact path={match.url} component={MainBoard}/>
-                    <Route path="/class/notice" component={NoticeBoard}/>
-                    <Route path="/class/work" component={WorkBoard}/>
-                    <Route exact path="/class/qna" component={QnABoard}/>   
+                    <Route exact path={match.url} render={()=>(
+                        <MainBoard boardIdx={0}/>
+                    )}/>
+                    <Route path="/class/notice" render={()=>(
+                        <NoticeBoard boardIdx={1}/>
+                    )}/>
+                    <Route path="/class/work" render={()=>(
+                        <WorkBoard boardIdx={2}/>
+                    )}/>
+                    <Route exact path="/class/qna" render={()=>(
+                        <QnABoard boardIdx={3}/>
+                    )}/>   
                     <Route path="/class/qna/post/:id" component={QnAPost}/>
-                    <Route path="/class/livequiz" component={LiveQuizBoard}/>
-                    <Route path="/class/teacher" component={TeacherBoard}/> 
+                    <Route path="/class/livequiz" render={()=>(
+                        <LiveQuizBoard boardIdx={4}/>
+                    )}/>
+                    <Route path="/class/teacher" render={()=>(
+                        <TeacherBoard boardIdx={5}/>
+                    )}/> 
                 </Switch>
             </TemplateContainer>            
         );
