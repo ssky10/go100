@@ -4,30 +4,16 @@ import { BrowserRouter, Route, Switch, Link } from "react-router-dom";
 import { Provider } from "react-redux";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
 
-import { Paper, Typography, ListItem, ListItemIcon, ListItemText, Divider, SvgIcon } from '@material-ui/core'
+import { Paper, Typography } from '@material-ui/core'
 
 //container&components
-import { Login, ClassesList, Exam, TemplateContainer } from "containers";
-import QnAPost from './components/class/board-contents/qnaboard/qna-post';
-import {
-  MainBoard, 
-  NoticeBoard, 
-  WorkBoard, 
-  QnABoard, 
-  LiveQuizBoard,
-  TeacherBoard
-} from "containers/board";
+import { Login, ClassesList, ClassRouter, Exam } from "containers";
+
 import PrivateRoute from "./privateRoute";
 import Template from "components/template";
 
 //SVG Icons
 import Block from '@material-ui/icons/Block'
-import HomeIcon from "@material-ui/icons/Home";
-import NoticeIcon from "@material-ui/icons/Announcement";
-import QNAIcon from "@material-ui/icons/QuestionAnswer";
-import CreateIcon from "@material-ui/icons/Create"
-import TeacherIcon from "@material-ui/icons/School";
-import WorkIcon from "@material-ui/icons/Event";
 
 //store
 import { LoginProvider, LoginConsumer } from "./context/loginProvider";
@@ -73,44 +59,6 @@ class App extends Component {
   render() {
     const page = this.state.page;
 
-    let boardNames = ["Main","공지사항", "과제", "Q&A", "LiveQuiz"];
-
-    const boardIcons = [
-      <HomeIcon />,
-      <NoticeIcon />,
-      <WorkIcon />,
-      <QNAIcon />,
-      <CreateIcon />,
-			<TeacherIcon />
-    ];
-
-    const ListItems = (text, index, URLs=["/class","/class/notice","/class/work","/class/qna","/class/livequiz","/class/teacher"]) => (
-			<ListItem 
-				button
-        component={Link}
-        to={`${URLs[index]}`}
-			>
-        <ListItemIcon>
-        <SvgIcon>{boardIcons[index]}</SvgIcon>
-        </ListItemIcon>
-        <ListItemText 
-          inset 
-          primary={text}
-        />
-      </ListItem>
-    )
-    
-    const drawer = (
-      <div>
-        {boardNames.map((text, index) => (
-          <div key = {index*10}>
-            <Divider />
-              {ListItems(text, index)}
-          </div>
-        ))}
-      </div>
-    );
-
     return (
       <Provider store={store}>
         <BrowserRouter>
@@ -128,23 +76,7 @@ class App extends Component {
               <Switch>
                 <Route exact path="/" component={Login} />
                 <Route exact path="/classeslist" component={ClassesList} />
-                {
-                  <TemplateContainer 
-                    theme={theme}
-                    drawer={drawer}
-                    title='우효'
-                    isLogin={true}
-                    user={"user1"}
-                  >
-                    <Route exact path="/class" component={MainBoard} />
-                    <Route exact path="/class/notice" component={NoticeBoard}/>
-                    <Route exact path="/class/work" component={WorkBoard}/>
-                    <Route exact path="/class/qna" component={QnABoard}/>
-                    <Route exact path="/class/livequiz" component={LiveQuizBoard}/>
-                    <Route exact path="/class/teacher" component={TeacherBoard}/>
-                    <Route path="/class/qna/post/:id" component={QnAPost}/>
-                  </TemplateContainer>
-                }
+                <Route path="/class" component={ClassRouter} />
                 <PrivateRoute exact path="/exam" component={Exam} />
                 <Route exact component={NoMatch} />
               </Switch>

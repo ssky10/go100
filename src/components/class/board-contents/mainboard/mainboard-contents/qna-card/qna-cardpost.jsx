@@ -35,8 +35,6 @@ class QnaCardPost extends Component {
     }
     render() { 
         const { classes, posts } = this.props;
-
-        console.log("QnACard:"+posts);
         const PostItems = ({idx, isAnswered, title, date}) => {
             return(
                 <Grid

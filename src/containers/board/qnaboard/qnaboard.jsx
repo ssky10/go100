@@ -87,7 +87,6 @@ class QnABoard extends Component {
             qnaPostList.then(res => {
                 if(res.data.result){
                     qnaPosts = fromJS(res.data.result);
-                    console.log("qnaPosts:"+qnaPosts);
                     if( this.state.isUpdate === false ){
                         this.setState(
                             {

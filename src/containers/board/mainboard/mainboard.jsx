@@ -63,23 +63,17 @@ class MainBoard extends Component {
     componentDidMount(){
         const { getNoticePostList, getWorkPostList, getQnAPostList, boardIdx } = this.props;
 
-        console.log(boardIdx);
-
         getNoticePostList(boardIdx);
         getWorkPostList(boardIdx);
         getQnAPostList(boardIdx);
-
-        console.log("componentDidMount 실행")
     }
 
     componentWillUpdate(nextProps, nextState) {
-        console.log("componentWillUpdate 실행")
     }
 
     componentDidUpdate(prevProps, prevState){
         if (prevProps.page !== this.props.gage) {
             this.displayPostList();
-            console.log("componentDidUpdate 실행")
         }
     }
 

@@ -5,5 +5,6 @@ as 이하의 이름으로 내보냄
 export { default as Login } from "containers/login-container";
 export { default as ClassesList } from "containers/classes-list";
 export { default as Class } from "containers/class-materialUI";
+export { default as ClassRouter } from "containers/class-router";
 export { default as Exam } from "containers/exam";
 export { default as TemplateContainer } from "containers/template-container"

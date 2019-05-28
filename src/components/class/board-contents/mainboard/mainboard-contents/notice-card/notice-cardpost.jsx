@@ -73,8 +73,6 @@ class NoticeCardPost extends Component {
         const PostList = posts.map(
             (post) => {
                 const { idx, title, contents, date} = post.toJS();
-                console.log("noticePostsList실행");
-                console.log("idx : "+idx+", title : "+title+", contents : "+contents+", date : "+date);
                 return (
                     <PostItems 
                         key={idx}
