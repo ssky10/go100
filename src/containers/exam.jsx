@@ -116,7 +116,14 @@ class Exam extends Component {
   };
 
   render() {
-    const { theme, subject, changeSubject, isLogin, questions } = this.props;
+    const {
+      theme,
+      subject,
+      changeSubject,
+      isLogin,
+      questions,
+      history
+    } = this.props;
     const { question, nowIdx, total, ID } = this.state;
     const subjectNames = ["국어", "영어", "수학", "한국사", "사회", "과학"];
     const subjectIcons = [

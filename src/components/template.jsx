@@ -11,6 +11,7 @@ import { withStyles } from "@material-ui/core/styles";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import Avatar from "@material-ui/core/Avatar";
+import Button from "@material-ui/core/Button";
 
 //SVGIcon
 import AccountCircle from "@material-ui/icons/AccountCircle";
@@ -141,7 +142,7 @@ class Template extends React.Component {
                   onClose={this.handleClose}
                 >
                   <MenuItem onClick={this.handleClose}>{user} Profile</MenuItem>
-                  <MenuItem component={logout}>Logout</MenuItem>
+                  <MenuItem onClick={logout}>Logout</MenuItem>
                 </Menu>
               </div>
             )}

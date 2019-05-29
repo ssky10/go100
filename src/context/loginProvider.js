@@ -26,6 +26,9 @@ class LoginProvider extends Component {
     setLogin: token => {
       saveToken(token);
       this.setState({ token: token, isLogin: true });
+    },
+    setLogout: () => {
+      this.setState({ isLogin: false });
     }
   };
 
@@ -50,6 +53,7 @@ function useAuth(WrappedComponent) {
             token={state.token}
             isLogin={state.isLogin}
             setLogin={actions.setLogin}
+            setLogout={actions.setLogout}
           />
         )}
       </LoginConsumer>

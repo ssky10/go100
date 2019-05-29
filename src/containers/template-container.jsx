@@ -20,6 +20,8 @@ import {
 //services
 import * as service from "../services/users";
 
+import { useAuth } from "../context/loginProvider";
+
 //components
 import Template from "components/template";
 
@@ -76,24 +78,25 @@ class TemplateContainer extends React.Component {
     }
   };
 
-  handleLogout = () => {
-    const token = getToken();
-    if (token) {
-      service.logout(token).then(function(response) {
-        if (response.data.status) {
-          deleteToken().then(function(result) {
-            if (result) {
-              deleteStorage();
-            }
-          });
-        }
-      });
-    }
-    return <Redirect to="/" />;
-  };
-
   render() {
-    const { theme, drawer, title, menu, isLogin, user } = this.props;
+    const { theme, drawer, title, menu, isLogin, user, setLogout } = this.props;
+
+    const handleLogout = () => {
+      const token = getToken();
+      if (token) {
+        service.logout(token).then(function(response) {
+          if (response.data.status) {
+            deleteToken().then(function(result) {
+              if (result) {
+                deleteStorage();
+                setLogout();
+                return <Redirect to="/" />;
+              }
+            });
+          }
+        });
+      }
+    };
 
     const appBarMenu = (
       <div>
@@ -117,7 +120,7 @@ class TemplateContainer extends React.Component {
         title={title}
         menu={appBarMenu}
         isLogin={isLogin}
-        logout={this.handleLogout}
+        logout={handleLogout}
         user={user}
       >
         {this.props.children}
@@ -126,4 +129,4 @@ class TemplateContainer extends React.Component {
   }
 }
 
-export default TemplateContainer;
+export default useAuth(TemplateContainer);
