@@ -1,4 +1,5 @@
 import React from "react";
+import { Redirect } from "react-router-dom";
 import IconButton from "@material-ui/core/IconButton";
 import NotiIcon from "@material-ui/icons/Notifications";
 import NotiOffIcon from "@material-ui/icons/NotificationsOff";
@@ -9,7 +10,12 @@ import {
   deleteToken
 } from "../push-notification";
 
-import { saveNotiToken, getNotiToken } from "../localStorageAccess";
+import {
+  saveNotiToken,
+  getNotiToken,
+  getToken,
+  deleteStorage
+} from "../localStorageAccess";
 
 //services
 import * as service from "../services/users";
@@ -70,6 +76,22 @@ class TemplateContainer extends React.Component {
     }
   };
 
+  handleLogout = () => {
+    const token = getToken();
+    if (token) {
+      service.logout(token).then(function(response) {
+        if (response.data.status) {
+          deleteToken().then(function(result) {
+            if (result) {
+              deleteStorage();
+            }
+          });
+        }
+      });
+    }
+    return <Redirect to="/" />;
+  };
+
   render() {
     const { theme, drawer, title, menu, isLogin, user } = this.props;
 
@@ -95,6 +117,7 @@ class TemplateContainer extends React.Component {
         title={title}
         menu={appBarMenu}
         isLogin={isLogin}
+        logout={this.handleLogout}
         user={user}
       >
         {this.props.children}

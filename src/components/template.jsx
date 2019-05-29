@@ -85,7 +85,16 @@ class Template extends React.Component {
   handleNotiToggle = () => {};
 
   render() {
-    const { classes, theme, drawer, title, menu, isLogin, user } = this.props;
+    const {
+      classes,
+      theme,
+      drawer,
+      title,
+      menu,
+      isLogin,
+      user,
+      logout
+    } = this.props;
     const open = Boolean(this.state.anchorEl);
     return (
       <div className={classes.root}>
@@ -132,7 +141,7 @@ class Template extends React.Component {
                   onClose={this.handleClose}
                 >
                   <MenuItem onClick={this.handleClose}>{user} Profile</MenuItem>
-                  <MenuItem onClick={this.handleClose}>Logout</MenuItem>
+                  <MenuItem component={logout}>Logout</MenuItem>
                 </Menu>
               </div>
             )}
