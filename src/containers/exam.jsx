@@ -23,24 +23,101 @@ import TemplateContainer from "containers/template-container";
 
 //components
 import ExamBoard from "components/exam/examBoard";
+import WriteExam from "components/exam/writeExam";
 
 //stores
-import { changeSubject } from "../store/modules/exam";
+import {
+  changeSubject,
+  addQuestion,
+  removeQuestion
+} from "../store/modules/exam";
+import { useAuth } from "../context/loginProvider";
+
+//services
+import * as service from "../services/exam";
 
 class Exam extends Component {
   constructor(props) {
     super(props);
-    this.state = { open: -1, anchorEl: null };
+    this.state = {
+      open: -1,
+      anchorEl: null,
+      isWrite: false,
+      nowIdx: 0,
+      total: 0,
+      ID: "user1"
+    };
   }
+
+  componentDidMount() {
+    this.updateAllQ(0, this.props.token);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { subject: newSubject, token } = nextProps;
+    const { subject: oldSubject } = this.props;
+    if (newSubject !== oldSubject) {
+      this.updateAllQ(newSubject, token);
+    }
+  }
+
+  updateAllQ = (subject, token) => {
+    const { addQuestion, removeQuestion } = this.props;
+    const setState = this.setState.bind(this);
+    removeQuestion();
+    setState(state => ({ total: 0, nowIdx: 0 }));
+    service.getQuestion(token, subject, 5, -1).then(function(response) {
+      if (response.data.status) {
+        if (response.data.num !== 0) {
+          const array = response.data.data;
+
+          for (let index = 0; index < array.length; index++) {
+            const element = array[index];
+            addQuestion(element);
+          }
+          setState(state => ({ ID: response.data.id, total: array.length }));
+        }
+      }
+      setState(state => ({ ID: response.data.id }));
+    });
+  };
+
+  onclickExample = choice => {};
+
+  onclickBack = () => {
+    if (this.state.nowIdx === 0) {
+      alert("처음문제 입니다.");
+      return;
+    }
+    this.setState(state => ({ nowIdx: this.state.nowIdx - 1 }));
+  };
+
+  onclickNext = () => {
+    if (this.state.nowIdx === this.state.total - 1) {
+      alert("마지막문제 입니다.");
+      return;
+    }
+    this.setState(state => ({ nowIdx: this.state.nowIdx + 1 }));
+  };
+
+  onclickCreate = () => {
+    this.setState(state => ({ isWrite: true }));
+  };
 
   handleClick = subject => {
     if (subject === this.state.open) this.setState(state => ({ open: -1 }));
     else this.setState(state => ({ open: subject }));
   };
 
+  handleSubject = subject => {
+    this.props.changeSubject(subject);
+    //this.updateAllQ(subject);
+    this.setState(state => ({ isWrite: false }));
+  };
+
   render() {
-    const { theme, subject, changeSubject, isLogin, user } = this.props;
-    
+    const { theme, subject, changeSubject, isLogin, questions } = this.props;
+    const { question, nowIdx, total, ID } = this.state;
     const subjectNames = ["국어", "영어", "수학", "한국사", "사회", "과학"];
     const subjectIcons = [
       <HangleIcon size="24" />,
@@ -82,7 +159,7 @@ class Exam extends Component {
                   <ListItem
                     button
                     key={text}
-                    onClick={() => changeSubject(index * 100 + subindex)}
+                    onClick={() => this.handleSubject(index * 100 + subindex)}
                   >
                     <ListItemText primary={text} />
                   </ListItem>
@@ -101,10 +178,31 @@ class Exam extends Component {
         drawer={drawer}
         title="Go100 Exam"
         menu={appBarMenu}
-        isLogin={true} //{isLogin}
-        user={"user1"} //{user}
+        isLogin={isLogin}
+        user={ID}
       >
-        <ExamBoard subject={subject} />
+        {this.state.isWrite ? (
+          <WriteExam
+            subject={
+              subsubjectNames[parseInt(subject / 100)][
+                subject - parseInt(subject / 100) * 100
+              ]
+            }
+          />
+        ) : (
+          <ExamBoard
+            subject={
+              subsubjectNames[parseInt(subject / 100)][
+                subject - parseInt(subject / 100) * 100
+              ]
+            }
+            question={total > 0 ? questions.get(nowIdx) : false}
+            onclickExample={this.onclickExample}
+            onclickBack={this.onclickBack}
+            onclickNext={this.onclickNext}
+            onclickCreate={this.onclickCreate}
+          />
+        )}
       </TemplateContainer>
     );
   }
@@ -113,14 +211,16 @@ class Exam extends Component {
 const mapStateToProps = ({ exam, auth }) => ({
   subject: exam.get("subject"),
   isLogin: auth.get("isLogin"),
-  user: auth.get("user")
+  questions: exam.get("questions")
 });
 
 const mapDispatchToProps = dispatch => ({
-  changeSubject: subject => dispatch(changeSubject(subject))
+  changeSubject: subject => dispatch(changeSubject(subject)),
+  addQuestion: question => dispatch(addQuestion(question)),
+  removeQuestion: () => dispatch(removeQuestion())
 });
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Exam);
+)(useAuth(Exam));

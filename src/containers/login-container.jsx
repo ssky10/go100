@@ -29,8 +29,8 @@ class LoginContainer extends Component {
         .login(this.state.ID, this.state.PASSWORD)
         .then(function(response) {
           if (response.data.status) {
-            alert(response.data.nickname + "님 환영합니다!");
-            setLogin(response.data.token);
+            alert(response.data.id + "님 환영합니다!");
+            setLogin(response.data.user_token);
           } else {
             alert(response.data.msg);
           }
@@ -54,9 +54,9 @@ class LoginContainer extends Component {
 
   render() {
     const { isLogin } = this.props;
-    console.log("확인 : " + isLogin);
     return (
       <div>
+        {console.log(this.props)}
         {isLogin && <Redirect to="/classeslist" />}
         <LoginPanel
           ID={this.state.ID}
