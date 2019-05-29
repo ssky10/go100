@@ -17,6 +17,7 @@ import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import SearchIcon from "@material-ui/icons/Search";
 import NoteIcon from "@material-ui/icons/Notes";
+import InboxIcon from "@material-ui/icons/Inbox";
 
 const styles = theme => ({
   search: {
@@ -66,7 +67,8 @@ const Drawer = ({
   subsubjectNames,
   onClickSubSubject,
   subjectIcons,
-  onClickSearch
+  onClickSearch,
+  ...props
 }) => {
   return (
     <div>
@@ -90,7 +92,14 @@ const Drawer = ({
         />
       </form>
       <Divider />
-      <ListItem button onClick={() => onClickSubSubject(-1)}>
+      <ListItem button component={onClickSubSubject} subject={-2}>
+        <ListItemIcon>
+          <InboxIcon />
+        </ListItemIcon>
+        <ListItemText inset primary={"작성한 문제"} />
+      </ListItem>
+      <Divider />
+      <ListItem button component={onClickSubSubject} subject={-1}>
         <ListItemIcon>
           <NoteIcon />
         </ListItemIcon>
@@ -118,7 +127,8 @@ const Drawer = ({
                 <ListItem
                   button
                   key={text}
-                  onClick={() => onClickSubSubject(index * 100 + subindex)}
+                  component={onClickSubSubject}
+                  subject={index * 100 + subindex}
                 >
                   <ListItemText primary={text} />
                 </ListItem>

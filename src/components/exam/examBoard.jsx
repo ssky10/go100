@@ -151,7 +151,10 @@ const ExamBoard = ({
                       className={classes.example}
                       avatar={<Avatar>1</Avatar>}
                       onClick={() =>
-                        onclickExample(question.get("example")[0].code)
+                        onclickExample(
+                          question.get("code"),
+                          question.get("example")[0].code
+                        )
                       }
                       label={question.get("example")[0].context}
                     />
@@ -161,7 +164,10 @@ const ExamBoard = ({
                       className={classes.example}
                       avatar={<Avatar>2</Avatar>}
                       onClick={() =>
-                        onclickExample(question.get("example")[1].code)
+                        onclickExample(
+                          question.get("code"),
+                          question.get("example")[1].code
+                        )
                       }
                       label={question.get("example")[1].context}
                     />
@@ -171,7 +177,10 @@ const ExamBoard = ({
                       className={classes.example}
                       avatar={<Avatar>3</Avatar>}
                       onClick={() =>
-                        onclickExample(question.get("example")[2].code)
+                        onclickExample(
+                          question.get("code"),
+                          question.get("example")[2].code
+                        )
                       }
                       label={question.get("example")[2].context}
                     />
@@ -181,7 +190,10 @@ const ExamBoard = ({
                       className={classes.example}
                       avatar={<Avatar>4</Avatar>}
                       onClick={() =>
-                        onclickExample(question.get("example")[3].code)
+                        onclickExample(
+                          question.get("code"),
+                          question.get("example")[3].code
+                        )
                       }
                       label={question.get("example")[3].context}
                     />
@@ -191,7 +203,10 @@ const ExamBoard = ({
                       className={classes.example}
                       avatar={<Avatar>5</Avatar>}
                       onClick={() =>
-                        onclickExample(question.get("example")[4].code)
+                        onclickExample(
+                          question.get("code"),
+                          question.get("example")[4].code
+                        )
                       }
                       label={question.get("example")[4].context}
                     />
