@@ -8,6 +8,13 @@ export function login(id, pw) {
   });
 }
 
+export function logout(token) {
+  return axios.post("https://golony.dev/api/auth/logout", {
+    Origin: window.location.hostname,
+    user_token: token
+  });
+}
+
 export function sendToken(user_token, fcm_token) {
   return axios.post("https://golony.dev/api/auth/add_token", {
     Origin: window.location.hostname,
