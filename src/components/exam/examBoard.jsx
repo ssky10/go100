@@ -21,6 +21,8 @@ import Tooltip from "@material-ui/core/Tooltip";
 import TextField from "@material-ui/core/TextField";
 import SadIcon from "@material-ui/icons/SentimentDissatisfied";
 import GoodIcon from "@material-ui/icons/ThumbUpAlt";
+import CorrectIcon from "@material-ui/icons/RadioButtonUnchecked";
+import WrongIcon from "@material-ui/icons/Close";
 
 const styles = theme => ({
   content: {
@@ -34,6 +36,11 @@ const styles = theme => ({
   },
   title: {
     margin: 0
+  },
+  context: {
+    marginLeft: theme.spacing.unit * 3,
+    marginRight: theme.spacing.unit * 3,
+    textAlign: "center"
   },
   code: {
     margin: 0,
@@ -84,6 +91,24 @@ const styles = theme => ({
     display: "-webkit-inline-box",
     width: "100%",
     fontSize: "inherit"
+  },
+  exampleSelect: {
+    backgroundColor: "#FDCF56",
+    "&:hover": {
+      backgroundColor: "#FDCF56"
+    },
+    "&:focus": {
+      backgroundColor: "#FDCF56"
+    }
+  },
+  exampleAnswer: {
+    backgroundColor: "#ff86bc",
+    "&:hover": {
+      backgroundColor: "#ff86bc"
+    },
+    "&:focus": {
+      backgroundColor: "#ff86bc"
+    }
   }
 });
 
@@ -96,13 +121,6 @@ const ExamBoard = ({
   onclickNext,
   onclickCreate
 }) => {
-  // if (!document.getElementById("jqMath")) {
-  //   const scriptjqMath = document.createElement("script");
-  //   scriptjqMath.id = "Mathjax";
-  //   scriptjqMath.src =
-  //     "//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML";
-  //   document.body.appendChild(scriptjqMath);
-  // }
   return (
     <main className={classes.content}>
       <Paper className={classes.paper} elevation={1}>
@@ -141,79 +159,49 @@ const ExamBoard = ({
               <Typography className={classes.code} variant="h6" gutterBottom>
                 #{question.get("code")}
               </Typography>
-              <Typography className={classes.title} variant="h6" gutterBottom>
-                {question.get("context")}
-              </Typography>
+              <div className={classes.context}>
+                {question.get("choice") === -1 ? null : question.get(
+                    "choice"
+                  ) == question.get("answer") ? (
+                  <CorrectIcon style={{ fontSize: "6em", color: "#FDCF56" }} />
+                ) : (
+                  <WrongIcon style={{ fontSize: "6em", color: "#ff86bc" }} />
+                )}
+                <Typography className={classes.title} variant="h6">
+                  {question.get("context")}
+                </Typography>
+              </div>
+
               {question.get("choiceable") ? (
                 <List className={classes.root}>
-                  <ListItem alignItems="flex-start">
-                    <Chip
-                      className={classes.example}
-                      avatar={<Avatar>1</Avatar>}
-                      onClick={() =>
-                        onclickExample(
-                          question.get("code"),
-                          question.get("example")[0].code
-                        )
-                      }
-                      label={question.get("example")[0].context}
-                    />
-                  </ListItem>
-                  <ListItem alignItems="flex-start">
-                    <Chip
-                      className={classes.example}
-                      avatar={<Avatar>2</Avatar>}
-                      onClick={() =>
-                        onclickExample(
-                          question.get("code"),
-                          question.get("example")[1].code
-                        )
-                      }
-                      label={question.get("example")[1].context}
-                    />
-                  </ListItem>
-                  <ListItem alignItems="flex-start">
-                    <Chip
-                      className={classes.example}
-                      avatar={<Avatar>3</Avatar>}
-                      onClick={() =>
-                        onclickExample(
-                          question.get("code"),
-                          question.get("example")[2].code
-                        )
-                      }
-                      label={question.get("example")[2].context}
-                    />
-                  </ListItem>
-                  <ListItem alignItems="flex-start">
-                    <Chip
-                      className={classes.example}
-                      avatar={<Avatar>4</Avatar>}
-                      onClick={() =>
-                        onclickExample(
-                          question.get("code"),
-                          question.get("example")[3].code
-                        )
-                      }
-                      label={question.get("example")[3].context}
-                    />
-                  </ListItem>
-                  <ListItem alignItems="flex-start">
-                    <Chip
-                      className={classes.example}
-                      avatar={<Avatar>5</Avatar>}
-                      onClick={() =>
-                        onclickExample(
-                          question.get("code"),
-                          question.get("example")[4].code
-                        )
-                      }
-                      label={question.get("example")[4].context}
-                    />
-                  </ListItem>
+                  {question.get("example").map((example, idx) => (
+                    <ListItem alignItems="flex-start">
+                      {console.log(example)}
+                      <Chip
+                        className={
+                          example.code === question.get("choice")
+                            ? `${classes.example} ${classes.exampleSelect}`
+                            : example.code == question.get("answer")
+                            ? `${classes.example} ${classes.exampleAnswer}`
+                            : classes.example
+                        }
+                        avatar={<Avatar>{idx + 1}</Avatar>}
+                        onClick={() =>
+                          onclickExample(question.get("code"), example.code)
+                        }
+                        label={example.context}
+                      />
+                    </ListItem>
+                  ))}
                 </List>
               ) : (
                 <TextField id="standard-dense" label="정답" margin="dense" />
+              )}
+
+              {question.get("choice") !== -1 && (
+                <Paper className={classes.paper} elevation={1}>
+                  {question.get("explanation")}
+                </Paper>
               )}
             </div>
           )}

@@ -22,7 +22,8 @@ import Drawer from "components/exam/drawer";
 import {
   changeSubject,
   addQuestion,
-  removeQuestion
+  removeQuestion,
+  addAnswer
 } from "../store/modules/exam";
 import { useAuth } from "../context/loginProvider";
 
@@ -60,9 +61,10 @@ class Exam extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { token, location: newLocation, match } = nextProps;
+    const { token, location: newLocation, match, questions } = nextProps;
     const { location: oldLocation } = this.props;
     console.log(match.path === "/exam/:code(\\d+)");
+    console.log(questions);
     if (match.path === "/exam/:code(\\d+)") {
       //
     } else if (newLocation !== oldLocation) {
@@ -109,10 +111,18 @@ class Exam extends Component {
   };
 
   onclickExample = (code, choice) => {
-    const { token } = this.props;
+    const { token, questions, addAnswer } = this.props;
+    const { nowIdx } = this.state;
     service.markQuestion(token, code, choice).then(function(response) {
       console.log(response);
       if (response.data.status) {
+        addAnswer(
+          nowIdx,
+          choice,
+          response.data.answer,
+          response.data.explanation
+        );
+        console.log(questions.get(nowIdx));
       }
     });
   };
@@ -264,7 +274,9 @@ const mapStateToProps = ({ exam, auth }) => ({
 const mapDispatchToProps = dispatch => ({
   changeSubject: subject => dispatch(changeSubject(subject)),
   addQuestion: question => dispatch(addQuestion(question)),
-  removeQuestion: () => dispatch(removeQuestion())
+  removeQuestion: () => dispatch(removeQuestion()),
+  addAnswer: (idx, choice, answer, explanation) =>
+    dispatch(addAnswer(idx, choice, answer, explanation))
 });
 
 export default connect(
