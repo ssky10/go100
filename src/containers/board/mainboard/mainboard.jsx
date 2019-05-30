@@ -46,12 +46,6 @@ const styles = theme => ({
     }
 })
 
-let noticePosts = List();
-
-let workPosts = List();
-
-let qnaPosts = List();
-
 class MainBoard extends Component {
     constructor(props) {
         super(props);
@@ -89,11 +83,9 @@ class MainBoard extends Component {
         if( oldWorkPostList !== newWorkPostList ){
             newWorkPostList.then(res => {
                 if (res.data.list) {
-                    this.setState(
-                        {
+                    this.setState({
                             workPosts: fromJS(res.data.list)
-                        }
-                    )
+                    })
                 }
             })
         }
@@ -137,7 +129,7 @@ class MainBoard extends Component {
                         >
                             <Typography
                                 component="h3"
-                                variant="title"
+                                variant="h6"
                                 gutterBottom
                                 className={classes.title}
                             >
@@ -164,7 +156,7 @@ class MainBoard extends Component {
                         >
                             <Typography
                                 component="h3"
-                                variant="title"
+                                variant="h6"
                                 gutterBottom
                                 className={classes.title}
                             >
@@ -192,7 +184,7 @@ class MainBoard extends Component {
                         >
                             <Typography
                                 component="h3"
-                                variant="title"
+                                variant="h6"
                                 gutterBottom
                                 className={classes.title}
                             >

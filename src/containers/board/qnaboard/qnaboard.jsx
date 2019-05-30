@@ -21,7 +21,15 @@ const styles = theme => ({
     boardtitle:{
         marginBottom: theme.spacing.unit * 3,
     },
+    linkwrite:{
+        float: "right",
+    },
+    writepaper:{
+        display:"flex"
+        
+    },
     paper:{
+        marginTop: theme.spacing.unit * 1,
         width: '100%',
     },
     listtitle:{
@@ -186,19 +194,32 @@ class QnABoard extends Component {
                     >
                         <Typography
                             variant="h5"
+                            component="h5"
                         >
                             QnABoard
                         </Typography>
                     </Grid>
                     <Grid
                         item
-                        xs={11}
-                    />
-                    <Grid
-                        item
-                        xs={1}
+                        xs={12}
                     >
-                        <Create/>
+                        <Link
+                            className={`${classes.linkwrite} ${classes.link}`} 
+                            to={"/class/qna/write/"}
+                        >
+                            <Paper
+                                className={classes.writepaper}
+                                square
+                            >
+                                <Create/>
+                                <Typography
+                                    variant="subtitle2"
+                                    gutterBottom
+                                >
+                                    글쓰기
+                                </Typography>
+                            </Paper>
+                        </Link>
                     </Grid>
                     <Grid                        
                         container

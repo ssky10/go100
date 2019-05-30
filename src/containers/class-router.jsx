@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Route, Switch, Link } from "react-router-dom";
 import PropTypes from "prop-types";
-import { withStyles, ListItem, ListItemIcon, ListItemText, Divider, SvgIcon } from '@material-ui/core'
+import { withStyles, ListItem, ListItemIcon, ListItemText, Divider, SvgIcon, IconButton } from '@material-ui/core'
 
 import {
     MainBoard, 
@@ -13,9 +13,11 @@ import {
 } from "containers/board";
 
 import QnAPost from 'components/class/board-contents/qnaboard/qna-post';
+import QnAWrite from 'components/class/board-contents/qnaboard/qna-write';
 
 import { TemplateContainer } from "containers";
 
+import ArrowBack from "@material-ui/icons/ArrowBack";
 import HomeIcon from "@material-ui/icons/Home";
 import NoticeIcon from "@material-ui/icons/Announcement";
 import QNAIcon from "@material-ui/icons/QuestionAnswer";
@@ -33,8 +35,9 @@ class ClassRouter extends Component {
             isTeacher: true
         }
     }
+
     render() { 
-        const { theme, classes, match } = this.props;
+        const { theme, classes, history } = this.props;
         
         let boardNames = ["Main","공지사항", "과제", "Q&A", "LiveQuiz"];
 
@@ -74,18 +77,29 @@ class ClassRouter extends Component {
                 </div>
               ))}
             </div>
-          );
-
+        );
+        
+        const menu = (
+            <IconButton
+                color="inherit"
+                onClick={()=>{history.push('/classeslist')}}
+            >
+                <ArrowBack/>
+            </IconButton>
+        )
+        
+        console.log(this.props);
         return (
             <TemplateContainer 
                 theme={theme}
                 drawer={drawer}
+                menu={menu}
                 title='우효'
                 isLogin={true}
                 user={"user1"}
             >
                 <Switch>
-                    <Route exact path={match.url} render={()=>(
+                    <Route exact path="/class" render={()=>(
                         <MainBoard boardIdx={0}/>
                     )}/>
                     <Route path="/class/notice" render={()=>(
@@ -96,7 +110,8 @@ class ClassRouter extends Component {
                     )}/>
                     <Route exact path="/class/qna" render={()=>(
                         <QnABoard boardIdx={3}/>
-                    )}/>   
+                    )}/>
+                    <Route path="/class/qna/write/" component={QnAWrite}/>
                     <Route path="/class/qna/post/:id" component={QnAPost}/>
                     <Route path="/class/livequiz" render={()=>(
                         <LiveQuizBoard boardIdx={4}/>

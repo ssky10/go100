@@ -68,6 +68,7 @@ class NoticeWrite extends Component {
         };
     }
     handleChange = (e) => {
+        console.log(e.target.id);
         if(!(e.target.id))
             this.setState({checked: !this.state.checked})
     };
@@ -133,7 +134,14 @@ class NoticeWrite extends Component {
                         item
                         xs={6}
                     >
-                        <CalendarToday/>
+                         <TextField
+                            id="datetime-local"
+                            label="DeadLine"
+                            type="datetime-local"
+                            InputLabelProps={{
+                            shrink: true,
+                            }}
+                        />
                     </Grid>
                     <Grid
                         item
@@ -213,7 +221,7 @@ class NoticeWrite extends Component {
                         
                         {this.state.checked ?
                             cardWrite()
-                            :                            
+                            :
                             <Grid
                                 item
                                 xs={false}
