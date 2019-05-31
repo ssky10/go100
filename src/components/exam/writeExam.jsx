@@ -105,14 +105,6 @@ const writeExam = ({
   onclickNext,
   onSubmit
 }) => {
-  // if (!document.getElementById("jqMath")) {
-  //   const scriptjqMath = document.createElement("script");
-  //   scriptjqMath.id = "Mathjax";
-  //   scriptjqMath.src =
-  //     "//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML";
-  //   document.body.appendChild(scriptjqMath);
-  // }
-
   return (
     <main className={classes.content}>
       <Paper className={classes.paper} elevation={1}>

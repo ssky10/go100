@@ -229,6 +229,7 @@ class Exam extends Component {
           menu={appBarMenu}
           isLogin={isLogin}
           user={ID}
+          token={this.props.token}
         >
           {this.state.isWrite ? (
             <WriteExam
