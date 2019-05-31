@@ -25,7 +25,6 @@ const styles = theme => ({
     },
     contents:{        
         marginTop: theme.spacing.unit * 3,
-        marginLeft: theme.spacing.unit * 10,
         marginRight: theme.spacing.unit * 10,
     },
     write:{

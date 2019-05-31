@@ -37,7 +37,7 @@ class NoticeCardPost extends Component {
     }
     render() { 
         const { classes, posts } = this.props;
-
+        
         const PostItems = ({date, contents}) => {
             return(
                 <Card
@@ -72,15 +72,14 @@ class NoticeCardPost extends Component {
         
         const PostList = posts.map(
             (post) => {
-                const { idx, title, contents, date} = post.toJS();
-                console.log("noticePostsList실행");
-                console.log("idx : "+idx+", title : "+title+", contents : "+contents+", date : "+date);
+                const { noticeid, username, update_date, title} = post.toJS();
+
                 return (
                     <PostItems 
-                        key={idx}
+                        key={noticeid}
                         title={title}
-                        contents={contents}
-                        date={date}
+                        contents={title}
+                        date={update_date}
                     />
                 )
             }

@@ -3,14 +3,11 @@ import React, { Component } from 'react';
 import { fromJS, List } from 'immutable';
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import { withStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
+import { withStyles, Grid, Paper, Typography, Divider } from '@material-ui/core';
 
 //service
-import { getNoticePostList, getWorkPostList } from "store/modules/post";
+import { getNoticePostList, getWorkPostList, getQnAPostList } from "store/modules/post";
+import { useAuth } from "context/loginProvider";
 
 //component
 import NoticeCard from 'components/class/board-contents/mainboard/mainboard-contents/notice-card/notice-cardpost';
@@ -19,7 +16,9 @@ import QnACard from 'components/class/board-contents/mainboard/mainboard-content
 
 const styles = theme => ({
     root:{
+        marginLeft: theme.spacing.unit * 1,
         padding: theme.spacing.unit * 1,
+        paddingTop: theme.spacing.unit * 2,
         flexGrow: 1
     },
     paper: {
@@ -47,76 +46,77 @@ const styles = theme => ({
     }
 })
 
-const boardTitle = [
-    '최근 공지',
-    '최근 과제',
-    '묻고 답하기'
-];
-
 let noticePosts = List();
 
 let workPosts = List();
 
-const qnaPosts = [
-    'qna1'
-]
+let qnaPosts = List();
 
 class MainBoard extends Component {
     constructor(props) {
         super(props);
         this.state = {
             spacing: '16',
-            isUpdate: false
+            noticePosts: List(),
+            workPosts: List(),
+            qnaPosts: List()
         }
-    }
-
-    displayPostList = () => {
-        const { getNoticePostList, getWorkPostList } = this.props;
-        getNoticePostList();
-        getWorkPostList();
     }
 
     componentDidMount(){
-        this.displayPostList();
-        console.log("componentDidMount 실행")
+        const { getNoticePostList, getWorkPostList, getQnAPostList, boardIdx, token } = this.props;
+
+        getNoticePostList(token, 1, boardIdx);
+        getWorkPostList(token, 1, boardIdx);
+        getQnAPostList(token, 1, boardIdx);
     }
 
-    componentWillUpdate(nextProps, nextState) {
-        console.log("componentWillUpdate 실행")
-    }
+    componentWillReceiveProps(nextProps){
+        const { noticePostList:oldNoticePostList, workPostList:oldWorkPostList,qnaPostList:oldQnaPostList } = this.props;
 
-    componentDidUpdate(prevProps, prevState){
-        if (prevProps.page !== this.props.gage) {
-            this.displayPostList();
-            console.log("componentDidUpdate 실행")
-        }
-    }
+        const { noticePostList:newNoticePostList, workPostList:newWorkPostList,qnaPostList:newQnaPostList } = nextProps;
 
-    render() {
-        const { classes, noticePostList, workPostList } = this.props;
-
-        if((typeof noticePostList.size) !== "number"){
-            noticePostList.then(res => {
-                if (res.data.result) {
-                    noticePosts = fromJS(res.data.result)
+        if( oldNoticePostList!==newNoticePostList ){
+            newNoticePostList.then(res => {
+                if( res.data.notice ){
+                    this.setState({
+                        noticePosts: fromJS(res.data.notice)
+                    })
                 }
             })
-            workPostList.then(res => {
-                if (res.data.result) {
-                    workPosts = fromJS(res.data.result)
-                }
-                if(this.state.isUpdate === false){
+        }
+
+        if( oldWorkPostList !== newWorkPostList ){
+            newWorkPostList.then(res => {
+                if (res.data.list) {
                     this.setState(
                         {
-                            isUpdate: true
+                            workPosts: fromJS(res.data.list)
                         }
                     )
                 }
             })
         }
 
-        console.log("notice: "+ noticePosts);
-        console.log("work: "+workPosts);
+        if( oldQnaPostList !== newQnaPostList ){
+            newQnaPostList.then(res => {
+                if (res.data.result) {
+                    this.setState(
+                        {
+                            qnaPosts: fromJS(res.data.result)
+                        }
+                    ) 
+                }
+            })
+        }
+    }
+
+    render() {
+        const { classes } = this.props;
+
+        const noticePosts = this.state.noticePosts
+        const workPosts = this.state.workPosts;
+        const qnaPosts = this.state.qnaPosts;
 
         return (
             <div
@@ -132,7 +132,7 @@ class MainBoard extends Component {
                     >
                         <Paper
                             className={classes.noticepaper}
-                            elevation={0}
+                            elevation={1}
                             square={true}
                         >
                             <Typography
@@ -159,7 +159,7 @@ class MainBoard extends Component {
                     >
                         <Paper
                             className={classes.paper}
-                            elevation={0}
+                            elevation={1}
                             square={true}
                         >
                             <Typography
@@ -187,7 +187,7 @@ class MainBoard extends Component {
                     >
                         <Paper
                             className={classes.paper}
-                            elevation={0}
+                            elevation={1}
                             square={true}
                         >
                             <Typography
@@ -204,6 +204,9 @@ class MainBoard extends Component {
                             <div
                                 className={classes.posts}
                             >
+                                <QnACard 
+                                posts={qnaPosts}
+                                />
                             </div>
                         </Paper>
                     </Grid>
@@ -213,25 +216,6 @@ class MainBoard extends Component {
     }
 }
 
-// {qnaPosts.map(post => (
-//     <QnACard key = {post.toString}/>
-// ))}
-
-/* <div className={cx("main-board")}>
-<div className={cx("recent-notice")}>
-    최근 공지
-</div>
-<div className={cx("recent-work")}>
-    최근 과제
-</div>
-<div className={cx("recent-qna")}>
-    최근 물음
-</div>
-<div className={cx("recent-livequiz")}>
-    최근 XX
-</div>
-</div> */
-
 MainBoard.propTypes = {
     classes: PropTypes.object.isRequired
 }
@@ -239,16 +223,18 @@ MainBoard.propTypes = {
 const mapStateToProps = ({ post }) => ({
     // **** .get 을 사용해서 값 조회
     noticePostList: post.get("noticePostList"),
-    workPostList: post.get("workPostList")
+    workPostList: post.get("workPostList"),
+    qnaPostList: post.get("qnaPostList")
 });
 
   // props 로 넣어줄 액션 생성함수
 const mapDispatchToProps = dispatch => ({
-    getNoticePostList: board => dispatch(getNoticePostList(board)),
-    getWorkPostList: board => dispatch(getWorkPostList(board))
+    getNoticePostList: (token, classIdx, boardIdx) => dispatch(getNoticePostList(token, classIdx, boardIdx)),
+    getWorkPostList: (token, classIdx, boardIdx) => dispatch(getWorkPostList(token, classIdx, boardIdx)),
+    getQnAPostList: board => dispatch(getQnAPostList(board))
 });
 
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(withStyles(styles)(MainBoard));
+)(withStyles(styles)(useAuth(MainBoard)));
