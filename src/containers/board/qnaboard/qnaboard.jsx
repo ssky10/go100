@@ -12,7 +12,7 @@ import { getQnAPostList } from "store/modules/post";
 
 const styles = theme => ({
     root:{
-        paddingTop: theme.spacing.unit * 5,
+        paddingTop: theme.spacing.unit * 10,
         paddingBottom : theme.spacing.unit * 2,
         paddingLeft: theme.spacing.unit * 10,
         paddingRight: theme.spacing.unit * 10,
@@ -162,11 +162,12 @@ class QnABoard extends Component {
         const PostList = qnaPosts.map(
             (post) => {
                 const { idx, isAnswered, title, date} = post.toJS();
+                const { urls } = this.props
                 return (
                     <Link
                         className={classes.link}
                         key={idx}
-                        to={`/class/qna/post/${idx}`}
+                        to={`${urls}/qna/post/${idx}`}
                     >
                         <PostItems
                             idx={idx}

@@ -18,7 +18,7 @@ const styles = theme => ({
     root:{
         marginLeft: theme.spacing.unit * 1,
         padding: theme.spacing.unit * 1,
-        paddingTop: theme.spacing.unit * 2,
+        paddingTop: theme.spacing.unit * 10,
         flexGrow: 1
     },
     paper: {

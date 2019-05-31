@@ -37,7 +37,7 @@ class ClassRouter extends Component {
     }
 
     render() { 
-        const { theme, classes, history } = this.props;
+        const { theme, classes, history, match } = this.props;
         
         let boardNames = ["Main","공지사항", "과제", "Q&A", "LiveQuiz"];
 
@@ -52,11 +52,11 @@ class ClassRouter extends Component {
             <TeacherIcon />
         ];
 
-        const ListItems = (text, index, URLs=["/class","/class/notice","/class/work","/class/qna","/class/livequiz","/class/teacher"]) => (
+        const ListItems = (text, index, URLs=["","/notice","/work","/qna","/livequiz","/teacher"]) => (
 			<ListItem 
 				button
                 component={Link}
-                to={`${URLs[index]}`}
+                to={`${match.url}${URLs[index]}`}
             >
                 <ListItemIcon>
                 <SvgIcon>{boardIcons[index]}</SvgIcon>
@@ -88,7 +88,7 @@ class ClassRouter extends Component {
             </IconButton>
         )
         
-        console.log(this.props);
+        console.log(match.url);
         return (
             <TemplateContainer 
                 theme={theme}
@@ -99,24 +99,24 @@ class ClassRouter extends Component {
                 user={"user1"}
             >
                 <Switch>
-                    <Route exact path="/class" render={()=>(
+                    <Route exact path={match.url} render={()=>(
                         <MainBoard boardIdx={0}/>
                     )}/>
-                    <Route path="/class/notice" render={()=>(
+                    <Route path={`${match.url}/notice`} render={()=>(
                         <NoticeBoard boardIdx={1}/>
                     )}/>
-                    <Route path="/class/work" render={()=>(
+                    <Route path={`${match.url}/work`} render={()=>(
                         <WorkBoard boardIdx={2}/>
                     )}/>
-                    <Route exact path="/class/qna" render={()=>(
-                        <QnABoard boardIdx={3}/>
+                    <Route exact path={`${match.url}/qna`} render={()=>(
+                        <QnABoard boardIdx={3} urls={`${match.url}`}/>
                     )}/>
-                    <Route path="/class/qna/write/" component={QnAWrite}/>
-                    <Route path="/class/qna/post/:id" component={QnAPost}/>
-                    <Route path="/class/livequiz" render={()=>(
+                    <Route path={`${match.url}/qna/write`} component={QnAWrite}/>
+                    <Route path={`${match.url}/qna/post/:id`} component={QnAPost}/>
+                    <Route path={`${match.url}/livequiz`} render={()=>(
                         <LiveQuizBoard boardIdx={4}/>
                     )}/>
-                    <Route path="/class/teacher" render={()=>(
+                    <Route path={`${match.url}/teacher`} render={()=>(
                         <TeacherBoard boardIdx={5}/>
                     )}/> 
                 </Switch>

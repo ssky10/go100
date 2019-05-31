@@ -115,7 +115,7 @@ class App extends Component {
               <Switch>
                 <Route exact path="/" component={Login} />
                 <Route exact path="/classeslist" component={ClassesList}/>
-                <Route path="/class" component={ClassRouter} />
+                <Route path="/class/:id" component={ClassRouter} />
                 <PrivateRoute exact path="/exam" component={Exam} />
                 <Route exact component={NoMatch} />
               </Switch>

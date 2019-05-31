@@ -92,9 +92,6 @@ class QnAWrite extends Component {
         this.setState({
             [name]: value
         })
-
-        console.log("name : " + name);
-        console.log("value : " + value);
     }
 
     excuteEditButton = (e, exc) => {
