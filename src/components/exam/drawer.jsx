@@ -108,7 +108,7 @@ const Drawer = ({
       {subjectNames.map((text, index) => (
         <div>
           <Divider />
-          <ListItem button onClick={() => onClickSubject(index)}>
+          <ListItem button onClick={() => onClickSubject(index)} key={text}>
             <ListItemIcon>
               <SvgIcon>{subjectIcons[index]}</SvgIcon>
             </ListItemIcon>
