@@ -8,21 +8,38 @@ import ListItemText from "@material-ui/core/ListItemText";
 
 //components
 import Template from "components/template";
-
 import ClassList from "components/class/classeslist";
+import { useAuth } from "../context/loginProvider";
+import { getlist } from "../services/list";
 
 class ClassesList extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {list: Array()};
   }
 
-  render() {
-    const { classes, theme, isLogin, user } = this.props;
-    // const { classes }= this.props;
+componentDidMount() {
+  console.log("componentDidMount")
+  const { token } = this.props;
+  const setState = this.setState.bind(this);
+  getlist(token)
+  .then(function(result) {
+    console.log(result)
+    //if(result.data.status){
+      setState(state => ({
+        list: result.data.Context
+      }))
+    //}
 
+  })
+}
+
+
+  render() {
+    const { classes, theme, isLogin, user, token } = this.props;
+    // const { classes }= this.props;
     return (
-      <div classname={classes}>
+      <div className={classes}>
         <Template theme={theme} title="클래스 목록">
           <div>
             {isLogin && <h1>{user}의 클래스 목록입니다.</h1>}
@@ -38,7 +55,8 @@ class ClassesList extends Component {
         </Template>
 
         <div>
-          <ClassList />
+          {console.log(this.state.list)}
+          <ClassList list= {this.state.list}/>
         </div>
       </div>
     );
@@ -57,4 +75,4 @@ const mapDispatchToProps = dispatch => ({});
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(ClassesList);
+)(useAuth(ClassesList));

@@ -206,7 +206,6 @@ class Exam extends Component {
   render() {
     const { theme, isLogin, questions } = this.props;
     const { nowIdx, total, ID, subject } = this.state;
-
     const drawer = (
       <Drawer
         subjectNames={this.subjectNames}

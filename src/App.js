@@ -1,30 +1,26 @@
 //node_module
 import React, { Component } from "react";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { BrowserRouter, Route, Switch, Link } from "react-router-dom";
 import { Provider } from "react-redux";
-import { library } from "@fortawesome/fontawesome-svg-core";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
-import {
-  faBars,
-  faTimes,
-  faAngleLeft,
-  faAngleRight
-} from "@fortawesome/free-solid-svg-icons";
-import Paper from "@material-ui/core/Paper";
-import Block from "@material-ui/icons/Block";
-import Typography from "@material-ui/core/Typography";
+
+import { Paper, Typography } from '@material-ui/core'
 
 //container&components
-import { Login, ClassesList, Class, Exam } from "containers";
-import Template from "components/template";
-import { LoginProvider } from "./context/loginProvider";
+import { Login, ClassesList, ClassRouter, Exam } from "containers";
+
 import PrivateRoute from "./privateRoute";
+import Template from "components/template";
+
+//SVG Icons
+import Block from '@material-ui/icons/Block'
+
+//store
+import { LoginProvider, LoginConsumer } from "./context/loginProvider";
 import store from "./store";
 
 //stylesheet
 import "./App.css";
-
-library.add(faBars, faTimes, faAngleLeft, faAngleRight);
 
 const theme = createMuiTheme({
   typography: {
@@ -54,16 +50,33 @@ const theme = createMuiTheme({
 });
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      page:'login'
+    };
+  }
   render() {
+    const page = this.state.page;
+
     return (
       <Provider store={store}>
         <BrowserRouter>
           <LoginProvider>
+            <LoginConsumer>
+              {(state)=>{
+                if(!(page===state.page)){
+                  this.setState({
+                    page: state.page
+                  })
+                }
+              }}
+            </LoginConsumer>
             <MuiThemeProvider theme={theme}>
               <Switch>
                 <Route exact path="/" component={Login} />
                 <Route exact path="/classeslist" component={ClassesList} />
-                <Route exact path="/class" component={Class} />
+                <Route path="/class" component={ClassRouter} />
                 <PrivateRoute exact path="/exam" component={Exam} />
                 <PrivateRoute exact path="/exam/:code(\d+)" component={Exam} />
                 <Route exact component={NoMatch} />

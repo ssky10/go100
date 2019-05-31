@@ -74,13 +74,14 @@ class WorkCardPost extends Component {
         }
         
         const PostList = posts.map(
-            (post) => {
-                const { idx, title, subject, date} = post.toJS();
-                console.log("noticePostsList실행");
-                console.log("idx : "+idx+", title : "+title+", subject : "+subject+", date : "+date);
+            (post,index) => {
+                const { title, subject, date} = post.toJS();
+
+                console.log("post : ");
+                console.log( post );
                 return (
                     <PostItems 
-                        key={idx}
+                        key={index}
                         title={title}
                         subject={subject}
                         date={date}

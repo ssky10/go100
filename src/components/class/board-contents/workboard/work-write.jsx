@@ -4,7 +4,8 @@ import PropTypes from 'prop-types';
 import { withStyles, Card, Grid, Avatar, Typography, Button, Divider, TextField } from '@material-ui/core';
 
 //stylesheet
-import './notice-write.css'
+import './work-write.css'
+import { CalendarToday } from '@material-ui/icons';
 
 const styles = theme => ({
     layout:{
@@ -52,6 +53,10 @@ const styles = theme => ({
         position: "absolute",
         visibility: "hidden",
         zIndex: -1111,
+    },
+    calendar:{
+        paddingTop: theme.spacing.unit * 1,
+        paddingLeft: theme.spacing.unit * 2,
     },
 })
 
@@ -124,8 +129,15 @@ class NoticeWrite extends Component {
                         <Divider/>
                     </Grid>
                     <Grid
+                        className={classes.calendar}
                         item
-                        xs={12}
+                        xs={6}
+                    >
+                        <CalendarToday/>
+                    </Grid>
+                    <Grid
+                        item
+                        xs={6}
                     >
                         {btnSubmit()}
                         {btnClose()}

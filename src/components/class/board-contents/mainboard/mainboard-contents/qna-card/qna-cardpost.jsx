@@ -1,5 +1,6 @@
 //node_module
 import React, {Component} from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
@@ -7,7 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import { Divider } from '@material-ui/core';
 
 //icons
-import NewIcons from '@material-ui/icons/FiberNew';
+import { QuestionAnswer } from '@material-ui/icons'
 
 const styles = theme => ({
     layout:{
@@ -16,15 +17,17 @@ const styles = theme => ({
         margin: theme.spacing.unit,
         overflow: 'hidden'
     },
+    link:{
+        textDecoration: 'none'  
+    },
     container:{
-        width: "auto"
+        paddingTop:theme.spacing.unit * 2,
+        paddingBottom:theme.spacing.unit * 1
     },
     title:{
         textAlign: "left"
     },
 });
-
-const isNewPost = true;
 
 class QnaCardPost extends Component {
     constructor(props) {
@@ -32,11 +35,10 @@ class QnaCardPost extends Component {
     }
     render() { 
         const { classes, posts } = this.props;
-
-        console.log("QnACard:"+posts);
-        const PostItems = ({date, contents}) => {
+        const PostItems = ({idx, isAnswered, title, date}) => {
             return(
                 <Grid
+                    className={classes.container}
                     container
                     spacing={24}
                 >
@@ -45,15 +47,15 @@ class QnaCardPost extends Component {
                         xs={1}  
                     >
                         <Typography>
-                            Idx
+                            {idx}
                         </Typography>
                     </Grid>
                     <Grid
                         item
                         xs={1}
                     >                    
-                        {isNewPost && 
-                            (<NewIcons/>)
+                        {(isAnswered ==='1')&& 
+                            <QuestionAnswer/>
                         }
                     </Grid>
                     <Grid
@@ -61,9 +63,9 @@ class QnaCardPost extends Component {
                         xs={8}
                     >
                         <Typography
-                            variant="h6"
+                            variant="subtitle1"
                         >
-                            Title
+                            {title}
                         </Typography>
                     </Grid>
                     <Grid
@@ -72,7 +74,7 @@ class QnaCardPost extends Component {
                     >
                         <Typography
                         >
-                            MM-DD
+                            {date}
                         </Typography>
                     </Grid>
                 </Grid>
@@ -81,16 +83,22 @@ class QnaCardPost extends Component {
         
         const PostList = posts.map(
             (post) => {
-                const { idx, title, contents, date} = post.toJS();
-                console.log("noticePostsList실행");
-                console.log("idx : "+idx+", title : "+title+", contents : "+contents+", date : "+date);
+                const { idx, user_id, isAnswered, title, date} = post.toJS();
                 return (
-                    <PostItems 
+                    <Link
                         key={idx}
-                        title={title}
-                        contents={contents}
-                        date={date}
-                    />
+                        className={classes.link}
+                        to={`/class/qna/post/${idx}`}
+                    >
+                        <PostItems
+                            idx={idx}
+                            user_id={user_id}
+                            isAnswered={isAnswered}
+                            title={title}
+                            date={date}
+                        />
+                        <Divider/>
+                    </Link>
                 )
             }
         )

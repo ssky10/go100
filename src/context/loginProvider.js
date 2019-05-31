@@ -13,9 +13,18 @@ class LoginProvider extends Component {
   constructor(props) {
     super(props);
     const token = getToken();
+    this._changePage = (pageURL) => {
+      if(!(this.state.pwd===pageURL)){
+        this.setState({
+          pwd: pageURL,
+        });
+      }
+    }
     this.state = {
       token: token,
-      isLogin: token ? true : false
+      isLogin: token ? true : false,
+      pwd: 'login',
+      changePage: this._changePage,
     };
   }
 
@@ -26,6 +35,9 @@ class LoginProvider extends Component {
     setLogin: token => {
       saveToken(token);
       this.setState({ token: token, isLogin: true });
+    },
+    setLogout: () => {
+      this.setState({ isLogin: false });
     }
   };
 
@@ -50,6 +62,7 @@ function useAuth(WrappedComponent) {
             token={state.token}
             isLogin={state.isLogin}
             setLogin={actions.setLogin}
+            setLogout={actions.setLogout}
           />
         )}
       </LoginConsumer>

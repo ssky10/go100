@@ -1,7 +1,7 @@
 //node_modules
 import React, { Component } from "react";
-import classNames from "classnames/bind";
-import { fromJS, List } from 'immutable';
+import classNames from 'classnames/bind';
+import { Link } from 'react-router-dom';
 import { connect } from "react-redux";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
@@ -18,7 +18,7 @@ import TeacherIcon from "@material-ui/icons/School";
 import WorkIcon from "@material-ui/icons/Event";
 
 //components
-import Template from "components/template";
+import TemplateContainer from "containers/template-container";
 import {
   MainBoard, 
   NoticeBoard, 
@@ -30,6 +30,7 @@ import {
 
 //stores
 import { changeBoard } from "store/modules/classboard";
+import { LoginConsumer } from "../context/loginProvider";
 
 //styles
 import style from "containers/class-materialUI.module.css";
@@ -52,6 +53,7 @@ class ClassMaterialUI extends Component {
     const isLogined = this.state.isLogined;
     let boardNames = ["Main","공지사항", "과제", "Q&A", "LiveQuiz"];
     
+    console.log("boardName : "+ typeof boardNames);
     //강사로그인일 경우
     this.state.isTeacher ? boardNames.push("강사") : boardNames = boardNames;
 
@@ -93,38 +95,53 @@ class ClassMaterialUI extends Component {
       </div>
     );
 
-    const BoardsContainer = ({ boardNo }) => {
+    const BoardsContainer = ({ boardIdx }) => {
       return (
         <div className={cx('board-container')}>
-                {(boardNo == 0) && (
-                    <MainBoard/>
-                )}
-                {(boardNo == 1) && (
-                    <NoticeBoard
-                      boardIdx={boardNo}
+                {(boardIdx == 0) && (
+                    <MainBoard
+                      boardIdx={boardIdx}
                     />
                 )}
-                {(boardNo == 2) && (
-                    <WorkBoard/>
+                {(boardIdx == 1) && (
+                    <NoticeBoard
+                      boardIdx={boardIdx}
+                    />
                 )}
-                {(boardNo == 3) && (
-                    <QnABoard/>
+                {(boardIdx == 2) && (
+                    <WorkBoard
+                      boardIdx={boardIdx}
+                    />
                 )}
-                {(boardNo == 4) && (
-                    <LiveQuizBoard/>
+                {(boardIdx == 3) && (
+                    <QnABoard
+                      boardIdx={boardIdx}
+                    />
                 )}
-                {(boardNo == 5) && (
-                    <TeacherBoard/>
+                {(boardIdx == 4) && (
+                    <LiveQuizBoard
+                      boardIdx={boardIdx}
+                    />
+                )}
+                {(boardIdx == 5) && (
+                    <TeacherBoard
+                      boardIdx={boardIdx}
+                    />
                 )}
             </div>
       )
     }
     return (
-      <Template theme={theme} drawer={drawer} title={title}>
+      <div>
+        <LoginConsumer>
+          {({state})=>(
+            state.changePage('class')
+          )}
+        </LoginConsumer>
         <BoardsContainer
-          boardNo={board}
+          boardIdx={board}
         />
-      </Template>
+      </div>
     );
   }
 }
