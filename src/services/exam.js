@@ -6,6 +6,11 @@ export const getQuestion = (userToken, subject, num, code) => {
       Origin: window.location.hostname,
       user_token: userToken
     });
+  } else if (subject === -2) {
+    return axios.post("https://golony.dev/api/exam/myquestion", {
+      Origin: window.location.hostname,
+      user_token: userToken
+    });
   } else {
     return axios.post("https://golony.dev/api/exam/getquestion", {
       Origin: window.location.hostname,
@@ -22,6 +27,6 @@ export function markQuestion(userToken, code, mark) {
     Origin: window.location.hostname,
     user_token: userToken,
     code: code,
-    marking: mark
+    marking: String(mark)
   });
 }

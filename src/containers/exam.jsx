@@ -40,17 +40,19 @@ class Exam extends Component {
       nowIdx: 0,
       total: 0,
       subject: -1,
-      ID: "user1"
+      ID: "user1",
+      isRefresh: false
     };
   }
 
   componentDidMount() {
     console.log("componentDidMount() start");
     console.log(this.props.match);
+    console.log("componentDidMount:", this.props.location);
     if (this.props.match.path === "/exam/:code(\\d+)") {
       this.updateAllQ(
         this.props.token,
-        201,
+        -1,
         1,
         parseInt(this.props.match.params.code)
       );
@@ -63,28 +65,35 @@ class Exam extends Component {
   componentWillReceiveProps(nextProps) {
     const { token, location: newLocation, match, questions } = nextProps;
     const { location: oldLocation } = this.props;
-    console.log(match.path === "/exam/:code(\\d+)");
-    console.log(questions);
+    console.log(newLocation, oldLocation);
     if (match.path === "/exam/:code(\\d+)") {
       //
     } else if (newLocation !== oldLocation) {
-      console.log(newLocation, oldLocation);
       const newSubject =
         newLocation.state == null
-          ? -1
+          ? null
           : newLocation.state.subject == null
-          ? -1
+          ? null
           : newLocation.state.subject;
       const oldSubject =
         oldLocation.state == null
-          ? -1
+          ? null
           : oldLocation.state.subject == null
-          ? -1
+          ? null
           : oldLocation.state.subject;
-
+      console.log(newSubject, oldSubject);
       if (newSubject !== oldSubject) {
-        this.updateAllQ(token, newSubject, 5, -1);
-        this.setState(state => ({ subject: newSubject }));
+        const isRefresh =
+          newLocation.state == null
+            ? false
+            : newLocation.state.isRefresh == null
+            ? false
+            : newLocation.state.isRefresh;
+        if (isRefresh) {
+          newLocation.state.isRefresh = false;
+          this.updateAllQ(token, newSubject, 5, -1);
+          this.setState(state => ({ subject: newSubject }));
+        }
       }
     }
   }
@@ -97,8 +106,8 @@ class Exam extends Component {
     service.getQuestion(token, subject, num, code).then(function(response) {
       if (response.data.status) {
         if (response.data.num !== 0) {
-          const array = response.data.data;
-
+          const array =
+            subject !== -2 ? response.data.data : response.data.questions;
           for (let index = 0; index < array.length; index++) {
             const element = array[index];
             addQuestion(element);
@@ -127,24 +136,9 @@ class Exam extends Component {
     });
   };
 
-  onclickSearch = (subject, token) => {
-    const { addQuestion, removeQuestion } = this.props;
-    const setState = this.setState.bind(this);
-    setState(state => ({ total: 0, nowIdx: 0 }));
-    service.getQuestion(token, subject, 5, -1).then(function(response) {
-      if (response.data.status) {
-        if (response.data.num !== 0) {
-          const array = response.data.data;
-
-          for (let index = 0; index < array.length; index++) {
-            const element = array[index];
-            addQuestion(element);
-          }
-          setState(state => ({ ID: response.data.id, total: array.length }));
-        }
-      }
-      setState(state => ({ ID: response.data.id }));
-    });
+  onclickSearch = e => {
+    console.log(e.elements);
+    e.preventDefault();
   };
 
   onclickBack = () => {
@@ -179,6 +173,18 @@ class Exam extends Component {
     this.setState(state => ({ isWrite: false }));
   };
 
+  handleSubject = props => (
+    <React.Fragment>
+      <Link
+        to={{
+          pathname: "/exam",
+          state: { subject: props.subject, isRefresh: true }
+        }}
+        {...props}
+      />
+    </React.Fragment>
+  );
+
   subjectNames = ["국어", "영어", "수학", "한국사", "사회", "과학"];
   subjectIcons = [
     <HangleIcon size="24" />,
@@ -201,26 +207,15 @@ class Exam extends Component {
     const { theme, isLogin, questions } = this.props;
     const { nowIdx, total, ID, subject } = this.state;
 
-    const handleSubject = props => (
-      <React.Fragment>
-        <Link
-          to={{
-            pathname: "/exam",
-            state: { subject: props.subject }
-          }}
-          {...props}
-        />
-      </React.Fragment>
-    );
-
     const drawer = (
       <Drawer
         subjectNames={this.subjectNames}
         open={this.state.open}
         onClickSubject={this.handleClick}
         subsubjectNames={this.subsubjectNames}
-        onClickSubSubject={handleSubject}
+        onClickSubSubject={this.handleSubject}
         subjectIcons={this.subjectIcons}
+        onClickSearch={this.onclickSearch}
       />
     );
     const appBarMenu = <div />;

@@ -186,8 +186,14 @@ const ExamBoard = ({
                             : classes.example
                         }
                         avatar={<Avatar>{idx + 1}</Avatar>}
-                        onClick={() =>
-                          onclickExample(question.get("code"), example.code)
+                        onClick={
+                          question.get("choice") === -1
+                            ? () =>
+                                onclickExample(
+                                  question.get("code"),
+                                  example.code
+                                )
+                            : null
                         }
                         label={example.context}
                       />
@@ -199,8 +205,14 @@ const ExamBoard = ({
               )}
 
               {question.get("choice") !== -1 && (
-                <Paper className={classes.paper} elevation={1}>
-                  {question.get("explanation")}
+                <Paper
+                  className={classes.paper}
+                  elevation={1}
+                  style={{ backgroundColor: "rgba(0,0,0,0.04)" }}
+                >
+                  <Typography variant="body1">
+                    {question.get("explanation")}
+                  </Typography>
                 </Paper>
               )}
             </div>
