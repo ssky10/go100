@@ -3,17 +3,25 @@ import { Map, List } from "immutable";
 // 액션 타입을 정의해줍니다.
 const CHANGESUBJECT = "exam/CHANGESUBJECT";
 const ADDQUESTION = "exam/ADDQUESTION";
+const ADDANSWER = "exam/ADDANSWER";
 const REMOVEQUESTION = "exam/REMOVEQUESTION";
 
 // 액션 생성 함수를 만듭니다.
 // 이 함수들은 나중에 다른 파일에서 불러와야 하므로 내보내줍니다.
 export const changeSubject = subject => ({ type: CHANGESUBJECT, subject });
 export const addQuestion = question => ({ type: ADDQUESTION, question });
+export const addAnswer = (idx, choice, answer, explanation) => ({
+  type: ADDANSWER,
+  idx,
+  answer,
+  choice,
+  explanation
+});
 export const removeQuestion = () => ({ type: REMOVEQUESTION });
 
 // 모듈의 초기 상태를 정의합니다.
 const initialState = Map({
-  subject: 0,
+  subject: -1,
   questions: List()
 });
 
@@ -28,7 +36,20 @@ export default function reducer(state = initialState, action) {
 
     case ADDQUESTION:
       return state.update("questions", questions =>
-        questions.push(Map(action.question))
+        questions
+          .push(Map(action.question).set("choice", -1))
+          .set("answer", false)
+          .set("explanation", "")
+      );
+
+    case ADDANSWER:
+      return state.update("questions", questions =>
+        questions.update(action.idx, question =>
+          question
+            .set("choice", action.choice)
+            .set("answer", action.answer)
+            .set("explanation", action.explanation)
+        )
       );
 
     case REMOVEQUESTION:

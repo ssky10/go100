@@ -20,6 +20,9 @@ import CreateIcon from "@material-ui/icons/Create";
 import Tooltip from "@material-ui/core/Tooltip";
 import TextField from "@material-ui/core/TextField";
 import SadIcon from "@material-ui/icons/SentimentDissatisfied";
+import GoodIcon from "@material-ui/icons/ThumbUpAlt";
+import CorrectIcon from "@material-ui/icons/RadioButtonUnchecked";
+import WrongIcon from "@material-ui/icons/Close";
 
 const styles = theme => ({
   content: {
@@ -33,6 +36,15 @@ const styles = theme => ({
   },
   title: {
     margin: 0
+  },
+  context: {
+    marginLeft: theme.spacing.unit * 3,
+    marginRight: theme.spacing.unit * 3,
+    textAlign: "center"
+  },
+  code: {
+    margin: 0,
+    color: "rgba(0,0,0,0.5)"
   },
   search: {
     position: "relative",
@@ -79,6 +91,24 @@ const styles = theme => ({
     display: "-webkit-inline-box",
     width: "100%",
     fontSize: "inherit"
+  },
+  exampleSelect: {
+    backgroundColor: "#FDCF56",
+    "&:hover": {
+      backgroundColor: "#FDCF56"
+    },
+    "&:focus": {
+      backgroundColor: "#FDCF56"
+    }
+  },
+  exampleAnswer: {
+    backgroundColor: "#ff86bc",
+    "&:hover": {
+      backgroundColor: "#ff86bc"
+    },
+    "&:focus": {
+      backgroundColor: "#ff86bc"
+    }
   }
 });
 
@@ -91,112 +121,99 @@ const ExamBoard = ({
   onclickNext,
   onclickCreate
 }) => {
-  // if (!document.getElementById("jqMath")) {
-  //   const scriptjqMath = document.createElement("script");
-  //   scriptjqMath.id = "Mathjax";
-  //   scriptjqMath.src =
-  //     "//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML";
-  //   document.body.appendChild(scriptjqMath);
-  // }
   return (
     <main className={classes.content}>
       <Paper className={classes.paper} elevation={1}>
-        <Grid container spacing={8}>
-          <Grid item xs={9}>
-            <Typography className={classes.title} variant="h4" gutterBottom>
-              {subject}
-              <Tooltip title="문제 만들기">
-                <IconButton aria-label="Create" onClick={onclickCreate}>
-                  <CreateIcon />
-                </IconButton>
-              </Tooltip>
-            </Typography>
-          </Grid>
-          <Grid item xs={3}>
-            <div className={classes.search}>
-              <div className={classes.searchIcon}>
-                <SearchIcon />
-              </div>
-              <InputBase
-                placeholder="문제번호"
-                classes={{
-                  root: classes.inputRoot,
-                  input: classes.inputInput
-                }}
-              />
-            </div>
-          </Grid>
-        </Grid>
+        <Typography className={classes.title} variant="h4" gutterBottom>
+          {subject}
+          {subject !== "오답노트" && (
+            <Tooltip title="문제 만들기">
+              <IconButton aria-label="Create" onClick={onclickCreate}>
+                <CreateIcon />
+              </IconButton>
+            </Tooltip>
+          )}
+        </Typography>
       </Paper>
       <Slide direction="left" in={true} mountOnEnter unmountOnExit>
         <Paper className={classes.paper} elevation={1}>
           {question === false ? (
             <div style={{ textAlign: "center" }}>
-              <SadIcon style={{ fontSize: "15em", color: "rgba(0,0,0,0.1)" }} />
+              {subject === "오답노트" ? (
+                <GoodIcon
+                  style={{ fontSize: "15em", color: "rgba(0,0,0,0.1)" }}
+                />
+              ) : (
+                <SadIcon
+                  style={{ fontSize: "15em", color: "rgba(0,0,0,0.1)" }}
+                />
+              )}
               <Typography className={classes.title} variant="h6" gutterBottom>
-                현재 만들어진 문제가 없어요.... 문제를 만들어 주세요!
+                {subject === "오답노트"
+                  ? "현재 틀린문제가 없어요!"
+                  : "현재 만들어진 문제가 없어요.... 문제를 만들어 주세요!"}
               </Typography>
             </div>
           ) : (
             <div>
-              <Typography className={classes.title} variant="h6" gutterBottom>
-                {question.get("context")}
+              <Typography className={classes.code} variant="h6" gutterBottom>
+                #{question.get("code")}
               </Typography>
+              <div className={classes.context}>
+                {question.get("choice") === -1 ? null : question.get(
+                    "choice"
+                  ) == question.get("answer") ? (
+                  <CorrectIcon style={{ fontSize: "6em", color: "#FDCF56" }} />
+                ) : (
+                  <WrongIcon style={{ fontSize: "6em", color: "#ff86bc" }} />
+                )}
+                <Typography className={classes.title} variant="h6">
+                  {question.get("context")}
+                </Typography>
+              </div>
+
               {question.get("choiceable") ? (
                 <List className={classes.root}>
-                  <ListItem alignItems="flex-start">
-                    <Chip
-                      className={classes.example}
-                      avatar={<Avatar>1</Avatar>}
-                      onClick={() =>
-                        onclickExample(question.get("example")[0].code)
-                      }
-                      label={question.get("example")[0].context}
-                    />
-                  </ListItem>
-                  <ListItem alignItems="flex-start">
-                    <Chip
-                      className={classes.example}
-                      avatar={<Avatar>2</Avatar>}
-                      onClick={() =>
-                        onclickExample(question.get("example")[1].code)
-                      }
-                      label={question.get("example")[1].context}
-                    />
-                  </ListItem>
-                  <ListItem alignItems="flex-start">
-                    <Chip
-                      className={classes.example}
-                      avatar={<Avatar>3</Avatar>}
-                      onClick={() =>
-                        onclickExample(question.get("example")[2].code)
-                      }
-                      label={question.get("example")[2].context}
-                    />
-                  </ListItem>
-                  <ListItem alignItems="flex-start">
-                    <Chip
-                      className={classes.example}
-                      avatar={<Avatar>4</Avatar>}
-                      onClick={() =>
-                        onclickExample(question.get("example")[3].code)
-                      }
-                      label={question.get("example")[3].context}
-                    />
-                  </ListItem>
-                  <ListItem alignItems="flex-start">
-                    <Chip
-                      className={classes.example}
-                      avatar={<Avatar>5</Avatar>}
-                      onClick={() =>
-                        onclickExample(question.get("example")[4].code)
-                      }
-                      label={question.get("example")[4].context}
-                    />
-                  </ListItem>
+                  {question.get("example").map((example, idx) => (
+                    <ListItem alignItems="flex-start">
+                      {console.log(example)}
+                      <Chip
+                        className={
+                          example.code === question.get("choice")
+                            ? `${classes.example} ${classes.exampleSelect}`
+                            : example.code == question.get("answer")
+                            ? `${classes.example} ${classes.exampleAnswer}`
+                            : classes.example
+                        }
+                        avatar={<Avatar>{idx + 1}</Avatar>}
+                        onClick={
+                          question.get("choice") === -1
+                            ? () =>
+                                onclickExample(
+                                  question.get("code"),
+                                  example.code
+                                )
+                            : null
+                        }
+                        label={example.context}
+                      />
+                    </ListItem>
+                  ))}
                 </List>
               ) : (
                 <TextField id="standard-dense" label="정답" margin="dense" />
+              )}
+
+              {question.get("choice") !== -1 && (
+                <Paper
+                  className={classes.paper}
+                  elevation={1}
+                  style={{ backgroundColor: "rgba(0,0,0,0.04)" }}
+                >
+                  <Typography variant="body1">
+                    {question.get("explanation")}
+                  </Typography>
+                </Paper>
               )}
             </div>
           )}

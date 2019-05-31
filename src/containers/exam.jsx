@@ -1,17 +1,9 @@
 //node_modules
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import List from "@material-ui/core/List";
-import Collapse from "@material-ui/core/Collapse";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import Divider from "@material-ui/core/Divider";
-import SvgIcon from "@material-ui/core/SvgIcon";
+import { Redirect, Link } from "react-router-dom";
 
 //SVGIcon
-import ExpandLess from "@material-ui/icons/ExpandLess";
-import ExpandMore from "@material-ui/icons/ExpandMore";
 import HangleIcon from "icons/hangleIcon";
 import EngIcon from "icons/engIcon";
 import MathIcon from "icons/mathIcon";
@@ -24,12 +16,14 @@ import TemplateContainer from "containers/template-container";
 //components
 import ExamBoard from "components/exam/examBoard";
 import WriteExam from "components/exam/writeExam";
+import Drawer from "components/exam/drawer";
 
 //stores
 import {
   changeSubject,
   addQuestion,
-  removeQuestion
+  removeQuestion,
+  addAnswer
 } from "../store/modules/exam";
 import { useAuth } from "../context/loginProvider";
 
@@ -45,32 +39,75 @@ class Exam extends Component {
       isWrite: false,
       nowIdx: 0,
       total: 0,
-      ID: "user1"
+      subject: -1,
+      ID: "user1",
+      isRefresh: false
     };
   }
 
   componentDidMount() {
-    this.updateAllQ(0, this.props.token);
+    console.log("componentDidMount() start");
+    console.log(this.props.match);
+    console.log("componentDidMount:", this.props.location);
+    if (this.props.match.path === "/exam/:code(\\d+)") {
+      this.updateAllQ(
+        this.props.token,
+        -1,
+        1,
+        parseInt(this.props.match.params.code)
+      );
+    } else {
+      this.updateAllQ(this.props.token, -1, 5, -1);
+    }
+    console.log("componentDidMount() end");
   }
 
   componentWillReceiveProps(nextProps) {
-    const { subject: newSubject, token } = nextProps;
-    const { subject: oldSubject } = this.props;
-    if (newSubject !== oldSubject) {
-      this.updateAllQ(newSubject, token);
+    const { token, location: newLocation, match, questions } = nextProps;
+    const { location: oldLocation } = this.props;
+    console.log(newLocation, oldLocation);
+    if (match.path === "/exam/:code(\\d+)") {
+      //
+    } else if (newLocation !== oldLocation) {
+      const newSubject =
+        newLocation.state == null
+          ? null
+          : newLocation.state.subject == null
+          ? null
+          : newLocation.state.subject;
+      const oldSubject =
+        oldLocation.state == null
+          ? null
+          : oldLocation.state.subject == null
+          ? null
+          : oldLocation.state.subject;
+      console.log(newSubject, oldSubject);
+      if (newSubject !== oldSubject) {
+        const isRefresh =
+          newLocation.state == null
+            ? false
+            : newLocation.state.isRefresh == null
+            ? false
+            : newLocation.state.isRefresh;
+        if (isRefresh) {
+          newLocation.state.isRefresh = false;
+          this.updateAllQ(token, newSubject, 5, -1);
+          this.setState(state => ({ subject: newSubject }));
+        }
+      }
     }
   }
 
-  updateAllQ = (subject, token) => {
+  updateAllQ = (token, subject, num, code) => {
     const { addQuestion, removeQuestion } = this.props;
     const setState = this.setState.bind(this);
     removeQuestion();
     setState(state => ({ total: 0, nowIdx: 0 }));
-    service.getQuestion(token, subject, 5, -1).then(function(response) {
+    service.getQuestion(token, subject, num, code).then(function(response) {
       if (response.data.status) {
         if (response.data.num !== 0) {
-          const array = response.data.data;
-
+          const array =
+            subject !== -2 ? response.data.data : response.data.questions;
           for (let index = 0; index < array.length; index++) {
             const element = array[index];
             addQuestion(element);
@@ -82,7 +119,27 @@ class Exam extends Component {
     });
   };
 
-  onclickExample = choice => {};
+  onclickExample = (code, choice) => {
+    const { token, questions, addAnswer } = this.props;
+    const { nowIdx } = this.state;
+    service.markQuestion(token, code, choice).then(function(response) {
+      console.log(response);
+      if (response.data.status) {
+        addAnswer(
+          nowIdx,
+          choice,
+          response.data.answer,
+          response.data.explanation
+        );
+        console.log(questions.get(nowIdx));
+      }
+    });
+  };
+
+  onclickSearch = e => {
+    console.log(e.elements);
+    e.preventDefault();
+  };
 
   onclickBack = () => {
     if (this.state.nowIdx === 0) {
@@ -111,106 +168,93 @@ class Exam extends Component {
 
   handleSubject = subject => {
     this.props.changeSubject(subject);
+    console.log(this.props.location.pathname);
     //this.updateAllQ(subject);
     this.setState(state => ({ isWrite: false }));
   };
 
+  handleSubject = props => (
+    <React.Fragment>
+      <Link
+        to={{
+          pathname: "/exam",
+          state: { subject: props.subject, isRefresh: true }
+        }}
+        {...props}
+      />
+    </React.Fragment>
+  );
+
+  subjectNames = ["국어", "영어", "수학", "한국사", "사회", "과학"];
+  subjectIcons = [
+    <HangleIcon size="24" />,
+    <EngIcon size="24" />,
+    <MathIcon size="24" />,
+    <HistoryIcon size="24" />,
+    <SocietyIcon size="24" />,
+    <ScienceIcon size="24" />
+  ];
+  subsubjectNames = [
+    ["중등국어", "공통국어", "화법과 작문", "언어와 매체", "독서", "문학"],
+    ["공통영어", "영어1", "영어2", "영어회화", "영어독해와 작문"],
+    ["중등수학", "공통수학", "수학1", "수학2", "미적분", "확률과 통계"],
+    ["중등역사", "한국사"],
+    ["중등사회", "통합사회", "정치와 법", "경제", "사회/문화", "생활과 윤리"],
+    ["중등과학", "통합과학", "물리1/2", "화학1/2", "생명1/2", "지구과학1/2"]
+  ];
+
   render() {
-    const {
-      theme,
-      subject,
-      changeSubject,
-      isLogin,
-      questions,
-      history
-    } = this.props;
-    const { question, nowIdx, total, ID } = this.state;
-    const subjectNames = ["국어", "영어", "수학", "한국사", "사회", "과학"];
-    const subjectIcons = [
-      <HangleIcon size="24" />,
-      <EngIcon size="24" />,
-      <MathIcon size="24" />,
-      <HistoryIcon size="24" />,
-      <SocietyIcon size="24" />,
-      <ScienceIcon size="24" />
-    ];
-    const subsubjectNames = [
-      ["중등국어", "공통국어", "화법과 작문", "언어와 매체", "독서", "문학"],
-      ["공통영어", "영어1", "영어2", "영어회화", "영어독해와 작문"],
-      ["중등수학", "공통수학", "수학1", "수학2", "미적분", "확률과 통계"],
-      ["중등역사", "한국사"],
-      ["중등사회", "통합사회", "정치와 법", "경제", "사회/문화", "생활과 윤리"],
-      ["중등과학", "통합과학", "물리1/2", "화학1/2", "생명1/2", "지구과학1,2"]
-    ];
+    const { theme, isLogin, questions } = this.props;
+    const { nowIdx, total, ID, subject } = this.state;
     const drawer = (
-      <div>
-        {subjectNames.map((text, index) => (
-          <div>
-            <Divider />
-            <ListItem button onClick={() => this.handleClick(index)}>
-              <ListItemIcon>
-                <SvgIcon>{subjectIcons[index]}</SvgIcon>
-              </ListItemIcon>
-              <ListItemText inset primary={text} />
-              {this.state.open === index ? <ExpandLess /> : <ExpandMore />}
-            </ListItem>
-            <Collapse
-              in={this.state.open === index}
-              timeout="auto"
-              unmountOnExit
-              style={{ backgroundColor: "#ffffff" }}
-            >
-              <Divider />
-              <List component="div" disablePadding>
-                {subsubjectNames[index].map((text, subindex) => (
-                  <ListItem
-                    button
-                    key={text}
-                    onClick={() => this.handleSubject(index * 100 + subindex)}
-                  >
-                    <ListItemText primary={text} />
-                  </ListItem>
-                ))}
-              </List>
-            </Collapse>
-          </div>
-        ))}
-      </div>
+      <Drawer
+        subjectNames={this.subjectNames}
+        open={this.state.open}
+        onClickSubject={this.handleClick}
+        subsubjectNames={this.subsubjectNames}
+        onClickSubSubject={this.handleSubject}
+        subjectIcons={this.subjectIcons}
+        onClickSearch={this.onclickSearch}
+      />
     );
     const appBarMenu = <div />;
 
     return (
-      <TemplateContainer
-        theme={theme}
-        drawer={drawer}
-        title="Go100 Exam"
-        menu={appBarMenu}
-        isLogin={isLogin}
-        user={ID}
-      >
-        {this.state.isWrite ? (
-          <WriteExam
-            subject={
-              subsubjectNames[parseInt(subject / 100)][
-                subject - parseInt(subject / 100) * 100
-              ]
-            }
-          />
-        ) : (
-          <ExamBoard
-            subject={
-              subsubjectNames[parseInt(subject / 100)][
-                subject - parseInt(subject / 100) * 100
-              ]
-            }
-            question={total > 0 ? questions.get(nowIdx) : false}
-            onclickExample={this.onclickExample}
-            onclickBack={this.onclickBack}
-            onclickNext={this.onclickNext}
-            onclickCreate={this.onclickCreate}
-          />
-        )}
-      </TemplateContainer>
+      <React.Fragment>
+        <TemplateContainer
+          theme={theme}
+          drawer={drawer}
+          title="Go100 Exam"
+          menu={appBarMenu}
+          isLogin={isLogin}
+          user={ID}
+        >
+          {this.state.isWrite ? (
+            <WriteExam
+              subject={
+                this.subsubjectNames[parseInt(subject / 100)][
+                  subject - parseInt(subject / 100) * 100
+                ]
+              }
+            />
+          ) : (
+            <ExamBoard
+              subject={
+                subject === -1
+                  ? "오답노트"
+                  : this.subsubjectNames[parseInt(subject / 100)][
+                      subject - parseInt(subject / 100) * 100
+                    ]
+              }
+              question={total > 0 ? questions.get(nowIdx) : false}
+              onclickExample={this.onclickExample}
+              onclickBack={this.onclickBack}
+              onclickNext={this.onclickNext}
+              onclickCreate={this.onclickCreate}
+            />
+          )}
+        </TemplateContainer>
+      </React.Fragment>
     );
   }
 }
@@ -224,7 +268,9 @@ const mapStateToProps = ({ exam, auth }) => ({
 const mapDispatchToProps = dispatch => ({
   changeSubject: subject => dispatch(changeSubject(subject)),
   addQuestion: question => dispatch(addQuestion(question)),
-  removeQuestion: () => dispatch(removeQuestion())
+  removeQuestion: () => dispatch(removeQuestion()),
+  addAnswer: (idx, choice, answer, explanation) =>
+    dispatch(addAnswer(idx, choice, answer, explanation))
 });
 
 export default connect(
