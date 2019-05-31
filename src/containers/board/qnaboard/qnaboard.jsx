@@ -206,7 +206,7 @@ class QnABoard extends Component {
                     >
                         <Link
                             className={`${classes.linkwrite} ${classes.link}`} 
-                            to={"/class/qna/write/"}
+                            to={`${this.props.urls}/qna/write/`}
                         >
                             <Paper
                                 className={classes.writepaper}

@@ -11,7 +11,7 @@ import * as axios from 'services/post'
 const styles = theme => ({
     root:{
         width: '700px',
-        height: '800px',
+        height: '502px',
         marginTop: theme.spacing.unit * 5,
         marginBottom : theme.spacing.unit * 2,
         marginLeft: theme.spacing.unit * 10,

@@ -18,10 +18,6 @@ const styles = theme => ({
     header:{
         display: "flex"
     },
-    papertitle:{
-        width:"4%",
-        backgroundColor: "#7cb6f3",
-    },
     typotitle:{
         marginLeft: theme.spacing.unit,
         marginRight: theme.spacing.unit,
@@ -29,8 +25,7 @@ const styles = theme => ({
         fontSize: "1.25rem"
     },
     paperinput:{
-        marginLeft: theme.spacing.unit/4*7,
-        width:"95%"
+        width: "100%"
     },
     editor:{
         display: 'flex',
@@ -194,18 +189,6 @@ class QnAWrite extends Component {
                     <div
                         className={classes.header}
                     >
-                        <Paper
-                            className={classes.papertitle}
-                            square
-                        >
-                            <Typography
-                                className={classes.typotitle}
-                                variant="subtitle1"
-                            >
-                                제목
-                            </Typography>
-                        </Paper>
-                        
                         <Paper
                             className={classes.paperinput}
                             square

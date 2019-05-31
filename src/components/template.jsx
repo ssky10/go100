@@ -17,12 +17,9 @@ import ListItemText from "@material-ui/core/ListItemText";
 import { Link } from "react-router-dom";
 
 //SVGIcon
-<<<<<<< HEAD
 import AccountCircle from "@material-ui/icons/AccountCircle";
-import { Typography } from "@material-ui/core";
-=======
 import AppsIcon from "@material-ui/icons/ArrowBack";
->>>>>>> 6bc6d99ae728379044a4dba8f51ac52161e3061e
+import { Typography } from "@material-ui/core";
 
 const drawerWidth = 240;
 

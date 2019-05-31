@@ -79,21 +79,11 @@ class ClassRouter extends Component {
             </div>
         );
         
-        const menu = (
-            <IconButton
-                color="inherit"
-                onClick={()=>{history.push('/classeslist')}}
-            >
-                <ArrowBack/>
-            </IconButton>
-        )
-        
         console.log(match.url);
         return (
             <TemplateContainer 
                 theme={theme}
                 drawer={drawer}
-                menu={menu}
                 title='우효'
                 isLogin={true}
                 user={"user1"}

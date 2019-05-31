@@ -1,9 +1,9 @@
 //node_modules
 import React, { Component } from 'react';
 import PropTypes from "prop-types";
-import { withStyles, Grid, Paper, Typography, Divier, SvgIcon, TextField } from "@material-ui/core";
+import { withStyles, Grid, Paper, Typography, Divider, SvgIcon, TextField } from "@material-ui/core";
 
-import { Create, Clear } from "@material-ui/icons"
+import { Create, Clear, PersonAdd, Person } from "@material-ui/icons"
 
 const styles = theme => ({
     root:{
@@ -24,31 +24,56 @@ const styles = theme => ({
         zIndex: 9999,
         backgroundColor:"#00000077"
     },
-    modal:{
-        position:"relative",
+    aboutmodal:{
+        position:"absolute",
         top:"110px",
-        left:"50%",
+        left:"60%",
         width:"700px",
-        height:"180px",
+        height:"230px",
         transform: "translateX(-50%)",
         padding: theme.spacing.unit,
     },
+    studentmodal:{
+        position:"absolute",
+        top: "50%",
+        left: "60%",
+        width: "400px",
+        height: "500px",
+        transform: "translate(-50%, -50%)",
+        padding: theme.spacing.unit,
+
+    },
     modalheader:{
         display:"flex",
+        marginTop: theme.spacing.unit * 2
+    },
+    divider:{
+        marginTop: theme.spacing.unit * 2
+    },
+    studentmodalheader:{
+        position: "relative",
+        left: "50%",
+        transform: "translate(-50%)"
     },
     modalinput:{
-        marginTop:theme.spacing.unit,
+        marginTop:theme.spacing.unit * 3,
         marginBottom:theme.spacing.unit
     },
-    modalbtn:{
+    btnmodal:{
+        position:"fixed",
+        right:"0px",
+        bottom:"0px",
+        margin:theme.spacing.unit,
         marginTop:theme.spacing.unit * 4,
-        float: "right"
     },
     body:{
         padding: theme.spacing.unit * 2
     },
-    aboutheader:{
-        display: "flex"
+    contentheader:{
+        display: "flex",
+        '& h5': {
+            marginRight: theme.spacing.unit
+        }
     },
     aboutcontents:{
         margin:theme.spacing.unit * 2,
@@ -56,9 +81,21 @@ const styles = theme => ({
     },
     btncreate:{
         cursor: 'pointer',
+        color: `${theme.palette.grey[600]}`,
     },
     btncancel:{
-        float:"right"
+        marginRight: theme.spacing.unit * 2,
+        position: 'fixed',
+        right: "0px",
+        color: `${theme.palette.grey[600]}`,
+    },
+    bottomcontent:{
+        marginTop:theme.spacing.unit * 8,
+        display: "flex"
+    },
+    studentcontents:{
+        margin:theme.spacing.unit * 2,
+        padding: theme.spacing.unit * 1
     }
 })
 
@@ -67,7 +104,9 @@ class TeacherBoard extends Component {
         super(props);
         this.state = {
             about: '소개글',
+            student_id: '',
             open: false,
+            type: '',
         }
     }
 
@@ -75,68 +114,89 @@ class TeacherBoard extends Component {
         const target = e.target;
         const name = target.name;
         const value = target.value;
-    
+        
+        console.log(name);
+
         this.setState({
             [name]: value
         })
     }
 
-    handleOpen = (e) => {
+    handleAboutOpen = (e) => {
+        console.log(e);
         this.setState({
-            open: !this.state.open
+            open: !this.state.open,
+            type: "About"
+        })
+    }
+
+    handleStudentOpen = (e) => {
+        this.setState({
+            open: !this.state.open,
+            type: "Student"
+        })
+    }
+
+    handleClose = (e) => {
+        this.setState({
+            open: !this.state.open,
+            type: ''
         })
     }
 
     render() { 
         const { classes } = this.props;
-        const about = this.state.about;
-        const open = this.state.open;
+        const { about, student_id, open, type } = this.state;
 
-        console.log(open);
         return (
             <div
                 className={classes.root}
             >
                 { open ?
-                <div
-                    className={classes.modalbackground}
-                >
-                    <Paper
-                        className={classes.modal}
+                    <div
+                        className={classes.modalbackground}
                     >
-                        <div
-                            className={classes.modalheader}
+                        <Paper
+                            className={(type==='About') ? classes.aboutmodal : classes.studentmodal}
                         >
+                            <div
+                                className={classes.modalheader}
+                            >
+                                <Typography
+                                    variant="h5"
+                                    component="h5"
+                                    className={(type==='Student') ? classes.studentmodalheader : null}
+                                >
+                                    { (type==='About') ? "학원 소개글" : "학생 추가" }
+                                </Typography>
+                                <SvgIcon
+                                    className={`${classes.btncreate} ${classes.btncancel}`}
+                                    onClick={this.handleClose}
+                                >
+                                    <Clear/>
+                                </SvgIcon>
+                            </div>
+                            <Divider
+                                className={classes.divider}
+                            />
+                            <TextField
+                                name={(type==='About') ? "about" : "student_id"}
+                                variant="outlined"
+                                className={classes.modalinput}
+                                value={(type==='About') ? about : student_id}
+                                placeholder={(type==='About') ? null : "학생 아이디"}
+                                fullWidth
+                                onChange={this.handleChange}
+                            />
                             <Typography
-                                variant="h5"
-                                component="h5"
+                                className={`${classes.btnmodal} ${classes.btncreate}`}
+                                variant="button"
+                                onClick={this.handleClose}
                             >
-                                학급 소개글 적기
+                                commit
                             </Typography>
-                            <SvgIcon
-                                className={`${classes.btncreate} ${classes.btncancel}`}
-                                onClick={this.handleOpen}
-                            >
-                                <Clear/>
-                            </SvgIcon>
-                        </div>
-                        <TextField
-                            name="about"
-                            variant="outlined"
-                            className={classes.modalinput}
-                            placeholder={about}
-                            fullWidth
-                            onChange={this.handleChange}
-                        />
-                        <Typography
-                            className={`${classes.modalbtn} ${classes.btncreate}`}
-                            variant="button"
-                            onClick={this.handleOpen}
-                        >
-                            commit
-                        </Typography>
-                    </Paper>
-                </div>
+                        </Paper>
+                    </div>
                 :
                 null}
                 <Paper
@@ -145,7 +205,7 @@ class TeacherBoard extends Component {
                 >
                     <div>
                         <div
-                            className={classes.aboutheader}
+                            className={classes.contentheader}
                         >
                             <Typography
                                 variant="h5"
@@ -155,9 +215,7 @@ class TeacherBoard extends Component {
                             </Typography>
                             <SvgIcon
                                 className={classes.btncreate}
-                                onClick={
-                                    this.handleOpen
-                                }
+                                onClick={this.handleAboutOpen}
                             >
                                 <Create/>
                             </SvgIcon>
@@ -167,8 +225,29 @@ class TeacherBoard extends Component {
                             elevation={0}
                             square
                         >
-                            {about}
+                            {this.state.about}
                         </Paper>
+                    </div>
+                    <div
+                        className={classes.bottomcontent}
+                    >
+                        <div
+                            className={classes.contentheader}
+                        >
+                            <Typography
+                                variant="h5"
+                                component="h5"
+                            >
+                                학생
+                            </Typography>
+                            <SvgIcon
+                                className={classes.btncreate}
+                                onClick={this.handleStudentOpen}
+                            >
+                                <PersonAdd
+                                    />
+                            </SvgIcon>
+                        </div>
                     </div>
                 </Paper>
             </div>
