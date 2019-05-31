@@ -11,11 +11,18 @@ import { withStyles } from "@material-ui/core/styles";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import Avatar from "@material-ui/core/Avatar";
-import Button from "@material-ui/core/Button";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
+import { Link } from "react-router-dom";
 
 //SVGIcon
+<<<<<<< HEAD
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import { Typography } from "@material-ui/core";
+=======
+import AppsIcon from "@material-ui/icons/ArrowBack";
+>>>>>>> 6bc6d99ae728379044a4dba8f51ac52161e3061e
 
 const drawerWidth = 240;
 
@@ -51,7 +58,15 @@ const styles = theme => ({
       display: "none"
     }
   },
-  toolbar: theme.mixins.toolbar,
+  toolbar: {
+    ...theme.mixins.toolbar,
+    paddingTop: theme.spacing.unit
+  },
+  footButton: {
+    position: "fixed",
+    bottom: 0,
+    width: drawerWidth
+  },
   drawerPaper: {
     width: drawerWidth,
     backgroundColor: "#7cb6f3"
@@ -169,6 +184,18 @@ class Template extends React.Component {
               >
                 <div className={classes.toolbar} />
                 {drawer}
+                <div className={classes.footButton}>
+                  <ListItem button component={Link} to="/classeslist">
+                    <ListItemIcon>
+                      <AppsIcon />
+                    </ListItemIcon>
+                    <ListItemText
+                      inset
+                      primary={"수업목록으로"}
+                      style={{ fontWeight: "bold" }}
+                    />
+                  </ListItem>
+                </div>
               </Drawer>
             </Hidden>
             <Hidden xsDown implementation="js">
@@ -181,6 +208,18 @@ class Template extends React.Component {
               >
                 <div className={classes.toolbar} />
                 {drawer}
+                <div className={classes.footButton}>
+                  <ListItem button component={Link} to="/classeslist">
+                    <ListItemIcon>
+                      <AppsIcon />
+                    </ListItemIcon>
+                    <ListItemText
+                      inset
+                      primary={"수업목록으로"}
+                      style={{ fontWeight: "bold" }}
+                    />
+                  </ListItem>
+                </div>
               </Drawer>
             </Hidden>
           </nav>

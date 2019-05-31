@@ -117,6 +117,7 @@ class App extends Component {
                 <Route exact path="/classeslist" component={ClassesList}/>
                 <Route path="/class/:id" component={ClassRouter} />
                 <PrivateRoute exact path="/exam" component={Exam} />
+                <PrivateRoute exact path="/exam/:code(\d+)" component={Exam} />
                 <Route exact component={NoMatch} />
               </Switch>
             </MuiThemeProvider>
