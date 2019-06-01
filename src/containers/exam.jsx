@@ -2,6 +2,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Redirect, Link } from "react-router-dom";
+import { List } from "immutable";
 
 //SVGIcon
 import HangleIcon from "icons/hangleIcon";
@@ -41,18 +42,33 @@ class Exam extends Component {
       total: 0,
       subject: -1,
       ID: "user1",
-      isRefresh: false
+      isRefresh: false,
+      writeExam: {
+        type: "choiceable",
+        context: "",
+        img: null,
+        answer: 0,
+        explanation: "",
+        example: List(["", ""])
+      },
+      template: {
+        searchCode: null
+      }
     };
+    this.onChangeValue = this.onChangeValue.bind(this);
   }
 
   componentDidMount() {
     console.log("componentDidMount() start");
-    console.log(this.props.match);
+    console.log(
+      this.props.match,
+      this.props.match.path === "/exam/:code(\\d+)"
+    );
     console.log("componentDidMount:", this.props.location);
     if (this.props.match.path === "/exam/:code(\\d+)") {
       this.updateAllQ(
         this.props.token,
-        -1,
+        -3,
         1,
         parseInt(this.props.match.params.code)
       );
@@ -66,33 +82,36 @@ class Exam extends Component {
     const { token, location: newLocation, match, questions } = nextProps;
     const { location: oldLocation } = this.props;
     console.log(newLocation, oldLocation);
-    if (match.path === "/exam/:code(\\d+)") {
-      //
-    } else if (newLocation !== oldLocation) {
-      const newSubject =
-        newLocation.state == null
-          ? null
-          : newLocation.state.subject == null
-          ? null
-          : newLocation.state.subject;
-      const oldSubject =
-        oldLocation.state == null
-          ? null
-          : oldLocation.state.subject == null
-          ? null
-          : oldLocation.state.subject;
-      console.log(newSubject, oldSubject);
-      if (newSubject !== oldSubject) {
-        const isRefresh =
+    if (newLocation !== oldLocation) {
+      if (match.path === "/exam/:code(\\d+)") {
+        this.updateAllQ(token, -3, 1, parseInt(match.params.code));
+        this.setState(state => ({ subject: -3, isWrite: false }));
+      } else {
+        const newSubject =
           newLocation.state == null
-            ? false
-            : newLocation.state.isRefresh == null
-            ? false
-            : newLocation.state.isRefresh;
-        if (isRefresh) {
-          newLocation.state.isRefresh = false;
-          this.updateAllQ(token, newSubject, 5, -1);
-          this.setState(state => ({ subject: newSubject }));
+            ? null
+            : newLocation.state.subject == null
+            ? null
+            : newLocation.state.subject;
+        const oldSubject =
+          oldLocation.state == null
+            ? null
+            : oldLocation.state.subject == null
+            ? null
+            : oldLocation.state.subject;
+        console.log(newSubject, oldSubject);
+        if (newSubject !== oldSubject) {
+          const isRefresh =
+            newLocation.state == null
+              ? false
+              : newLocation.state.isRefresh == null
+              ? false
+              : newLocation.state.isRefresh;
+          if (isRefresh) {
+            newLocation.state.isRefresh = false;
+            this.updateAllQ(token, newSubject, 5, -1);
+            this.setState(state => ({ subject: newSubject, isWrite: false }));
+          }
         }
       }
     }
@@ -137,8 +156,97 @@ class Exam extends Component {
   };
 
   onclickSearch = e => {
-    console.log(e.elements);
     e.preventDefault();
+    console.log(this.state.template.searchCode);
+    this.setState({ isWrite: false });
+    this.props.history.push("/exam/" + this.state.template.searchCode);
+  };
+
+  onChangeSearchCode = e => {
+    const target = e.target;
+    this.setState(state => ({
+      template: { ...state.template, searchCode: target.value }
+    }));
+  };
+
+  onChangeValue = e => {
+    const target = e.target;
+    const name = target.name === undefined ? target.id : target.name;
+    console.log(name, this.state.writeExam);
+    switch (name) {
+      case "context":
+        this.setState(state => ({
+          writeExam: { ...state.writeExam, context: e.srcElement.innerHTML }
+        }));
+        break;
+      case "explanation":
+        this.setState(state => ({
+          writeExam: { ...state.writeExam, explanation: e.srcElement.innerHTML }
+        }));
+        break;
+      case "img":
+        this.setState(state => ({
+          writeExam: { ...state.writeExam, img: e.target.files[0] }
+        }));
+        break;
+      default:
+        if (/^example(\d+)/.test(name)) {
+          const result = /^example(\d+)/.exec(name);
+          const idx = parseInt(result[1]);
+          console.log(this.state.writeExam.example.get(idx) !== target.value);
+          if (this.state.writeExam.example.get(idx) !== target.value) {
+            if (idx + 1 === this.state.writeExam.example.size) {
+              this.setState(state => ({
+                writeExam: {
+                  ...state.writeExam,
+                  example: state.writeExam.example
+                    .update(idx, val => target.value)
+                    .push("")
+                }
+              }));
+            } else if (
+              target.value == "" &&
+              this.state.writeExam.example.size > 2
+            ) {
+              this.setState(state => ({
+                writeExam: {
+                  ...state.writeExam,
+                  example: state.writeExam.example.delete(idx)
+                }
+              }));
+            } else {
+              this.setState(state => ({
+                writeExam: {
+                  ...state.writeExam,
+                  example: state.writeExam.example.set(idx, target.value)
+                }
+              }));
+            }
+          }
+        } else {
+          this.setState(state => ({
+            writeExam: { ...state.writeExam, [name]: target.value }
+          }));
+        }
+        break;
+    }
+  };
+
+  onClickMakeQ = e => {
+    e.preventDefault();
+    const { token } = this.props;
+    const { subject, writeExam } = this.state;
+    service.makeQuestion(token, subject, writeExam).then(function(response) {
+      console.log(response);
+      if (response.data.status) {
+      }
+    });
+  };
+
+  onselectAnswer = idx => {
+    this.setState(state => ({
+      writeExam: { ...state.writeExam, answer: idx }
+    }));
   };
 
   onclickBack = () => {
@@ -205,7 +313,15 @@ class Exam extends Component {
 
   render() {
     const { theme, isLogin, questions } = this.props;
-    const { nowIdx, total, ID, subject } = this.state;
+    const {
+      nowIdx,
+      total,
+      ID,
+      subject,
+      template,
+      test,
+      writeExam
+    } = this.state;
     const drawer = (
       <Drawer
         subjectNames={this.subjectNames}
@@ -215,6 +331,8 @@ class Exam extends Component {
         onClickSubSubject={this.handleSubject}
         subjectIcons={this.subjectIcons}
         onClickSearch={this.onclickSearch}
+        onChangeSearchCode={this.onChangeSearchCode}
+        values={template}
       />
     );
     const appBarMenu = <div />;
@@ -237,11 +355,17 @@ class Exam extends Component {
                   subject - parseInt(subject / 100) * 100
                 ]
               }
+              onChangeValue={this.onChangeValue}
+              value={writeExam}
+              onselectAnswer={this.onselectAnswer}
+              onSubmit={this.onClickMakeQ}
             />
           ) : (
             <ExamBoard
               subject={
-                subject === -1
+                subject === -2
+                  ? "내가 작성한 문제"
+                  : subject === -1
                   ? "오답노트"
                   : this.subsubjectNames[parseInt(subject / 100)][
                       subject - parseInt(subject / 100) * 100

@@ -21,6 +21,7 @@ const styles = theme => ({
     marginBottom: theme.spacing.unit * 1
   },
   title: {
+    ...theme.typography.h6,
     margin: 0
   },
   context: {
@@ -71,9 +72,11 @@ const AfterSolve = ({ classes, question }) => {
             ) : (
               <WrongIcon style={{ fontSize: "6em", color: "#ff86bc" }} />
             )}
-            <Typography className={classes.title} variant="h6">
-              {question.get("context")}
-            </Typography>
+            <div
+              id="context"
+              className={classes.title}
+              dangerouslySetInnerHTML={{ __html: question.get("context") }}
+            />
           </div>
 
           {question.get("choiceable") ? (
@@ -122,9 +125,17 @@ const BeforeSolve = ({ classes, question, onclickExample }) => {
             #{question.get("code")}
           </Typography>
           <div className={classes.context}>
-            <Typography className={classes.title} variant="h6">
-              {question.get("context")}
-            </Typography>
+            <div
+              className={classes.title}
+              id="context"
+              dangerouslySetInnerHTML={{ __html: question.get("context") }}
+            />
+            {question.get("img") != null ? (
+              <img
+                src={`https://golony.dev${question.get("img")}`}
+                alt="문제 이미지"
+              />
+            ) : null}
           </div>
 
           {question.get("choiceable") ? (
@@ -167,9 +178,17 @@ const MyQuestion = ({ classes, question }) => {
             ) : (
               <WrongIcon style={{ fontSize: "6em", color: "#ff86bc" }} />
             )}
-            <Typography className={classes.title} variant="h6">
-              {question.get("context")}
-            </Typography>
+            <div
+              id="context"
+              className={classes.title}
+              dangerouslySetInnerHTML={{ __html: question.get("context") }}
+            />
+            {question.get("img") !== null ? (
+              <img
+                src={`https://golony.dev${question.get("img")}`}
+                alt="문제 이미지"
+              />
+            ) : null}
           </div>
 
           {question.get("choiceable") ? (
@@ -222,6 +241,12 @@ const Question = ({ classes, question, onclickExample }) => {
         <AfterSolve classes={classes} question={question} />
       )}
     </React.Fragment>
+  );
+};
+
+Question.componentDidMount = () => {
+  document.getElementById("context").innerHTML = this.props.question.get(
+    "context"
   );
 };
 
