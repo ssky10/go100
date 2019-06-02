@@ -6,6 +6,7 @@ import { withStyles, Paper, Grid, Typography } from '@material-ui/core';
 import { QuestionAnswer } from '@material-ui/icons';
 
 //services
+import { useAuth } from 'context/loginProvider'
 import * as axios from 'services/post'
 
 const styles = theme => ({
@@ -43,38 +44,39 @@ const styles = theme => ({
 
 })
 
-let post = List();
-
 class QnAPost extends Component{
     constructor(props) {
         super(props);
         this.state = {
-            isGet: false
+            post: List()
         }
     }
 
     componentDidMount() {
-        console.log("componentDidMount")
+        const { token } = this.props;
+        const postId = this.props.match.params.id;
+        console.log(this.props)
         axios
-            .getQnAPost(this.props.match.params.id)
-            .then(res => {
-                if(res.data.result){
-                    post = fromJS(res.data.result);
-                    if( this.state.isGet===false){
-                        this.setState({
-                            isGet: true
-                        })
-                    }
-                }
-            })
+        .getQnAPost(token, 1, postId)
+        .then(res => {
+            console.log(res.data);
+            if(res.data){
+                this.setState({
+                post: fromJS(res.data)
+                })
+            }
+        })
     }
 
     render(){
         const { classes, match } = this.props
-        if (this.state.isGet){
-            const { user_id, title, date, contents, isAnswered } = post.toJS()[0];
+        const post = this.state.post;
+
+        console.log("After toJS");   
+
+        if(post){
+            const { title, writer_id, date,  isAnswered, is_teacher, q_contents, a_contents } = post.toJS();
             return (
-                this.state.isGet &&
                 <Paper
                     className={classes.root}
                     elevation={1}
@@ -113,7 +115,7 @@ class QnAPost extends Component{
                             <Typography
                                 variant="body1"
                             >
-                                {user_id}
+                                {writer_id}
                             </Typography>
                         </Grid>
                         <Grid
@@ -126,28 +128,27 @@ class QnAPost extends Component{
                             >
                                 {date}
                             </Typography>
-                        </Grid>
-                        
+                        </Grid>        
                         <Grid
                             className={classes.body}
                             item
                             xs={12}
                         >
-                            {contents}
+                            {q_contents}
                         </Grid>
                     </Grid>
                 </Paper>
             );
-        }else
-        return (
-            <Paper>
-
-            </Paper>
-        );
+        }
+        else{
+            return(
+                <Paper/>
+            )
+        }
     }
 }
 
 QnAPost.propTypes = {
     classes:PropTypes.object.isRequired
 }
-export default (withStyles(styles))(QnAPost);
+export default ((withStyles(styles))(useAuth(QnAPost)));

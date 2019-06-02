@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { Route, Switch, Link } from "react-router-dom";
 import PropTypes from "prop-types";
-import { withStyles, ListItem, ListItemIcon, ListItemText, Divider, SvgIcon, IconButton } from '@material-ui/core'
+import { withStyles, ListItem, ListItemIcon, ListItemText, Divider, SvgIcon } from '@material-ui/core'
+
+
 
 import {
     MainBoard, 
@@ -11,13 +13,13 @@ import {
     LiveQuizBoard,
     TeacherBoard
 } from "containers/board";
+import { TemplateContainer } from "containers";
 
 import QnAPost from 'components/class/board-contents/qnaboard/qna-post';
 import QnAWrite from 'components/class/board-contents/qnaboard/qna-write';
 
-import { TemplateContainer } from "containers";
+import { useAuth } from 'context/loginProvider';
 
-import ArrowBack from "@material-ui/icons/ArrowBack";
 import HomeIcon from "@material-ui/icons/Home";
 import NoticeIcon from "@material-ui/icons/Announcement";
 import QNAIcon from "@material-ui/icons/QuestionAnswer";
@@ -37,7 +39,8 @@ class ClassRouter extends Component {
     }
 
     render() { 
-        const { theme, classes, history, match } = this.props;
+        const { theme, classes, history, match, token } = this.props;
+        console.log(this.props);
         
         let boardNames = ["Main","공지사항", "과제", "Q&A", "LiveQuiz"];
 
@@ -78,8 +81,6 @@ class ClassRouter extends Component {
               ))}
             </div>
         );
-        
-        console.log(match.url);
         return (
             <TemplateContainer 
                 theme={theme}
@@ -90,24 +91,24 @@ class ClassRouter extends Component {
             >
                 <Switch>
                     <Route exact path={match.url} render={()=>(
-                        <MainBoard boardIdx={0}/>
+                        <MainBoard boardIdx={0} classIdx={match.params.id} token={token}/>
                     )}/>
                     <Route path={`${match.url}/notice`} render={()=>(
-                        <NoticeBoard boardIdx={1}/>
+                        <NoticeBoard boardIdx={1} token={token}/>
                     )}/>
                     <Route path={`${match.url}/work`} render={()=>(
-                        <WorkBoard boardIdx={2}/>
+                        <WorkBoard boardIdx={2} token={token}/>
                     )}/>
                     <Route exact path={`${match.url}/qna`} render={()=>(
-                        <QnABoard boardIdx={3} urls={`${match.url}`}/>
+                        <QnABoard boardIdx={3} URL={`${match.url}`} token={token}/>
                     )}/>
                     <Route path={`${match.url}/qna/write`} component={QnAWrite}/>
                     <Route path={`${match.url}/qna/post/:id`} component={QnAPost}/>
                     <Route path={`${match.url}/livequiz`} render={()=>(
-                        <LiveQuizBoard boardIdx={4}/>
+                        <LiveQuizBoard boardIdx={4}  token={token}/>
                     )}/>
                     <Route path={`${match.url}/teacher`} render={()=>(
-                        <TeacherBoard boardIdx={5}/>
+                        <TeacherBoard boardIdx={5}  token={token}/>
                     )}/> 
                 </Switch>
             </TemplateContainer>            
@@ -119,4 +120,4 @@ ClassRouter.propTypes = {
 }
 
 ClassRouter.defaultProps ={}
-export default withStyles(styles)(ClassRouter);
+export default (withStyles(styles)(useAuth(ClassRouter)));

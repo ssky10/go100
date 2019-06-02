@@ -82,11 +82,9 @@ const ClassList = ({ classes, list })  =>  {
                   </Typography>
                 </CardContent>
                 <CardActions>
-                  <Button size="small" component={Link} to= {"/class/"+card.class_id}>
+                  <Button size="small" component={Link} to={"/class/"+card.class_id}>
                     입장하기
-                    
-                  </Button>
-                  
+                  </Button>                  
                 </CardActions>
               </Card>
             </Grid>

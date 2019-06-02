@@ -71,40 +71,40 @@ const styles = theme => ({
     }
 })
 
-let qnaPosts = List();
-
 class QnABoard extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isUpdate: false
+            qnaPosts: List()
         }
     }
 
     componentDidMount(){
-        const { getQnAPostList, boardIdx } = this.props;
+        const { getQnAPostList, boardIdx, token } = this.props;
 
-        getQnAPostList(boardIdx);
+        getQnAPostList(token, 1);
     }
 
-    render() { 
-        const { classes, qnaPostList } = this.props;
-        
-        if(typeof qnaPostList.size !== "number")
-        {
-            qnaPostList.then(res => {
-                if(res.data.result){
-                    qnaPosts = fromJS(res.data.result);
-                    if( this.state.isUpdate === false ){
-                        this.setState(
-                            {
-                                isUpdate: true
-                            }
-                        )
-                    }
+    componentWillReceiveProps(nextProps){
+        const { qnaPostList: oldQnaPostList } = this.props;
+        const { qnaPostList: newQnaPostList } = nextProps;
+
+        if( oldQnaPostList !== newQnaPostList ){
+            newQnaPostList.then(res => {
+                if (res.data.list) {
+                    this.setState(
+                        {
+                            qnaPosts: fromJS(res.data.list)
+                        }
+                    ) 
                 }
             })
         }
+    }
+    render() { 
+        const { classes, qnaPostList } = this.props;
+        const qnaPosts = this.state.qnaPosts;
+
         const PostItems = ({idx, isAnswered, title, date}) => {
             return (
                 <Grid
@@ -161,19 +161,19 @@ class QnABoard extends Component {
         }
         const PostList = qnaPosts.map(
             (post) => {
-                const { idx, isAnswered, title, date} = post.toJS();
-                const { urls } = this.props
+                const { post_id, isAnswered, title, reg_date} = post.toJS();
+                const { URL } = this.props
                 return (
                     <Link
                         className={classes.link}
-                        key={idx}
-                        to={`${urls}/qna/post/${idx}`}
+                        key={post_id}
+                        to={`${URL}/qna/post/${post_id}`}
                     >
                         <PostItems
-                            idx={idx}
+                            idx={post_id}
                             isAnswered={isAnswered}
                             title={title}
-                            date={date}
+                            date={reg_date}
                         />
                         <Divider/>
                     </Link>                    
@@ -302,7 +302,7 @@ const mapStateToProps = ({ post }) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    getQnAPostList: board => dispatch(getQnAPostList(board))
+    getQnAPostList: (token, classIdx) => dispatch(getQnAPostList(token, classIdx))
 });
 
 export default connect(

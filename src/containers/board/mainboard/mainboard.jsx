@@ -7,7 +7,6 @@ import { withStyles, Grid, Paper, Typography, Divider } from '@material-ui/core'
 
 //service
 import { getNoticePostList, getWorkPostList, getQnAPostList } from "store/modules/post";
-import { useAuth } from "context/loginProvider";
 
 //component
 import NoticeCard from 'components/class/board-contents/mainboard/mainboard-contents/notice-card/notice-cardpost';
@@ -58,11 +57,11 @@ class MainBoard extends Component {
     }
 
     componentDidMount(){
-        const { getNoticePostList, getWorkPostList, getQnAPostList, boardIdx, token } = this.props;
+        const { getNoticePostList, getWorkPostList, getQnAPostList, token, classIdx, boardIdx } = this.props;
 
-        getNoticePostList(token, 1, boardIdx);
-        getWorkPostList(token, 1, boardIdx);
-        getQnAPostList(token, 1, boardIdx);
+        getNoticePostList(token, classIdx, boardIdx);
+        getWorkPostList(token, classIdx, boardIdx);
+        getQnAPostList(token, classIdx);
     }
 
     componentWillReceiveProps(nextProps){
@@ -72,9 +71,9 @@ class MainBoard extends Component {
 
         if( oldNoticePostList!==newNoticePostList ){
             newNoticePostList.then(res => {
-                if( res.data.notice ){
+                if( res.data.list ){
                     this.setState({
-                        noticePosts: fromJS(res.data.notice)
+                        noticePosts: fromJS(res.data.list)
                     })
                 }
             })
@@ -92,10 +91,10 @@ class MainBoard extends Component {
 
         if( oldQnaPostList !== newQnaPostList ){
             newQnaPostList.then(res => {
-                if (res.data.result) {
+                if (res.data.list) {
                     this.setState(
                         {
-                            qnaPosts: fromJS(res.data.result)
+                            qnaPosts: fromJS(res.data.list)
                         }
                     ) 
                 }
@@ -104,7 +103,7 @@ class MainBoard extends Component {
     }
 
     render() {
-        const { classes } = this.props;
+        const { classes, classIdx } = this.props;
 
         const noticePosts = this.state.noticePosts
         const workPosts = this.state.workPosts;
@@ -198,6 +197,7 @@ class MainBoard extends Component {
                             >
                                 <QnACard 
                                 posts={qnaPosts}
+                                classIdx={classIdx}
                                 />
                             </div>
                         </Paper>
@@ -223,10 +223,10 @@ const mapStateToProps = ({ post }) => ({
 const mapDispatchToProps = dispatch => ({
     getNoticePostList: (token, classIdx, boardIdx) => dispatch(getNoticePostList(token, classIdx, boardIdx)),
     getWorkPostList: (token, classIdx, boardIdx) => dispatch(getWorkPostList(token, classIdx, boardIdx)),
-    getQnAPostList: board => dispatch(getQnAPostList(board))
+    getQnAPostList: (token, classIdx) => dispatch(getQnAPostList(token, classIdx))
 });
 
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(withStyles(styles)(useAuth(MainBoard)));
+)(withStyles(styles)(MainBoard));
