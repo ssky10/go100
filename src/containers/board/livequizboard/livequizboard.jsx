@@ -14,7 +14,7 @@ class LiveQuizBoard extends Component {
 
         }
     }
-    render() { 
+    render() {
         return (
             <div className="livequiz-board">
                 LiveQuiz Board

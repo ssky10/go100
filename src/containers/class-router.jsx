@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Route, Switch, Link } from "react-router-dom";
 import PropTypes from "prop-types";
-import { withStyles, ListItem, ListItemIcon, ListItemText, Divider, SvgIcon } from '@material-ui/core'
+import { ListItem, ListItemIcon, ListItemText, Divider, SvgIcon } from '@material-ui/core'
 
 
 
@@ -27,9 +27,6 @@ import CreateIcon from "@material-ui/icons/Create"
 import TeacherIcon from "@material-ui/icons/School";
 import WorkIcon from "@material-ui/icons/Event";
 
-const styles = theme => {
-
-}
 class ClassRouter extends Component {
     constructor(props) {
         super(props);
@@ -39,7 +36,7 @@ class ClassRouter extends Component {
     }
 
     render() { 
-        const { theme, classes, history, match, token } = this.props;
+        const { theme, match, token } = this.props;
         console.log(this.props);
         
         let boardNames = ["Main","공지사항", "과제", "Q&A", "LiveQuiz"];
@@ -115,9 +112,4 @@ class ClassRouter extends Component {
         );
     }
 }
-ClassRouter.propTypes = {
-    classes: PropTypes.object.isRequired
-}
-
-ClassRouter.defaultProps ={}
-export default (withStyles(styles)(useAuth(ClassRouter)));
+export default (useAuth(ClassRouter));

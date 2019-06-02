@@ -1,9 +1,16 @@
 //node_modules
 import React, { Component } from 'react';
 import PropTypes from "prop-types";
-import { withStyles, Grid, Paper, Typography, Divider, SvgIcon, TextField } from "@material-ui/core";
+import { withStyles, Paper, Typography, Divider, SvgIcon, TextField, Button } from "@material-ui/core";
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableRow
+} from "@material-ui/core";
 
-import { Create, Clear, PersonAdd, Person } from "@material-ui/icons"
+import { Create, Clear, PersonAdd } from "@material-ui/icons"
 
 const styles = theme => ({
     root:{
@@ -232,21 +239,30 @@ class TeacherBoard extends Component {
                         className={classes.bottomcontent}
                     >
                         <div
-                            className={classes.contentheader}
+                            className={classes.student}
                         >
-                            <Typography
-                                variant="h5"
-                                component="h5"
+                            <div
+                                className={classes.contentheader}
                             >
-                                학생
-                            </Typography>
-                            <SvgIcon
-                                className={classes.btncreate}
-                                onClick={this.handleStudentOpen}
-                            >
-                                <PersonAdd
-                                    />
-                            </SvgIcon>
+                                <Typography
+                                    variant="h5"
+                                    component="h5"
+                                >
+                                    학생
+                                </Typography>
+                                <SvgIcon
+                                    className={classes.btncreate}
+                                    onClick={this.handleStudentOpen}
+                                >
+                                    <PersonAdd/>
+                                </SvgIcon>
+                            </div>
+                        </div>
+                        <div
+                            className={classes.classconfig}
+                        >
+                            <Button>수정</Button>
+                            <Button>삭제</Button>
                         </div>
                     </div>
                 </Paper>
