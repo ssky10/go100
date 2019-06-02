@@ -26,7 +26,7 @@ const theme = createMuiTheme({
   typography: {
     // Use the system font instead of the default Roboto font.
     fontFamily: [
-      "NanumSquare",
+      "Nanum Square",
       "-apple-system",
       "BlinkMacSystemFont",
       '"Segoe UI"',

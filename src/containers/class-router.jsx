@@ -79,6 +79,7 @@ class ClassRouter extends Component {
               ))}
             </div>
         );
+        console.log("router: "+token);
         return (
             <TemplateContainer 
                 theme={theme}

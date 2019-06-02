@@ -59,6 +59,9 @@ class MainBoard extends Component {
     componentDidMount(){
         const { getNoticePostList, getWorkPostList, getQnAPostList, token, classIdx, boardIdx } = this.props;
 
+        
+        console.log("mainboard: "+token);
+
         getNoticePostList(token, classIdx, boardIdx);
         getWorkPostList(token, classIdx, boardIdx);
         getQnAPostList(token, classIdx);
@@ -167,8 +170,7 @@ class MainBoard extends Component {
                             <div
                                 className={classes.posts}
                             >
-                                {<WorkCard posts={workPosts}/>
-                                }
+                                {<WorkCard posts={workPosts}/>}
                             </div>
                         </Paper>
                     </Grid>
