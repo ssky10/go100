@@ -37,31 +37,27 @@ export const getNoticePostList = (token, classIdx, boardIdx) => {
   });
 }
 
-export const setQnAPostList = (token, class_id) => {
+export const setQnAPostList = () => {
   return axios.post(DummyURL+"setQnAPostList.php",{
-    user_token: token,
-    class_id: class_id
   });
 }
 
 export const getWorkPostList = ( token, classIdx, boardIdx) => {
   return axios.post(URL+"classroom/homework",{
     user_token: token,
-    class: classIdx
+    class: classIdx,
+    boardIdx: boardIdx
   });
 }
 
-export const getQnAPostList = (token, classIdx) => {
-  return axios.post(URL+"classroom/getallqna",{
-    user_token: token,
-    class_id: classIdx
+export const getQnAPostList = (token, classIdx, boardIdx) => {
+  return axios.post(DummyURL+"/getQnAPostList.php",{
+
   })
 }
 
-export const getQnAPost = (token, classIdx, post_id) => {
-  return axios.post(URL+"classroom/getqna",{
-    user_token: token,
-    class_id: classIdx,
-    post_id: post_id
+export const getQnAPost = (postid) => {
+  return axios.post(DummyURL+"/getqnapost.php",{
+    postid: postid
   });
 }

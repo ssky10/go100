@@ -8,16 +8,6 @@ import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import Toolbar from "@material-ui/core/Toolbar";
 import { withStyles } from "@material-ui/core/styles";
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
-import Avatar from "@material-ui/core/Avatar";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import { Link } from "react-router-dom";
-
-//SVGIcon
-import AppsIcon from "@material-ui/icons/ArrowBack";
 
 const drawerWidth = 240;
 
@@ -33,10 +23,10 @@ const styles = theme => ({
   },
   title: {
     ...theme.typography.h6,
-    color: "#007CFF",
+    color: "#FFFFFF",
+    fontFamily: "Nanum Gothic",
     fontSize: "1.5rem",
-    fontWeight: 900,
-    flexGrow: 1
+    fontWeight: 900
   },
   wideAppBar: {
     width: "100%"
@@ -53,21 +43,13 @@ const styles = theme => ({
       display: "none"
     }
   },
-  toolbar: {
-    ...theme.mixins.toolbar,
-    paddingTop: theme.spacing.unit
-  },
-  footButton: {
-    position: "fixed",
-    bottom: 0,
-    width: drawerWidth
-  },
+  toolbar: theme.mixins.toolbar,
   drawerPaper: {
     width: drawerWidth,
-    backgroundColor: "#7cb6f3"
+    backgroundColor: "#C5D3D9"
   },
   content: {
-    flexGrow: 1
+    flexGrow: 1,
   }
 });
 
@@ -77,37 +59,16 @@ class Template extends React.Component {
   };
 
   state = {
-    mobileOpen: false,
-    open: -1,
-    anchorEl: null
+    mobileOpen: false
   };
 
   handleDrawerToggle = () => {
     this.setState(state => ({ mobileOpen: !state.mobileOpen }));
   };
 
-  handleMenu = event => {
-    this.setState({ anchorEl: event.currentTarget });
-  };
-
-  handleClose = () => {
-    this.setState({ anchorEl: null });
-  };
-
-  handleNotiToggle = () => {};
-
   render() {
-    const {
-      classes,
-      theme,
-      drawer,
-      title,
-      menu,
-      isLogin,
-      user,
-      logout
-    } = this.props;
-    const open = Boolean(this.state.anchorEl);
+    const { classes, theme, drawer, title } = this.props;
+
     return (
       <div className={classes.root}>
         <CssBaseline />
@@ -127,36 +88,6 @@ class Template extends React.Component {
               </IconButton>
             )}
             <div className={classes.title}>{title}</div>
-            {menu}
-            {!isLogin ? null : (
-              <div>
-                <IconButton
-                  aria-owns={open ? "menu-appbar" : undefined}
-                  aria-haspopup="true"
-                  onClick={this.handleMenu}
-                  color="inherit"
-                >
-                  <Avatar>{user.slice(0, 2)}</Avatar>
-                </IconButton>
-                <Menu
-                  id="menu-appbar"
-                  anchorEl={this.state.anchorEl}
-                  anchorOrigin={{
-                    vertical: "top",
-                    horizontal: "right"
-                  }}
-                  transformOrigin={{
-                    vertical: "top",
-                    horizontal: "right"
-                  }}
-                  open={open}
-                  onClose={this.handleClose}
-                >
-                  <MenuItem onClick={this.handleClose}>{user} Profile</MenuItem>
-                  <MenuItem onClick={logout}>Logout</MenuItem>
-                </Menu>
-              </div>
-            )}
           </Toolbar>
         </AppBar>
         {drawer && (
@@ -175,18 +106,6 @@ class Template extends React.Component {
               >
                 <div className={classes.toolbar} />
                 {drawer}
-                <div className={classes.footButton}>
-                  <ListItem button component={Link} to="/classeslist">
-                    <ListItemIcon>
-                      <AppsIcon />
-                    </ListItemIcon>
-                    <ListItemText
-                      inset
-                      primary={"수업목록으로"}
-                      style={{ fontWeight: "bold" }}
-                    />
-                  </ListItem>
-                </div>
               </Drawer>
             </Hidden>
             <Hidden xsDown implementation="js">
@@ -199,24 +118,12 @@ class Template extends React.Component {
               >
                 <div className={classes.toolbar} />
                 {drawer}
-                <div className={classes.footButton}>
-                  <ListItem button component={Link} to="/classeslist">
-                    <ListItemIcon>
-                      <AppsIcon />
-                    </ListItemIcon>
-                    <ListItemText
-                      inset
-                      primary={"수업목록으로"}
-                      style={{ fontWeight: "bold" }}
-                    />
-                  </ListItem>
-                </div>
               </Drawer>
             </Hidden>
           </nav>
         )}
         <main className={classes.content}>
-          <div className={classes.toolbar} />
+          <div className={classes.toolbar}/>
           {this.props.children}
         </main>
       </div>

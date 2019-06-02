@@ -14,7 +14,7 @@ import * as axios from "services/post";
 
 const styles = theme => ({
     root:{
-        paddingTop: theme.spacing.unit * 10,
+        paddingTop: theme.spacing.unit * 5,
         paddingBottom : theme.spacing.unit * 2,
         paddingLeft: theme.spacing.unit * 10,
         paddingRight: theme.spacing.unit * 2,

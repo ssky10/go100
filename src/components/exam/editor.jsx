@@ -52,7 +52,6 @@ class editor extends React.Component {
 
   excuteEditButton = exc => {
     const selection = window.getSelection();
-    console.log(selection);
     const found = selection.containsNode(
       document.getElementById(this.props.id),
       true

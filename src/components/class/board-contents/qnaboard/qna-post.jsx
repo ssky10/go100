@@ -6,13 +6,12 @@ import { withStyles, Paper, Grid, Typography } from '@material-ui/core';
 import { QuestionAnswer } from '@material-ui/icons';
 
 //services
-import { useAuth } from 'context/loginProvider'
 import * as axios from 'services/post'
 
 const styles = theme => ({
     root:{
         width: '700px',
-        height: '502px',
+        height: '800px',
         marginTop: theme.spacing.unit * 5,
         marginBottom : theme.spacing.unit * 2,
         marginLeft: theme.spacing.unit * 10,
@@ -44,39 +43,38 @@ const styles = theme => ({
 
 })
 
+let post = List();
+
 class QnAPost extends Component{
     constructor(props) {
         super(props);
         this.state = {
-            post: List()
+            isGet: false
         }
     }
 
     componentDidMount() {
-        const { token } = this.props;
-        const postId = this.props.match.params.id;
-        console.log(this.props)
+        console.log("componentDidMount")
         axios
-        .getQnAPost(token, 1, postId)
-        .then(res => {
-            console.log(res.data);
-            if(res.data){
-                this.setState({
-                post: fromJS(res.data)
-                })
-            }
-        })
+            .getQnAPost(this.props.match.params.id)
+            .then(res => {
+                if(res.data.result){
+                    post = fromJS(res.data.result);
+                    if( this.state.isGet===false){
+                        this.setState({
+                            isGet: true
+                        })
+                    }
+                }
+            })
     }
 
     render(){
         const { classes, match } = this.props
-        const post = this.state.post;
-
-        console.log("After toJS");   
-
-        if(post){
-            const { title, writer_id, date,  isAnswered, is_teacher, q_contents, a_contents } = post.toJS();
+        if (this.state.isGet){
+            const { user_id, title, date, contents, isAnswered } = post.toJS()[0];
             return (
+                this.state.isGet &&
                 <Paper
                     className={classes.root}
                     elevation={1}
@@ -115,7 +113,7 @@ class QnAPost extends Component{
                             <Typography
                                 variant="body1"
                             >
-                                {writer_id}
+                                {user_id}
                             </Typography>
                         </Grid>
                         <Grid
@@ -128,27 +126,28 @@ class QnAPost extends Component{
                             >
                                 {date}
                             </Typography>
-                        </Grid>        
+                        </Grid>
+                        
                         <Grid
                             className={classes.body}
                             item
                             xs={12}
                         >
-                            {q_contents}
+                            {contents}
                         </Grid>
                     </Grid>
                 </Paper>
             );
-        }
-        else{
-            return(
-                <Paper/>
-            )
-        }
+        }else
+        return (
+            <Paper>
+
+            </Paper>
+        );
     }
 }
 
 QnAPost.propTypes = {
     classes:PropTypes.object.isRequired
 }
-export default ((withStyles(styles))(useAuth(QnAPost)));
+export default (withStyles(styles))(QnAPost);

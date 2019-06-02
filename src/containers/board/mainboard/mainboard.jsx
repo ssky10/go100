@@ -7,6 +7,7 @@ import { withStyles, Grid, Paper, Typography, Divider } from '@material-ui/core'
 
 //service
 import { getNoticePostList, getWorkPostList, getQnAPostList } from "store/modules/post";
+import { useAuth } from "context/loginProvider";
 
 //component
 import NoticeCard from 'components/class/board-contents/mainboard/mainboard-contents/notice-card/notice-cardpost';
@@ -17,7 +18,7 @@ const styles = theme => ({
     root:{
         marginLeft: theme.spacing.unit * 1,
         padding: theme.spacing.unit * 1,
-        paddingTop: theme.spacing.unit * 10,
+        paddingTop: theme.spacing.unit * 2,
         flexGrow: 1
     },
     paper: {
@@ -45,6 +46,12 @@ const styles = theme => ({
     }
 })
 
+let noticePosts = List();
+
+let workPosts = List();
+
+let qnaPosts = List();
+
 class MainBoard extends Component {
     constructor(props) {
         super(props);
@@ -57,11 +64,11 @@ class MainBoard extends Component {
     }
 
     componentDidMount(){
-        const { getNoticePostList, getWorkPostList, getQnAPostList, token, classIdx, boardIdx } = this.props;
+        const { getNoticePostList, getWorkPostList, getQnAPostList, boardIdx, token } = this.props;
 
-        getNoticePostList(token, classIdx, boardIdx);
-        getWorkPostList(token, classIdx, boardIdx);
-        getQnAPostList(token, classIdx);
+        getNoticePostList(token, 1, boardIdx);
+        getWorkPostList(token, 1, boardIdx);
+        getQnAPostList(token, 1, boardIdx);
     }
 
     componentWillReceiveProps(nextProps){
@@ -71,9 +78,9 @@ class MainBoard extends Component {
 
         if( oldNoticePostList!==newNoticePostList ){
             newNoticePostList.then(res => {
-                if( res.data.list ){
+                if( res.data.notice ){
                     this.setState({
-                        noticePosts: fromJS(res.data.list)
+                        noticePosts: fromJS(res.data.notice)
                     })
                 }
             })
@@ -82,19 +89,21 @@ class MainBoard extends Component {
         if( oldWorkPostList !== newWorkPostList ){
             newWorkPostList.then(res => {
                 if (res.data.list) {
-                    this.setState({
+                    this.setState(
+                        {
                             workPosts: fromJS(res.data.list)
-                    })
+                        }
+                    )
                 }
             })
         }
 
         if( oldQnaPostList !== newQnaPostList ){
             newQnaPostList.then(res => {
-                if (res.data.list) {
+                if (res.data.result) {
                     this.setState(
                         {
-                            qnaPosts: fromJS(res.data.list)
+                            qnaPosts: fromJS(res.data.result)
                         }
                     ) 
                 }
@@ -103,7 +112,7 @@ class MainBoard extends Component {
     }
 
     render() {
-        const { classes, classIdx } = this.props;
+        const { classes } = this.props;
 
         const noticePosts = this.state.noticePosts
         const workPosts = this.state.workPosts;
@@ -128,7 +137,7 @@ class MainBoard extends Component {
                         >
                             <Typography
                                 component="h3"
-                                variant="h6"
+                                variant="title"
                                 gutterBottom
                                 className={classes.title}
                             >
@@ -155,7 +164,7 @@ class MainBoard extends Component {
                         >
                             <Typography
                                 component="h3"
-                                variant="h6"
+                                variant="title"
                                 gutterBottom
                                 className={classes.title}
                             >
@@ -183,7 +192,7 @@ class MainBoard extends Component {
                         >
                             <Typography
                                 component="h3"
-                                variant="h6"
+                                variant="title"
                                 gutterBottom
                                 className={classes.title}
                             >
@@ -197,7 +206,6 @@ class MainBoard extends Component {
                             >
                                 <QnACard 
                                 posts={qnaPosts}
-                                classIdx={classIdx}
                                 />
                             </div>
                         </Paper>
@@ -223,10 +231,10 @@ const mapStateToProps = ({ post }) => ({
 const mapDispatchToProps = dispatch => ({
     getNoticePostList: (token, classIdx, boardIdx) => dispatch(getNoticePostList(token, classIdx, boardIdx)),
     getWorkPostList: (token, classIdx, boardIdx) => dispatch(getWorkPostList(token, classIdx, boardIdx)),
-    getQnAPostList: (token, classIdx) => dispatch(getQnAPostList(token, classIdx))
+    getQnAPostList: board => dispatch(getQnAPostList(board))
 });
 
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(withStyles(styles)(MainBoard));
+)(withStyles(styles)(useAuth(MainBoard)));

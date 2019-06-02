@@ -16,9 +16,8 @@ export const getWorkPostList = (token, classIdx, boardIdx) => ({
   type: WORKPOSTLIST,
   token, classIdx, boardIdx
 })
-export const getQnAPostList = (token, classIdx) => ({
-  type: QNAPOSTLIST,
-  token, classIdx
+export const getQnAPostList = () => ({
+  type: QNAPOSTLIST
 })
 
 // 모듈의 초기 상태를 정의합니다.
@@ -41,7 +40,7 @@ export default function reducer(state = initialState, action) {
       return state.set("workPostList", service.getWorkPostList(action.token,action.classIdx, action.boardIdx));
     case QNAPOSTLIST:
       return state.set("qnaPostList",
-      service.getQnAPostList(action.token, action.classIdx));
+      service.getQnAPostList(action.boardIdx));
     default:
       return state; // 아무 일도 일어나지 않으면 현재 상태를 그대로 반환합니다.
   }

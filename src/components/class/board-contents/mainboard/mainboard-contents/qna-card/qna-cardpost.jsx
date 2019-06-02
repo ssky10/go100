@@ -34,7 +34,7 @@ class QnaCardPost extends Component {
         super(props);
     }
     render() { 
-        const { classes, posts, classIdx } = this.props;
+        const { classes, posts } = this.props;
         const PostItems = ({idx, isAnswered, title, date}) => {
             return(
                 <Grid
@@ -83,19 +83,19 @@ class QnaCardPost extends Component {
         
         const PostList = posts.map(
             (post) => {
-                const { post_id, user_id, isAnswered, title, reg_date} = post.toJS();
+                const { idx, user_id, isAnswered, title, date} = post.toJS();
                 return (
                     <Link
-                        key={post_id}
+                        key={idx}
                         className={classes.link}
-                        to={`${classIdx}/qna/post/${post_id}`}
+                        to={`/class/qna/post/${idx}`}
                     >
                         <PostItems
-                            idx={post_id}
+                            idx={idx}
                             user_id={user_id}
                             isAnswered={isAnswered}
                             title={title}
-                            date={reg_date}
+                            date={date}
                         />
                         <Divider/>
                     </Link>
