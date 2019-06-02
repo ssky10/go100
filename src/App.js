@@ -4,7 +4,7 @@ import { BrowserRouter, Route, Switch, Link } from "react-router-dom";
 import { Provider } from "react-redux";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
 
-import { Paper, Typography } from '@material-ui/core'
+import { Paper, Typography } from "@material-ui/core";
 
 //container&components
 import { Login, ClassesList, ClassRouter, Exam } from "containers";
@@ -13,7 +13,7 @@ import PrivateRoute from "./privateRoute";
 import Template from "components/template";
 
 //SVG Icons
-import Block from '@material-ui/icons/Block'
+import Block from "@material-ui/icons/Block";
 
 //store
 import { LoginProvider, LoginConsumer } from "./context/loginProvider";
@@ -92,7 +92,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      page:'login'
+      page: "login"
     };
   }
   render() {
@@ -103,18 +103,22 @@ class App extends Component {
         <BrowserRouter>
           <LoginProvider>
             <LoginConsumer>
-              {(state)=>{
-                if(!(page===state.page)){
+              {state => {
+                if (!(page === state.page)) {
                   this.setState({
                     page: state.page
-                  })
+                  });
                 }
               }}
             </LoginConsumer>
             <MuiThemeProvider theme={theme}>
               <Switch>
                 <Route exact path="/" component={Login} />
-                <Route exact path="/classeslist" component={ClassesList}/>
+                <PrivateRoute
+                  exact
+                  path="/classeslist"
+                  component={ClassesList}
+                />
                 <Route path="/class/:id" component={ClassRouter} />
                 <PrivateRoute exact path="/exam" component={Exam} />
                 <PrivateRoute exact path="/exam/:code(\d+)" component={Exam} />

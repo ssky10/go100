@@ -99,7 +99,7 @@ class TemplateContainer extends React.Component {
     };
 
     const appBarMenu = (
-      <div>
+      <div style={{ display: "inherit" }}>
         {menu}
         <Tooltip title={this.state.notiToken ? "알림취소" : "알림설정"}>
           <IconButton
