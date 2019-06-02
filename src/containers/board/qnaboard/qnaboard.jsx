@@ -80,9 +80,9 @@ class QnABoard extends Component {
     }
 
     componentDidMount(){
-        const { getQnAPostList, boardIdx, token } = this.props;
-
-        getQnAPostList(token, 1);
+        const { getQnAPostList, boardIdx, token, classIdx } = this.props;
+        
+        getQnAPostList(token, classIdx);
     }
 
     componentWillReceiveProps(nextProps){
@@ -104,6 +104,7 @@ class QnABoard extends Component {
     render() { 
         const { classes, qnaPostList } = this.props;
         const qnaPosts = this.state.qnaPosts;
+        const { classIdx } = this.props
 
         const PostItems = ({idx, isAnswered, title, date}) => {
             return (
@@ -162,12 +163,12 @@ class QnABoard extends Component {
         const PostList = qnaPosts.map(
             (post) => {
                 const { post_id, isAnswered, title, reg_date} = post.toJS();
-                const { URL } = this.props
+                console.log("classid2 :"+classIdx);
                 return (
                     <Link
                         className={classes.link}
                         key={post_id}
-                        to={`${URL}/qna/post/${post_id}`}
+                        to={"qna/post/"+`${post_id}`}
                     >
                         <PostItems
                             idx={post_id}
@@ -180,6 +181,7 @@ class QnABoard extends Component {
                 )
             }
         )
+        console.log("classid1:"+classIdx)
         return (
             <div
                 className={classes.root}
@@ -206,7 +208,7 @@ class QnABoard extends Component {
                     >
                         <Link
                             className={`${classes.linkwrite} ${classes.link}`} 
-                            to={`${this.props.urls}/qna/write/`}
+                            to={`qna/write/`}
                         >
                             <Paper
                                 className={classes.writepaper}

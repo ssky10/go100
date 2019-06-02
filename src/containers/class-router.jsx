@@ -39,6 +39,7 @@ class ClassRouter extends Component {
         const { theme, match, token } = this.props;
         console.log(this.props);
         
+        console.log(match.params.id);
         let boardNames = ["Main","공지사항", "과제", "Q&A", "LiveQuiz"];
 
         this.state.isTeacher ? boardNames.push("강사") : boardNames = boardNames;
@@ -97,7 +98,7 @@ class ClassRouter extends Component {
                         <WorkBoard boardIdx={2} token={token}/>
                     )}/>
                     <Route exact path={`${match.url}/qna`} render={()=>(
-                        <QnABoard boardIdx={3} URL={`${match.url}`} token={token}/>
+                        <QnABoard boardIdx={3} classIdx={match.params.id} token={token}/>
                     )}/>
                     <Route path={`${match.url}/qna/write`} component={QnAWrite}/>
                     <Route path={`${match.url}/qna/post/:id`} component={QnAPost}/>
