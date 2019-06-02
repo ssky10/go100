@@ -11,12 +11,9 @@ import * as axios from 'services/post'
 
 const styles = theme => ({
     root:{
-        width: '700px',
         height: '502px',
         marginTop: theme.spacing.unit * 5,
         marginBottom : theme.spacing.unit * 2,
-        marginLeft: theme.spacing.unit * 10,
-        marginRight: theme.spacing.unit * 10,
         flexGrow: 1
     },
     title:{
@@ -77,67 +74,85 @@ class QnAPost extends Component{
         if(post){
             const { title, writer_id, date,  isAnswered, is_teacher, q_contents, a_contents } = post.toJS();
             return (
-                <Paper
-                    className={classes.root}
-                    elevation={1}
-                    square={true}
+                <Grid
+                    container
+                    spacing={0}
                 >
                     <Grid
-                        container
-                        spacing={0}
+                        item
+                        xs={1}
+                    />
+                    <Grid
+                        item
+                        xs={10}
                     >
-                        <Grid
-                            className={classes.title}
-                            item
-                            xs={12}
+                        <Paper
+                            className={classes.root}
+                            elevation={1}
+                            square={true}
                         >
-                            <Typography
-                                variant="h6"
+                            <Grid
+                                container
+                                spacing={0}
                             >
-                                {title}
-                            </Typography>
-                        </Grid>
-                        <Grid
-                            className={ classes.answericon}
-                            item
-                            xs={1}
-                        >
-                            {(isAnswered==='1') &&
-                            <QuestionAnswer
-                                className={classes.contentsicon}
-                            />}
-                        </Grid>
-                        <Grid
-                            className={classes.grid}
-                            item
-                            xs={8}
-                        >
-                            <Typography
-                                variant="body1"
-                            >
-                                {writer_id}
-                            </Typography>
-                        </Grid>
-                        <Grid
-                            className={classes.grid}
-                            item
-                            xs={3}
-                        >
-                            <Typography
-                                variant="body1"
-                            >
-                                {date}
-                            </Typography>
-                        </Grid>        
-                        <Grid
-                            className={classes.body}
-                            item
-                            xs={12}
-                        >
-                            {q_contents}
-                        </Grid>
+                                <Grid
+                                    className={classes.title}
+                                    item
+                                    xs={12}
+                                >
+                                    <Typography
+                                        variant="h6"
+                                    >
+                                        {title}
+                                    </Typography>
+                                </Grid>
+                                <Grid
+                                    className={ classes.answericon}
+                                    item
+                                    xs={1}
+                                >
+                                    {(isAnswered==='1') &&
+                                    <QuestionAnswer
+                                        className={classes.contentsicon}
+                                    />}
+                                </Grid>
+                                <Grid
+                                    className={classes.grid}
+                                    item
+                                    xs={8}
+                                >
+                                    <Typography
+                                        variant="body1"
+                                    >
+                                        {writer_id}
+                                    </Typography>
+                                </Grid>
+                                <Grid
+                                    className={classes.grid}
+                                    item
+                                    xs={3}
+                                >
+                                    <Typography
+                                        variant="body1"
+                                    >
+                                        {date}
+                                    </Typography>
+                                </Grid>        
+                                <Grid
+                                    className={classes.body}
+                                    item
+                                    xs={12}
+                                >
+                                    {q_contents}
+                                </Grid>
+                            </Grid>
+                        </Paper>
                     </Grid>
-                </Paper>
+                    <Grid
+                        item
+                        xs={1}
+                    />
+                </Grid>
             );
         }
         else{

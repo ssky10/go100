@@ -106,6 +106,12 @@ const styles = theme => ({
     },
     studenttable:{
         minWidth: 650
+    },
+    classconfig:{
+    },
+    btndelete:{
+        backgroundColor: "#E81D35",
+        color: "#FFFFFF"
     }
 })
 
@@ -274,8 +280,17 @@ class TeacherBoard extends Component {
                         <div
                             className={classes.classconfig}
                         >
-                            <Button>수정</Button>
-                            <Button>삭제</Button>
+                            <div>
+                                <Button>학급 수정</Button>
+                            </div>
+                            <div>                                                        
+                                <Button
+                                    size="large"
+                                    className={classes.btndelete}
+                                >
+                                학급 삭제
+                                </Button>
+                            </div>
                         </div>
                     </div>
                 </Paper>
