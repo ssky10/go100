@@ -1,0 +1,9 @@
+.buttons{
+    float: right;
+}
+.buttons:first-child{
+    margin: 0 16px 0 0;
+}
+.buttons + .buttons {
+    margin: 0 16px 0 0;
+}

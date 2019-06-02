@@ -154,10 +154,6 @@ class TeacherBoard extends Component {
         })
     }
 
-    createData = (student_index, studnet_id, student_name) => {
-        
-    }
-    
     render() { 
         const { classes } = this.props;
         const { about, student_id, open, type } = this.state;
