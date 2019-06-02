@@ -76,9 +76,6 @@ class WorkCardPost extends Component {
         const PostList = posts.map(
             (post,index) => {
                 const { title, subject, date} = post.toJS();
-
-                console.log("post : ");
-                console.log( post );
                 return (
                     <PostItems 
                         key={index}
