@@ -17,7 +17,9 @@ import ListItemText from "@material-ui/core/ListItemText";
 import { Link } from "react-router-dom";
 
 //SVGIcon
+import AccountCircle from "@material-ui/icons/AccountCircle";
 import AppsIcon from "@material-ui/icons/ArrowBack";
+import { Typography } from "@material-ui/core";
 
 const drawerWidth = 240;
 
@@ -126,7 +128,11 @@ class Template extends React.Component {
                 <MenuIcon />
               </IconButton>
             )}
-            <div className={classes.title}>{title}</div>
+            <div
+              className={classes.title}
+            >
+              {title}
+            </div>
             {menu}
             {!isLogin ? null : (
               <div>
