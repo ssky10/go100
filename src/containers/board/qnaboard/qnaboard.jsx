@@ -74,9 +74,9 @@ class QnABoard extends Component {
     }
 
     componentDidMount(){
-        const { getQnAPostList, boardIdx } = this.props;
-
-        getQnAPostList(boardIdx);
+        const { getQnAPostList, boardIdx, token, classIdx } = this.props;
+        
+        getQnAPostList(token, classIdx);
     }
 
     render() { 
@@ -97,6 +97,15 @@ class QnABoard extends Component {
                 }
             })
         }
+<<<<<<< HEAD
+=======
+    }
+    render() { 
+        const { classes, qnaPostList } = this.props;
+        const qnaPosts = this.state.qnaPosts;
+        const { classIdx } = this.props
+
+>>>>>>> back-up
         const PostItems = ({idx, isAnswered, title, date}) => {
             return (
                 <Grid
@@ -153,12 +162,22 @@ class QnABoard extends Component {
         }
         const PostList = qnaPosts.map(
             (post) => {
+<<<<<<< HEAD
                 const { idx, isAnswered, title, date} = post.toJS();
                 return (
                     <Link
                         className={classes.link}
                         key={idx}
                         to={`/class/qna/post/${idx}`}
+=======
+                const { post_id, isAnswered, title, reg_date} = post.toJS();
+                console.log("classid2 :"+classIdx);
+                return (
+                    <Link
+                        className={classes.link}
+                        key={post_id}
+                        to={"qna/post/"+`${post_id}`}
+>>>>>>> back-up
                     >
                         <PostItems
                             idx={idx}
@@ -171,6 +190,7 @@ class QnABoard extends Component {
                 )
             }
         )
+        console.log("classid1:"+classIdx)
         return (
             <div
                 className={classes.root}
@@ -198,7 +218,27 @@ class QnABoard extends Component {
                         item
                         xs={1}
                     >
+<<<<<<< HEAD
                         <Create/>
+=======
+                        <Link
+                            className={`${classes.linkwrite} ${classes.link}`} 
+                            to={`qna/write/`}
+                        >
+                            <Paper
+                                className={classes.writepaper}
+                                square
+                            >
+                                <Create/>
+                                <Typography
+                                    variant="subtitle2"
+                                    gutterBottom
+                                >
+                                    글쓰기
+                                </Typography>
+                            </Paper>
+                        </Link>
+>>>>>>> back-up
                     </Grid>
                     <Grid                        
                         container
