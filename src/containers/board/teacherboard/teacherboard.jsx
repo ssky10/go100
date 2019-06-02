@@ -103,6 +103,9 @@ const styles = theme => ({
     studentcontents:{
         margin:theme.spacing.unit * 2,
         padding: theme.spacing.unit * 1
+    },
+    studenttable:{
+        minWidth: 650
     }
 })
 
@@ -257,6 +260,16 @@ class TeacherBoard extends Component {
                                     <PersonAdd/>
                                 </SvgIcon>
                             </div>
+                            <Table>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell>학번</TableCell>
+                                        <TableCell align="right">ID</TableCell>
+                                        <TableCell align="right">이름</TableCell>
+                                        <TableCell align="right">삭제</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                            </Table>
                         </div>
                         <div
                             className={classes.classconfig}
