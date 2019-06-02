@@ -13,8 +13,10 @@ import {
 } from "containers/board";
 
 import QnAPost from 'components/class/board-contents/qnaboard/qna-post';
+import QnAWrite from 'components/class/board-contents/qnaboard/qna-write';
 
 import { TemplateContainer } from "containers";
+import { useAuth } from "context/loginProvider";
 
 import HomeIcon from "@material-ui/icons/Home";
 import NoticeIcon from "@material-ui/icons/Announcement";
@@ -31,12 +33,8 @@ class ClassRouter extends Component {
         }
     }
     render() { 
-<<<<<<< HEAD
-        const { theme, classes, match } = this.props;
-=======
         const { theme, match, token } = this.props;
         console.log(this.props);
->>>>>>> back-up
         
         console.log(match.params.id);
         let boardNames = ["Main","공지사항", "과제", "Q&A", "LiveQuiz"];
@@ -112,13 +110,4 @@ class ClassRouter extends Component {
         );
     }
 }
-<<<<<<< HEAD
-ClassRouter.propTypes = {
-    classes: PropTypes.object.isRequired
-}
-
-ClassRouter.defaultProps ={}
-export default withStyles(styles)(ClassRouter);
-=======
 export default (useAuth(ClassRouter));
->>>>>>> back-up

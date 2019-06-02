@@ -97,15 +97,12 @@ class QnABoard extends Component {
                 }
             })
         }
-<<<<<<< HEAD
-=======
     }
     render() { 
         const { classes, qnaPostList } = this.props;
         const qnaPosts = this.state.qnaPosts;
         const { classIdx } = this.props
 
->>>>>>> back-up
         const PostItems = ({idx, isAnswered, title, date}) => {
             return (
                 <Grid
@@ -162,14 +159,6 @@ class QnABoard extends Component {
         }
         const PostList = qnaPosts.map(
             (post) => {
-<<<<<<< HEAD
-                const { idx, isAnswered, title, date} = post.toJS();
-                return (
-                    <Link
-                        className={classes.link}
-                        key={idx}
-                        to={`/class/qna/post/${idx}`}
-=======
                 const { post_id, isAnswered, title, reg_date} = post.toJS();
                 console.log("classid2 :"+classIdx);
                 return (
@@ -177,13 +166,12 @@ class QnABoard extends Component {
                         className={classes.link}
                         key={post_id}
                         to={"qna/post/"+`${post_id}`}
->>>>>>> back-up
                     >
                         <PostItems
-                            idx={idx}
+                            idx={post_id}
                             isAnswered={isAnswered}
                             title={title}
-                            date={date}
+                            date={reg_date}
                         />
                         <Divider/>
                     </Link>                    
@@ -218,9 +206,6 @@ class QnABoard extends Component {
                         item
                         xs={1}
                     >
-<<<<<<< HEAD
-                        <Create/>
-=======
                         <Link
                             className={`${classes.linkwrite} ${classes.link}`} 
                             to={`qna/write/`}
@@ -238,7 +223,6 @@ class QnABoard extends Component {
                                 </Typography>
                             </Paper>
                         </Link>
->>>>>>> back-up
                     </Grid>
                     <Grid                        
                         container
