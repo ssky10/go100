@@ -1,5 +1,6 @@
 //node_modules
 import React, { Component } from 'react';
+import { fromJS, List } from 'immutable';
 import PropTypes from "prop-types";
 import { withStyles, Paper, Typography, Divider, SvgIcon, TextField, Button } from "@material-ui/core";
 import {
@@ -11,6 +12,8 @@ import {
 } from "@material-ui/core";
 
 import { Create, Clear, PersonAdd } from "@material-ui/icons"
+
+import * as axios from "services/classroom"
 
 const styles = theme => ({
     root:{
@@ -121,6 +124,7 @@ class TeacherBoard extends Component {
         this.state = {
             about: '소개글',
             student_id: '',
+            studentList: List(),
             open: false,
             type: '',
         }
@@ -160,10 +164,25 @@ class TeacherBoard extends Component {
         })
     }
 
+    componentDidMount(){
+        const { classIdx, token } = this.props;
+        axios
+            .getStudentList(classIdx, token)
+            .then(res=>{
+                console.log(res)
+                if(res.data){
+                    this.setState({
+                        studentList: fromJS(res.data.list)
+                    })
+                }
+            })
+    }
+
     render() { 
         const { classes } = this.props;
-        const { about, student_id, open, type } = this.state;
+        const { about, student_id, studentList, open, type } = this.state;
 
+        console.log(studentList);
         return (
             <div
                 className={classes.root}

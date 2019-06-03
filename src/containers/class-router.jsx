@@ -107,7 +107,7 @@ class ClassRouter extends Component {
                         <LiveQuizBoard boardIdx={4}  token={token}/>
                     )}/>
                     <Route path={`${match.url}/teacher`} render={()=>(
-                        <TeacherBoard boardIdx={5}  token={token}/>
+                        <TeacherBoard boardIdx={5}  token={token} classIdx={match.params.id}/>
                     )}/> 
                 </Switch>
             </TemplateContainer>            
