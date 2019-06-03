@@ -12,7 +12,7 @@ import { getQnAPostList } from "store/modules/post";
 
 const styles = theme => ({
     root:{
-        paddingTop: theme.spacing.unit * 5,
+        paddingTop: theme.spacing.unit * 10,
         paddingBottom : theme.spacing.unit * 2,
         paddingLeft: theme.spacing.unit * 10,
         paddingRight: theme.spacing.unit * 10,
@@ -21,7 +21,15 @@ const styles = theme => ({
     boardtitle:{
         marginBottom: theme.spacing.unit * 3,
     },
+    linkwrite:{
+        float: "right",
+    },
+    writepaper:{
+        display:"flex"
+        
+    },
     paper:{
+        marginTop: theme.spacing.unit * 1,
         width: '100%',
     },
     listtitle:{
@@ -63,40 +71,41 @@ const styles = theme => ({
     }
 })
 
-let qnaPosts = List();
-
 class QnABoard extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isUpdate: false
+            qnaPosts: List()
         }
     }
 
     componentDidMount(){
-        const { getQnAPostList, boardIdx } = this.props;
-
-        getQnAPostList(boardIdx);
+        const { getQnAPostList, boardIdx, token, classIdx } = this.props;
+        
+        getQnAPostList(token, classIdx);
     }
 
-    render() { 
-        const { classes, qnaPostList } = this.props;
-        
-        if(typeof qnaPostList.size !== "number")
-        {
-            qnaPostList.then(res => {
-                if(res.data.result){
-                    qnaPosts = fromJS(res.data.result);
-                    if( this.state.isUpdate === false ){
-                        this.setState(
-                            {
-                                isUpdate: true
-                            }
-                        )
-                    }
+    componentWillReceiveProps(nextProps){
+        const { qnaPostList: oldQnaPostList } = this.props;
+        const { qnaPostList: newQnaPostList } = nextProps;
+
+        if( oldQnaPostList !== newQnaPostList ){
+            newQnaPostList.then(res => {
+                if (res.data.list) {
+                    this.setState(
+                        {
+                            qnaPosts: fromJS(res.data.list)
+                        }
+                    ) 
                 }
             })
         }
+    }
+    render() { 
+        const { classes, qnaPostList } = this.props;
+        const qnaPosts = this.state.qnaPosts;
+        const { classIdx } = this.props
+
         const PostItems = ({idx, isAnswered, title, date}) => {
             return (
                 <Grid
@@ -153,24 +162,26 @@ class QnABoard extends Component {
         }
         const PostList = qnaPosts.map(
             (post) => {
-                const { idx, isAnswered, title, date} = post.toJS();
+                const { post_id, isAnswered, title, reg_date} = post.toJS();
+                console.log("classid2 :"+classIdx);
                 return (
                     <Link
                         className={classes.link}
-                        key={idx}
-                        to={`/class/qna/post/${idx}`}
+                        key={post_id}
+                        to={"qna/post/"+`${post_id}`}
                     >
                         <PostItems
-                            idx={idx}
+                            idx={post_id}
                             isAnswered={isAnswered}
                             title={title}
-                            date={date}
+                            date={reg_date}
                         />
                         <Divider/>
                     </Link>                    
                 )
             }
         )
+        console.log("classid1:"+classIdx)
         return (
             <div
                 className={classes.root}
@@ -186,19 +197,32 @@ class QnABoard extends Component {
                     >
                         <Typography
                             variant="h5"
+                            component="h5"
                         >
                             QnABoard
                         </Typography>
                     </Grid>
                     <Grid
                         item
-                        xs={11}
-                    />
-                    <Grid
-                        item
-                        xs={1}
+                        xs={12}
                     >
-                        <Create/>
+                        <Link
+                            className={`${classes.linkwrite} ${classes.link}`} 
+                            to={`qna/write/`}
+                        >
+                            <Paper
+                                className={classes.writepaper}
+                                square
+                            >
+                                <Create/>
+                                <Typography
+                                    variant="subtitle2"
+                                    gutterBottom
+                                >
+                                    글쓰기
+                                </Typography>
+                            </Paper>
+                        </Link>
                     </Grid>
                     <Grid                        
                         container
@@ -280,7 +304,7 @@ const mapStateToProps = ({ post }) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    getQnAPostList: board => dispatch(getQnAPostList(board))
+    getQnAPostList: (token, classIdx) => dispatch(getQnAPostList(token, classIdx))
 });
 
 export default connect(
