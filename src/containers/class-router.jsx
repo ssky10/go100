@@ -10,13 +10,12 @@ import {
     NoticeBoard, 
     WorkBoard, 
     QnABoard, 
+    QnAPost, 
+    QnAWrite, 
     LiveQuizBoard,
     TeacherBoard
 } from "containers/board";
 import { TemplateContainer } from "containers";
-
-import QnAPost from 'components/class/board-contents/qnaboard/qna-post';
-import QnAWrite from 'components/class/board-contents/qnaboard/qna-write';
 
 import { useAuth } from 'context/loginProvider';
 

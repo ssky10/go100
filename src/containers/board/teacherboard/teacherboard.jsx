@@ -3,15 +3,11 @@ import React, { Component } from 'react';
 import { fromJS, List } from 'immutable';
 import PropTypes from "prop-types";
 import { withStyles, Paper, Typography, Divider, SvgIcon, TextField, Button } from "@material-ui/core";
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableRow
-} from "@material-ui/core";
 
-import { Create, Clear, PersonAdd } from "@material-ui/icons"
+import ClassroomAbout from "components/class/board-contents/teacherboard/about";
+import StudentTable from "components/class/board-contents/teacherboard/student-table";
+
+import { Clear } from "@material-ui/icons"
 
 import * as axios from "services/classroom"
 
@@ -164,6 +160,11 @@ class TeacherBoard extends Component {
         })
     }
 
+    handleDeleteStudent = (class_id, user_id, user_token) => {
+        axios
+            .deleteStudent(class_id, user_id, user_token)
+    }
+
     componentDidMount(){
         const { classIdx, token } = this.props;
         axios
@@ -178,8 +179,10 @@ class TeacherBoard extends Component {
             })
     }
 
+    
+
     render() { 
-        const { classes } = this.props;
+        const { classes, token, classIdx } = this.props;
         const { about, student_id, studentList, open, type } = this.state;
 
         console.log(studentList);
@@ -238,71 +241,31 @@ class TeacherBoard extends Component {
                     className={classes.body}
                     square
                 >
-                    <div>
-                        <div
-                            className={classes.contentheader}
-                        >
-                            <Typography
-                                variant="h5"
-                                component="h5"
-                            >
-                                학원 소개글
-                            </Typography>
-                            <SvgIcon
-                                className={classes.btncreate}
-                                onClick={this.handleAboutOpen}
-                            >
-                                <Create/>
-                            </SvgIcon>
-                        </div>
-                        <Paper
-                            className={classes.aboutcontents}
-                            elevation={0}
-                            square
-                        >
-                            {this.state.about}
-                        </Paper>
-                    </div>
+                    <ClassroomAbout
+                        classes={this.props.classes}
+                        handleAboutOpen={this.handleAboutOpen}
+                        about={about}
+                    />
                     <div
                         className={classes.bottomcontent}
                     >
-                        <div
-                            className={classes.student}
-                        >
-                            <div
-                                className={classes.contentheader}
-                            >
-                                <Typography
-                                    variant="h5"
-                                    component="h5"
-                                >
-                                    학생
-                                </Typography>
-                                <SvgIcon
-                                    className={classes.btncreate}
-                                    onClick={this.handleStudentOpen}
-                                >
-                                    <PersonAdd/>
-                                </SvgIcon>
-                            </div>
-                            <Table>
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell>학번</TableCell>
-                                        <TableCell align="right">ID</TableCell>
-                                        <TableCell align="right">이름</TableCell>
-                                        <TableCell align="right">삭제</TableCell>
-                                    </TableRow>
-                                </TableHead>
-                            </Table>
-                        </div>
+                        <StudentTable
+                            classes={this.props.classes}
+                            studentList={studentList}
+                            classIdx={classIdx}
+                            token={token}
+                            handleStudentOpen={this.handleStudentOpen}
+                            handleDeleteStudent={
+                                this.handleDeleteStudent
+                            }
+                        />
                         <div
                             className={classes.classconfig}
                         >
                             <div>
                                 <Button>학급 수정</Button>
                             </div>
-                            <div>                                                        
+                            <div>
                                 <Button
                                     size="large"
                                     className={classes.btndelete}

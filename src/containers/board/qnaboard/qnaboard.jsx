@@ -22,11 +22,14 @@ const styles = theme => ({
         marginBottom: theme.spacing.unit * 3,
     },
     linkwrite:{
+        
         float: "right",
     },
     writepaper:{
-        display:"flex"
-        
+        paddingTop: theme.spacing.unit / 4,
+        paddingRight: theme.spacing.unit / 2,
+        paddingLeft: theme.spacing.unit / 2,
+        display:"flex"        
     },
     paper:{
         marginTop: theme.spacing.unit * 1,
