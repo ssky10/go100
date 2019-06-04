@@ -26,7 +26,7 @@ const theme = createMuiTheme({
   typography: {
     // Use the system font instead of the default Roboto font.
     fontFamily: [
-      "NanumSquare",
+      "Nanum Square",
       "-apple-system",
       "BlinkMacSystemFont",
       '"Segoe UI"',
@@ -37,7 +37,46 @@ const theme = createMuiTheme({
       '"Apple Color Emoji"',
       '"Segoe UI Emoji"',
       '"Segoe UI Symbol"'
-    ].join(",")
+    ].join(","),
+    h1:{
+      fontWeight: 300,
+    },
+    h2:{
+      fontWeight: 300,
+    },
+    h3:{
+      fontWeight: 400,
+    },
+    h4:{
+      fontWeight: 400,
+    },
+    h5:{
+      fontWeight: 400,
+    },
+    h6:{
+      fontWeight: 800
+    },
+    subtitle1:{
+      fontWeight: 400,
+    },
+    subtitle2:{
+      fontWeight: 700,
+    },
+    body1:{
+      fontWeight: 400,
+    },
+    body2:{
+      fontWeight: 400,
+    },
+    button:{
+      fontWeight: 700,
+    },
+    caption:{
+      fontWeight: 700,
+    },
+    overline:{
+      fontWeight: 400,
+    }
   },
   palette: {
     primary: {
@@ -75,8 +114,8 @@ class App extends Component {
             <MuiThemeProvider theme={theme}>
               <Switch>
                 <Route exact path="/" component={Login} />
-                <Route exact path="/classeslist" component={ClassesList} />
-                <Route path="/class" component={ClassRouter} />
+                <Route exact path="/classeslist" component={ClassesList}/>
+                <Route path="/class/:id" component={ClassRouter} />
                 <PrivateRoute exact path="/exam" component={Exam} />
                 <PrivateRoute exact path="/exam/:code(\d+)" component={Exam} />
                 <Route exact component={NoMatch} />

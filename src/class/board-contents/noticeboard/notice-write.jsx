@@ -4,8 +4,7 @@ import PropTypes from 'prop-types';
 import { withStyles, Card, Grid, Avatar, Typography, Button, Divider, TextField } from '@material-ui/core';
 
 //stylesheet
-import './work-write.css'
-import { CalendarToday } from '@material-ui/icons';
+import './notice-write.css'
 
 const styles = theme => ({
     layout:{
@@ -54,10 +53,6 @@ const styles = theme => ({
         visibility: "hidden",
         zIndex: -1111,
     },
-    calendar:{
-        paddingTop: theme.spacing.unit * 1,
-        paddingLeft: theme.spacing.unit * 2,
-    },
 })
 
 class NoticeWrite extends Component {
@@ -68,7 +63,6 @@ class NoticeWrite extends Component {
         };
     }
     handleChange = (e) => {
-        console.log(e.target.id);
         if(!(e.target.id))
             this.setState({checked: !this.state.checked})
     };
@@ -130,22 +124,8 @@ class NoticeWrite extends Component {
                         <Divider/>
                     </Grid>
                     <Grid
-                        className={classes.calendar}
                         item
-                        xs={6}
-                    >
-                         <TextField
-                            id="datetime-local"
-                            label="DeadLine"
-                            type="datetime-local"
-                            InputLabelProps={{
-                            shrink: true,
-                            }}
-                        />
-                    </Grid>
-                    <Grid
-                        item
-                        xs={6}
+                        xs={12}
                     >
                         {btnSubmit()}
                         {btnClose()}
@@ -221,7 +201,7 @@ class NoticeWrite extends Component {
                         
                         {this.state.checked ?
                             cardWrite()
-                            :
+                            :                            
                             <Grid
                                 item
                                 xs={false}

@@ -1,78 +1,148 @@
 //node_modules
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { connect } from "react-redux";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
+import Button from "@material-ui/core/Button";
+import Tooltip from "@material-ui/core/Tooltip";
+import IconButton from "@material-ui/core/IconButton";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import TextField from "@material-ui/core/TextField";
 
 //components
-import Template from "components/template";
+import TemplateContainer from "./template-container";
 import ClassList from "components/class/classeslist";
 import { useAuth } from "../context/loginProvider";
-import { getlist } from "../services/list";
+import { getlist, makeClass } from "../services/list";
+
+import AddIcon from "@material-ui/icons/Add";
 
 class ClassesList extends Component {
   constructor(props) {
     super(props);
-    this.state = {list: Array()};
+    this.state = {
+      list: [],
+      ID: "user",
+      isTeacher: false,
+      open: false,
+      name: "",
+      desc: ""
+    };
   }
 
-componentDidMount() {
-  console.log("componentDidMount")
-  const { token } = this.props;
-  const setState = this.setState.bind(this);
-  getlist(token)
-  .then(function(result) {
-    console.log(result)
-    //if(result.data.status){
-      setState(state => ({
-        list: result.data.Context
-      }))
-    //}
+  componentDidMount() {
+    console.log("componentDidMount");
+    this.setList();
+  }
 
-  })
-}
+  setList = () => {
+    const { token } = this.props;
+    const setState = this.setState.bind(this);
+    getlist(token).then(function(result) {
+      if (result.data.status) {
+        setState(state => ({
+          list: result.data.Context,
+          ID: result.data.id,
+          isTeacher: result.data.is_teacher
+        }));
+      }
+    });
+  };
 
+  handleClickOpen = () => {
+    this.setState({ open: true });
+  };
+
+  handleClose = () => {
+    this.setState({ open: false });
+  };
+
+  handleCreate = () => {
+    const { token } = this.props;
+    const { name, desc } = this.state;
+    const setList = this.setList.bind(this);
+    const setState = this.setState.bind(this);
+    makeClass(token, name, desc).then(function(response) {
+      if (response.data.status) {
+        setState({ open: false });
+        setList();
+      }
+    });
+  };
+
+  onChange = e => {
+    const target = e.target;
+    const name = target.id;
+    console.log(name, target.value);
+    this.setState({
+      [name]: target.value
+    });
+  };
 
   render() {
-    const { classes, theme, isLogin, user, token } = this.props;
-    // const { classes }= this.props;
+    const { classes, theme, isLogin, token } = this.props;
+    const { ID, isTeacher, open } = this.state;
+
+    const appBarMenu = (
+      <div>
+        <Tooltip title="클래스 개설">
+          <IconButton
+            color="inherit"
+            aria-label="create-class"
+            onClick={this.handleClickOpen}
+          >
+            <AddIcon />
+          </IconButton>
+        </Tooltip>
+        <Dialog
+          open={open}
+          onClose={this.handleClose}
+          aria-labelledby="form-dialog-title"
+        >
+          <DialogTitle id="form-dialog-title">수업 개설하기</DialogTitle>
+          <DialogContent>
+            <TextField
+              autoFocus
+              margin="dense"
+              id="name"
+              label="수업명"
+              type="text"
+              onChange={this.onChange}
+              fullWidth
+            />
+            <TextField
+              margin="dense"
+              id="desc"
+              label="수업설명"
+              type="text"
+              onChange={this.onChange}
+              fullWidth
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.handleClose}>취소</Button>
+            <Button onClick={this.handleCreate}>개설하기</Button>
+          </DialogActions>
+        </Dialog>
+      </div>
+    );
+
     return (
       <div className={classes}>
-        <Template theme={theme} title="클래스 목록">
-          <div>
-            {isLogin && <h1>{user}의 클래스 목록입니다.</h1>}
-            <List component="nav">
-              <ListItem button component={Link} to="class">
-                <ListItemText primary="Class Page" />
-              </ListItem>
-              <ListItem button component={Link} to="exam">
-                <ListItemText primary="Exam" />
-              </ListItem>
-            </List>
-          </div>
-        </Template>
-
-        <div>
-          {console.log(this.state.list)}
-          <ClassList list= {this.state.list}/>
-        </div>
+        <TemplateContainer
+          theme={theme}
+          title="클래스 목록"
+          isLogin={isLogin}
+          user={ID}
+          token={token}
+          menu={isTeacher ? appBarMenu : null}
+        >
+          <ClassList list={this.state.list} />
+        </TemplateContainer>
       </div>
     );
   }
 }
 
-const mapStateToProps = ({ auth }) => ({
-  // **** .get 을 사용해서 값 조회
-  isLogin: auth.get("isLogin"),
-  user: auth.get("user")
-});
-
-// props 로 넣어줄 액션 생성함수
-const mapDispatchToProps = dispatch => ({});
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(useAuth(ClassesList));
+export default useAuth(ClassesList);
