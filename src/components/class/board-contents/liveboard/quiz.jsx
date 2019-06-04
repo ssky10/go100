@@ -8,14 +8,22 @@ import Avatar from "@material-ui/core/Avatar";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import Button from "@material-ui/core/Button";
-import Slide from "@material-ui/core/Slide";
 import TextField from "@material-ui/core/TextField";
-import CorrectIcon from "@material-ui/icons/RadioButtonUnchecked";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
 
 //Icon
+import CorrectIcon from "@material-ui/icons/RadioButtonUnchecked";
 import WrongIcon from "@material-ui/icons/Close";
 
 const styles = theme => ({
+  content: {
+    flexGrow: 1,
+    padding: theme.spacing.unit * 3
+  },
   paper: {
     height: "100%",
     padding: theme.spacing.unit * 1,
@@ -61,18 +69,23 @@ const styles = theme => ({
 const AfterSolve = ({ classes, question, isTeacher, userList }) => {
   return (
     <div>
-      <Typography className={classes.code} variant="h6" gutterBottom>
-        #현재 접속자수 : {userList}
-      </Typography>
       <div className={classes.context}>
         {question.get("choice") == question.get("answer") ? (
           <CorrectIcon style={{ fontSize: "6em", color: "#FDCF56" }} />
         ) : (
           <WrongIcon style={{ fontSize: "6em", color: "#ff86bc" }} />
         )}
-        <Typography className={classes.title} variant="h6">
-          {question.get("context")}
-        </Typography>
+        <div
+          className={classes.title}
+          id="context"
+          dangerouslySetInnerHTML={{ __html: question.get("context") }}
+        />
+        {question.get("img") !== undefined ? (
+          <img
+            src={`https://golony.dev${question.get("img")}`}
+            alt="문제 이미지"
+          />
+        ) : null}
       </div>
 
       {question.get("choiceable") ? (
@@ -101,22 +114,21 @@ const AfterSolve = ({ classes, question, isTeacher, userList }) => {
   );
 };
 
-const BeforeSolve = ({
-  classes,
-  question,
-  onclickExample,
-  isTeacher,
-  userList
-}) => {
+const BeforeSolve = ({ classes, question, onclickExample, isTeacher }) => {
   return (
     <div>
-      <Typography className={classes.code} variant="h6" gutterBottom>
-        #현재 접속자수 : {userList}
-      </Typography>
       <div className={classes.context}>
-        <Typography className={classes.title} variant="h6">
-          {question.get("context")}
-        </Typography>
+        <div
+          className={classes.title}
+          id="context"
+          dangerouslySetInnerHTML={{ __html: question.get("context") }}
+        />
+        {question.get("img") !== undefined ? (
+          <img
+            src={`https://golony.dev${question.get("img")}`}
+            alt="문제 이미지"
+          />
+        ) : null}
       </div>
 
       {question.get("choiceable") ? (
@@ -132,9 +144,7 @@ const BeforeSolve = ({
                     : classes.example
                 }
                 avatar={<Avatar>{idx + 1}</Avatar>}
-                onClick={() =>
-                  onclickExample(question.get("code"), example.code)
-                }
+                onClick={!isTeacher ? () => onclickExample(example.code) : null}
                 label={example.context}
               />
             </ListItem>
@@ -150,9 +160,6 @@ const BeforeSolve = ({
 const Wait = ({ classes, isTeacher, userList }) => {
   return (
     <React.Fragment>
-      <Typography className={classes.code} variant="h6" gutterBottom>
-        #현재 접속자수 : {userList}
-      </Typography>
       <div className={classes.context}>
         <Typography className={classes.title} variant="h6">
           현재 접속 대기중입니다.
@@ -162,39 +169,108 @@ const Wait = ({ classes, isTeacher, userList }) => {
   );
 };
 
+const Result = ({ classes, isTeacher, scoreView }) => {
+  const list = [];
+  let old_score = scoreView[0].score + 1,
+    No = 0;
+
+  scoreView.forEach((element, idx) => {
+    if (old_score > element.score) {
+      old_score = element.score;
+      No = idx + 1;
+    }
+    list.push({ ...element, No: No });
+  });
+
+  return (
+    <React.Fragment>
+      <div className={classes.context}>
+        <Typography className={classes.title} variant="h6">
+          최종 순위
+        </Typography>
+        <Table className={classes.table}>
+          <TableHead>
+            <TableRow>
+              <TableCell>순위</TableCell>
+              <TableCell align="right">ID</TableCell>
+              <TableCell align="right">점수</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {list.map(row => (
+              <TableRow key={row.id}>
+                <TableCell component="th" scope="row">
+                  {row.No}
+                </TableCell>
+                <TableCell align="right">{row.user_id}</TableCell>
+                <TableCell align="right">{row.score}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+    </React.Fragment>
+  );
+};
+
 const Quiz = ({
   classes,
-  isTeacher,
-  question,
+  user_num,
+  quiz,
   onclickExample,
   state,
-  userList
+  isTeacher,
+  scoreView,
+  onclickNext
 }) => {
   return (
     <React.Fragment>
-      <Paper className={classes.paper} elevation={1}>
-        {state === 0 ? (
-          <Wait classes={classes} />
-        ) : state === 1 ? (
-          <AfterSolve classes={classes} question={question} />
-        ) : (
-          <BeforeSolve
-            classes={classes}
-            question={question}
-            onclickExample={onclickExample}
-          />
-        )}
-
-        <Paper
-          className={classes.paper}
-          elevation={1}
-          style={{ backgroundColor: "rgba(0,0,0,0.04)" }}
-        >
-          <Button variant="contained" className={classes.button}>
-            다음문제로 넘어가기
-          </Button>
+      <div className={classes.content}>
+        <Paper className={classes.paper} elevation={1}>
+          <Typography className={classes.code} variant="h6" gutterBottom>
+            #현재 접속자수 : {user_num}
+          </Typography>
+          {state === "wait" ? (
+            <Wait classes={classes} />
+          ) : state === "start" ? (
+            <BeforeSolve
+              classes={classes}
+              question={quiz}
+              isTeacher={isTeacher}
+              onclickExample={onclickExample}
+            />
+          ) : state === "next" ? (
+            <AfterSolve classes={classes} question={quiz} />
+          ) : state === "result" ? (
+            <Result
+              classes={classes}
+              isTeacher={isTeacher}
+              scoreView={scoreView}
+            />
+          ) : null}
         </Paper>
-      </Paper>
+        {isTeacher ? (
+          <Paper
+            className={classes.paper}
+            elevation={1}
+            style={{ backgroundColor: "rgba(0,0,0,0.04)" }}
+          >
+            <Button
+              variant="contained"
+              className={classes.button}
+              onClick={onclickNext}
+            >
+              {state === "wait"
+                ? "시작하기"
+                : state === "start"
+                ? "문제마감"
+                : state === "next"
+                ? "다음문제"
+                : "라이브퀴즈 종료"}
+            </Button>
+          </Paper>
+        ) : null}
+      </div>
     </React.Fragment>
   );
 };
@@ -205,7 +281,7 @@ Quiz.propTypes = {
   isTeacher: PropTypes.bool,
   question: PropTypes.object,
   isAnswerPage: PropTypes.bool,
-  state: PropTypes.number
+  state: PropTypes.string
 };
 
 Quiz.defaultProps = {
@@ -223,7 +299,7 @@ Quiz.defaultProps = {
       { code: 3, context: "4번보기" }
     ]
   },
-  state: 0
+  state: "wait"
 };
 
 export default withStyles(styles, { withTheme: true })(Quiz);

@@ -115,12 +115,7 @@ const LoginPanel = ({ ID, password, onSubmit, onChange, classes }) => {
           </Button>
         </form>
         <Divider className={classes.divider} variant="middle" />
-        <form
-          className={classes.form}
-          action=""
-          onSubmit="return false"
-          name="guest"
-        >
+        <form className={classes.form} action="" onSubmit={null} name="guest">
           <Button
             fullWidth
             variant="contained"

@@ -131,24 +131,47 @@ const QuizList = ({ classes, list, onclickCreate, isTeacher, url }) => {
               <TableCell align="right">문항수</TableCell>
               <TableCell align="right">생성일</TableCell>
               <TableCell align="right">시작하기</TableCell>
+              {isTeacher ? <TableCell align="right">삭제하기</TableCell> : null}
             </TableRow>
           </TableHead>
-          <TableBody>
-            {list.map(row => (
-              <TableRow key={row.code}>
-                <TableCell component="th" scope="row">
-                  {row.title}
-                </TableCell>
-                <TableCell align="right">{row.quizzes_num}</TableCell>
-                <TableCell align="right">{row.date}</TableCell>
-                <TableCell align="right">
-                  <Button component={Link} to={`${url}/livequiz/${row.code}`}>
-                    입장하기
-                  </Button>
+
+          {list.length === 0 ? (
+            <TableBody>
+              <TableRow key={0}>
+                <TableCell align="center" colSpan={5}>
+                  현재 라이브퀴즈가 없습니다.
                 </TableCell>
               </TableRow>
-            ))}
-          </TableBody>
+            </TableBody>
+          ) : (
+            <TableBody>
+              {list.map(row => (
+                <TableRow key={row.code}>
+                  <TableCell component="th" scope="row">
+                    {row.title}
+                  </TableCell>
+                  <TableCell align="right">{row.quizzes_num}</TableCell>
+                  <TableCell align="right">{row.date}</TableCell>
+                  <TableCell align="right">
+                    <Button component={Link} to={`${url}/livequiz/${row.code}`}>
+                      입장하기
+                    </Button>
+                  </TableCell>
+                  {isTeacher ? (
+                    <TableCell align="right">
+                      <Button
+                        style={{ background: "rgb(225, 0, 80)" }}
+                        component={Link}
+                        to={`${url}/livequiz/${row.code}`}
+                      >
+                        삭제하기
+                      </Button>
+                    </TableCell>
+                  ) : null}
+                </TableRow>
+              ))}
+            </TableBody>
+          )}
         </Table>
       </Paper>
     </main>
@@ -167,7 +190,7 @@ QuizList.defaultProps = {
   list: [
     { code: 0, title: "라이브퀴즈 명", quizzes_num: 3, date: "2019-06-03" }
   ],
-  isTeacher: true,
+  isTeacher: false,
   url: "class/0"
 };
 

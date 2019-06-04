@@ -60,6 +60,11 @@ class editor extends React.Component {
       .addEventListener("input", this.props.onChange);
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    if (!nextProps.isReset) return false;
+    return true;
+  }
+
   excuteEditButton = exc => {
     const selection = window.getSelection();
     const found = selection.containsNode(
@@ -118,8 +123,35 @@ class editor extends React.Component {
     });
   };
 
+  setCaret = node => {
+    var caretID = "caret";
+    var cc = document.createElement("span");
+    cc.id = caretID;
+
+    window
+      .getSelection()
+      .getRangeAt(0)
+      .insertNode(cc);
+
+    node.blur();
+  };
+
+  getCaret = node => {
+    var caretID = "caret";
+
+    node.focus();
+
+    var range = document.createRange();
+    var cc = document.getElementById(caretID);
+    range.selectNode(cc);
+    var selection = window.getSelection();
+    selection.removeAllRanges();
+    selection.addRange(range);
+    range.deleteContents();
+  };
+
   render() {
-    const { id, classes, ableImg, onChange, value } = this.props;
+    const { id, classes, ableImg, onChange, value, isReset } = this.props;
 
     return (
       <Paper
@@ -326,6 +358,7 @@ class editor extends React.Component {
           </DialogActions>
         </Dialog>
         <Divider />
+        {console.log(isReset, value)}
         <div
           className={classes.editorDiv}
           id={id}
@@ -333,6 +366,7 @@ class editor extends React.Component {
           contentEditable="true"
           suppressContentEditableWarning={true}
           onChange={onChange}
+          dangerouslySetInnerHTML={{ __html: value }}
         />
         <Divider />
         {ableImg ? (

@@ -84,29 +84,36 @@ const makeQuiz = ({
   onselectAnswer,
   onclickAdd,
   onSubmit,
+  isReset,
+  title,
   idx
 }) => {
   return (
     <main className={classes.content}>
-      <Paper className={classes.paper} elevation={1}>
-        <Typography className={classes.title} variant="h4" gutterBottom>
-          문제 만들기
-          <Tooltip title="문항 추가하기">
-            <IconButton aria-label="Create" onClick={onclickAdd}>
-              <CreateIcon />
-            </IconButton>
-          </Tooltip>
-        </Typography>
-      </Paper>
-      <Slide direction="left" in={true} mountOnEnter unmountOnExit>
+      <form className={classes.form} onSubmit={onSubmit}>
         <Paper className={classes.paper} elevation={1}>
-          <Typography className={classes.code} variant="h6" gutterBottom>
-            #{idx + 1}번
+          <Typography className={classes.title} variant="h4" gutterBottom>
+            <Input
+              name="title"
+              placeholder="퀴즈 제목"
+              onChange={onChangeValue}
+              value={title}
+            />
+            <Tooltip title="문항 추가하기">
+              <IconButton aria-label="Create" onClick={onclickAdd}>
+                <CreateIcon />
+              </IconButton>
+            </Tooltip>
           </Typography>
-          <form className={classes.form} onSubmit={onSubmit}>
+        </Paper>
+        <Slide direction="left" in={true} mountOnEnter unmountOnExit>
+          <Paper className={classes.paper} elevation={1}>
+            <Typography className={classes.code} variant="h6" gutterBottom>
+              #{idx + 1}번
+            </Typography>
             <FormControl margin="normal" required fullWidth>
               <FormLabel component="legend">문제 유형</FormLabel>
-              {console.log(value.type)}
+              {console.log(value)}
               <RadioGroup
                 aria-label="문제 유형"
                 name="type"
@@ -132,6 +139,7 @@ const makeQuiz = ({
                 onChange={onChangeValue}
                 value={value.context}
                 ableImg={true}
+                isReset={isReset}
               />
 
               <List className={classes.root}>
@@ -162,27 +170,27 @@ const makeQuiz = ({
               </List>
               <Divider />
             </FormControl>
-          </form>
+          </Paper>
+        </Slide>
+        <Paper
+          className={classes.paper}
+          style={{ display: "flex" }}
+          elevation={1}
+        >
+          <Button size="small" className={classes.button} onClick={onclickBack}>
+            <BackIcon />
+            이전문제
+          </Button>
+          <Button size="small" style={{ margin: "0 auto" }} type="submit">
+            <CreateIcon />
+            라이브퀴즈 생성하기
+          </Button>
+          <Button size="small" className={classes.button} onClick={onclickNext}>
+            다음문제
+            <NextIcon />
+          </Button>
         </Paper>
-      </Slide>
-      <Paper
-        className={classes.paper}
-        style={{ display: "flex" }}
-        elevation={1}
-      >
-        <Button size="small" className={classes.button} onClick={onclickBack}>
-          <BackIcon />
-          이전문제
-        </Button>
-        <Button size="small" style={{ margin: "0 auto" }} type="submit">
-          <CreateIcon />
-          문제 제출하기
-        </Button>
-        <Button size="small" className={classes.button} onClick={onclickNext}>
-          다음문제
-          <NextIcon />
-        </Button>
-      </Paper>
+      </form>
     </main>
   );
 };

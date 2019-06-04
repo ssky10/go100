@@ -14,6 +14,9 @@ class LiveQuizBoard extends Component {
     this.state = {
       idx: 0,
       list: [],
+      isReset: false,
+      isTeacher: false,
+      title: "",
       quizList: List([
         {
           type: "choiceable",
@@ -35,13 +38,15 @@ class LiveQuizBoard extends Component {
   }
 
   componentDidMount() {
+    const setState = this.setState.bind(this);
     service
       .getList(this.props.token, this.props.match.params.id)
       .then(function(response) {
         console.log(response.data);
         if (response.data.status) {
-          this.setState(state => ({
-            list: response.data.list
+          setState(state => ({
+            list: response.data.list,
+            isTeacher: response.data.is_teacher
           }));
         }
       });
@@ -52,24 +57,23 @@ class LiveQuizBoard extends Component {
     const name = target.name === undefined ? target.id : target.name;
     console.log(name, this.state.writeExam);
     switch (name) {
+      case "title":
+        this.setState(state => ({
+          title: target.value
+        }));
+        break;
       case "context":
         this.setState(state => ({
+          isReset: false,
           quizList: state.quizList.update(state.idx, val => ({
             ...val,
             context: e.srcElement.innerHTML
           }))
         }));
         break;
-      case "explanation":
-        this.setState(state => ({
-          quizList: state.quizList.update(state.idx, val => ({
-            ...val,
-            explanation: e.srcElement.innerHTML
-          }))
-        }));
-        break;
       case "img":
         this.setState(state => ({
+          isReset: false,
           quizList: state.quizList.update(state.idx, val => ({
             ...val,
             img: e.target.files[0]
@@ -93,6 +97,7 @@ class LiveQuizBoard extends Component {
               this.state.quizList.get(this.state.idx).example.size
             ) {
               this.setState(state => ({
+                isReset: false,
                 quizList: state.quizList.update(state.idx, val => ({
                   ...val,
                   example: val.example.update(idx, val => target.value).push("")
@@ -103,6 +108,7 @@ class LiveQuizBoard extends Component {
               this.state.quizList.get(this.state.idx).example.size > 2
             ) {
               this.setState(state => ({
+                isReset: false,
                 quizList: state.quizList.update(state.idx, val => ({
                   ...val,
                   example: val.example.delete(idx)
@@ -110,6 +116,7 @@ class LiveQuizBoard extends Component {
               }));
             } else {
               this.setState(state => ({
+                isReset: false,
                 quizList: state.quizList.update(state.idx, val => ({
                   ...val,
                   example: val.example.set(idx, target.value)
@@ -119,6 +126,7 @@ class LiveQuizBoard extends Component {
           }
         } else {
           this.setState(state => ({
+            isReset: false,
             quizList: state.quizList.update(state.idx, val => ({
               ...val,
               [name]: target.value
@@ -131,18 +139,30 @@ class LiveQuizBoard extends Component {
 
   onClickMakeQ = e => {
     e.preventDefault();
-    const { token } = this.props;
-    const { subject, writeExam } = this.state;
-    // service.makeQuestion(token, subject, writeExam).then(function(response) {
-    //   console.log(response);
-    //   if (response.data.status) {
-    //   }
-    // });
+    const setState = this.setState.bind(this);
+    service
+      .makeQuiz(
+        this.props.token,
+        this.props.match.params.id,
+        this.state.title,
+        this.state.quizList
+      )
+      .then(function(response) {
+        if (response.data.status) {
+          setState(state => ({
+            isWrite: false,
+            quizList: List([state.defaultQuiz])
+          }));
+        }
+      });
   };
 
   onselectAnswer = idx => {
     this.setState(state => ({
-      writeExam: { ...state.writeExam, answer: idx }
+      quizList: state.quizList.update(state.idx, val => ({
+        ...val,
+        answer: idx
+      }))
     }));
   };
 
@@ -161,7 +181,7 @@ class LiveQuizBoard extends Component {
       alert("처음문제 입니다.");
       return;
     }
-    this.setState(state => ({ idx: state.idx - 1 }));
+    this.setState(state => ({ idx: state.idx - 1, isReset: true }));
   };
 
   onclickNext = () => {
@@ -169,12 +189,12 @@ class LiveQuizBoard extends Component {
       alert("마지막문제 입니다.");
       return;
     }
-    this.setState(state => ({ idx: state.idx + 1 }));
+    this.setState(state => ({ idx: state.idx + 1, isReset: true }));
   };
 
   render() {
     const { match } = this.props;
-    const { quizList, idx } = this.state;
+    const { quizList, idx, list, isTeacher, title } = this.state;
     return this.state.isWrite ? (
       <QuizWrite
         onChangeValue={this.onChangeValue}
@@ -185,9 +205,18 @@ class LiveQuizBoard extends Component {
         onclickBack={this.onclickBack}
         onclickNext={this.onclickNext}
         onclickAdd={this.onclickAdd}
-      />
+        isReset={this.state.isReset}
+        title={title}
+      >
+        {console.log("isReset", this.isReset)}
+      </QuizWrite>
     ) : (
-      <QuizList url={match.url} onclickCreate={this.onclickCreate} />
+      <QuizList
+        url={match.url}
+        onclickCreate={this.onclickCreate}
+        list={list}
+        isTeacher={isTeacher}
+      />
     );
   }
 }
