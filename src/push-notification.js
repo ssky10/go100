@@ -33,10 +33,14 @@ export const requestPermission = () => {
     })
     .then(function(token) {
       console.log(token);
-      return { status: true, token: token };
+      permissionState.status = true;
+      permissionState.token = token;
+      return permissionState;
     })
     .catch(function(err) {
-      return { status: false, error: err };
+      permissionState.status = false;
+      permissionState.token = err;
+      return permissionState;
     })
     .then(function(params) {
       if (params.status) {
