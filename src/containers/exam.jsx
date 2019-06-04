@@ -3,6 +3,9 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Redirect, Link } from "react-router-dom";
 import { List } from "immutable";
+import Snackbar from "@material-ui/core/Snackbar";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
 
 //SVGIcon
 import HangleIcon from "icons/hangleIcon";
@@ -36,6 +39,7 @@ class Exam extends Component {
     super(props);
     this.state = {
       open: -1,
+      snack: { open: false, msg: "" },
       anchorEl: null,
       isWrite: false,
       nowIdx: 0,
@@ -236,9 +240,22 @@ class Exam extends Component {
     e.preventDefault();
     const { token } = this.props;
     const { subject, writeExam } = this.state;
+    const setState = this.setState.bind(this);
     service.makeQuestion(token, subject, writeExam).then(function(response) {
       console.log(response);
       if (response.data.status) {
+        setState(state => ({
+          isWrite: false,
+          writeExam: {
+            type: "choiceable",
+            context: "",
+            img: null,
+            answer: 0,
+            explanation: "",
+            example: List(["", ""])
+          },
+          snack: { open: true, msg: "문제가 등록되었습니다." }
+        }));
       }
     });
   };
@@ -292,6 +309,14 @@ class Exam extends Component {
       />
     </React.Fragment>
   );
+
+  handleSnackClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    this.setState({ snack: { open: false, msg: "" } });
+  };
 
   subjectNames = ["국어", "영어", "수학", "한국사", "사회", "과학"];
   subjectIcons = [
@@ -378,6 +403,29 @@ class Exam extends Component {
               onclickCreate={this.onclickCreate}
             />
           )}
+          <Snackbar
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "left"
+            }}
+            open={this.state.snack.open}
+            autoHideDuration={6000}
+            onClose={this.handleSnackClose}
+            ContentProps={{
+              "aria-describedby": "message-id"
+            }}
+            message={<span id="message-id">{this.state.snack.msg}</span>}
+            action={[
+              <IconButton
+                key="close"
+                aria-label="Close"
+                color="inherit"
+                onClick={this.handleSnackClose}
+              >
+                <CloseIcon />
+              </IconButton>
+            ]}
+          />
         </TemplateContainer>
       </React.Fragment>
     );

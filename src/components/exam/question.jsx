@@ -77,6 +77,12 @@ const AfterSolve = ({ classes, question }) => {
               className={classes.title}
               dangerouslySetInnerHTML={{ __html: question.get("context") }}
             />
+            {question.get("img") !== undefined ? (
+              <img
+                src={`https://golony.dev${question.get("img")}`}
+                alt="문제 이미지"
+              />
+            ) : null}
           </div>
 
           {question.get("choiceable") ? (
@@ -130,7 +136,7 @@ const BeforeSolve = ({ classes, question, onclickExample }) => {
               id="context"
               dangerouslySetInnerHTML={{ __html: question.get("context") }}
             />
-            {question.get("img") != null ? (
+            {question.get("img") !== undefined ? (
               <img
                 src={`https://golony.dev${question.get("img")}`}
                 alt="문제 이미지"
@@ -173,17 +179,12 @@ const MyQuestion = ({ classes, question }) => {
             #{question.get("code")}
           </Typography>
           <div className={classes.context}>
-            {question.get("choice") == question.get("answer") ? (
-              <CorrectIcon style={{ fontSize: "6em", color: "#FDCF56" }} />
-            ) : (
-              <WrongIcon style={{ fontSize: "6em", color: "#ff86bc" }} />
-            )}
             <div
               id="context"
               className={classes.title}
               dangerouslySetInnerHTML={{ __html: question.get("context") }}
             />
-            {question.get("img") !== null ? (
+            {question.get("img") !== undefined ? (
               <img
                 src={`https://golony.dev${question.get("img")}`}
                 alt="문제 이미지"
@@ -198,10 +199,8 @@ const MyQuestion = ({ classes, question }) => {
                 <ListItem alignItems="flex-start" key={idx}>
                   <Chip
                     className={
-                      example.code === question.get("choice")
+                      example.code == question.get("answer")
                         ? `${classes.example} ${classes.exampleSelect}`
-                        : example.code == question.get("answer")
-                        ? `${classes.example} ${classes.exampleAnswer}`
                         : classes.example
                     }
                     avatar={<Avatar>{idx + 1}</Avatar>}
@@ -228,10 +227,12 @@ const MyQuestion = ({ classes, question }) => {
   );
 };
 
-const Question = ({ classes, question, onclickExample }) => {
+const Question = ({ classes, question, onclickExample, myQ }) => {
   return (
     <React.Fragment>
-      {question.get("choice") === -1 ? (
+      {myQ ? (
+        <MyQuestion classes={classes} question={question} />
+      ) : question.get("choice") === -1 ? (
         <BeforeSolve
           classes={classes}
           question={question}
