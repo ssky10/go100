@@ -4,9 +4,11 @@ import { fromJS, List } from 'immutable';
 import PropTypes from "prop-types";
 import { withStyles, Paper, Typography, Divider, SvgIcon, TextField, Button } from "@material-ui/core";
 
-import ClassroomAbout from "components/class/board-contents/teacherboard/about";
-import StudentTable from "components/class/board-contents/teacherboard/student-table";
-import SearchedStudentList from "components/class/board-contents/teacherboard/searched-studentlist";
+import {
+    ClassroomAbout,
+    SearchedStudentList,
+    StudentTable
+} from 'components/class/board-contents/teacherboard';
 
 import { Clear } from "@material-ui/icons"
 
@@ -61,7 +63,7 @@ const styles = theme => ({
     studentmodalheader:{
         position: "relative",
         left: "50%",
-        transform: "translate(-50%)"
+        transform: "translateX(-50%)"
     },
     modalinput:{
         marginTop:theme.spacing.unit * 3,
@@ -73,6 +75,16 @@ const styles = theme => ({
         bottom:"0px",
         margin:theme.spacing.unit,
         marginTop:theme.spacing.unit * 4,
+        backgroundColor: "#DBDBDB"
+    },
+    btnregister:{
+        position:"relative",
+        left: "50%",
+        transform: "translateX(-50%)",
+        margin:theme.spacing.unit,
+        marginTop:theme.spacing.unit * 4,
+        backgroundColor: "#4CAF50",
+        color: "#FFFFFF"
     },
     body:{
         padding: theme.spacing.unit * 2
@@ -132,6 +144,7 @@ class TeacherBoard extends Component {
         this.state = {
             about: '소개글',
             student_id: '',
+            password: '',
             studentList: List(),
             BeforeApplyStudentList: List(),
             open: false,
@@ -166,17 +179,23 @@ class TeacherBoard extends Component {
         console.log(e);
         this.setState({
             open: !this.state.open,
-            isAbout: true
+            isAbout: "About"
         })
     }
 
     handleStudentOpen = (e) => {
         this.setState({
             open: !this.state.open,
-            isAbout: false
+            isAbout: "Student"
         })
     }
 
+    handleRegisterOpen = () => {
+        this.setState({
+            open: !this.state.open,
+            isAbout: "Register"
+        })
+    }
     handleClose = (e) => {
         this.setState({
             open: !this.state.open,
@@ -251,10 +270,23 @@ class TeacherBoard extends Component {
     }
 
     shouldComponentUpdate(nextProps, nextState){
-        
         const vitalPropsChange = this.props !== nextProps;
         const vitalStateChange = this.state !== nextState;    
         return vitalPropsChange || vitalStateChange;
+    }
+
+    btnCommit = (isAbout) => {
+        const {classes} = this.props;
+        console.log("isAbout:"+isAbout);
+        return (
+            <Button
+                className={(isAbout==="About") ? `${classes.btnmodal} ${classes.btncreate}`: classes.btnregister }
+                size="large"
+                onClick={()=>this.handleClose}
+            >
+                commit
+            </Button>
+        )
     }
 
     render() { 
@@ -271,7 +303,7 @@ class TeacherBoard extends Component {
                         className={classes.modalbackground}
                     >
                         <Paper
-                            className={(isAbout) ? classes.aboutmodal : classes.studentmodal}
+                            className={(isAbout==="About") ? classes.aboutmodal : classes.studentmodal}
                         >
                             <div
                                 className={classes.modalheader}
@@ -279,9 +311,9 @@ class TeacherBoard extends Component {
                                 <Typography
                                     variant="h5"
                                     component="h5"
-                                    className={(isAbout) ? null : classes.studentmodalheader}
+                                    className={(isAbout==="About") ? null : classes.studentmodalheader}
                                 >
-                                    { (isAbout) ? "학원 소개글" : "학생 추가" }
+                                    { (isAbout==="About") ? "학원 소개글" : (isAbout==="Student") ? "학생 추가" : "학생 가입" }
                                 </Typography>
                                 <SvgIcon
                                     className={`${classes.btncreate} ${classes.btncancel}`}
@@ -293,30 +325,46 @@ class TeacherBoard extends Component {
                             <Divider
                                 className={classes.divider}
                             />
+                            {(!(isAbout==="Register"))? 
                             <TextField
-                                name={(isAbout) ? "about" : "student_id"}
+                                name={(isAbout==="About") ? "about" : "student_id"}
                                 variant="outlined"
                                 className={classes.modalinput}
-                                value={(isAbout) ? about : student_id}
-                                placeholder={( isAbout ) ? null : "학생 아이디"}
+                                value={(isAbout==="About") ? about : student_id}
+                                placeholder={( isAbout==="About" ) ? null : "학생 아이디"}
                                 fullWidth
                                 onChange={this.handleChange}
-                            />
+                            /> : 
+                            <div>
+                                <TextField
+                                    name={"student_id"}
+                                    variant="outlined"
+                                    className={classes.modalinput}
+                                    value={(isAbout==="About") ? about : student_id}
+                                    placeholder={( isAbout==="About" ) ? null : "학생 아이디"}
+                                    fullWidth
+                                    onChange={this.handleChange}
+                                />
+                                <TextField
+                                    name={"password"}
+                                    variant="outlined"
+                                    type="password"
+                                    className={classes.modalinput}
+                                    value={this.state.password}
+                                    placeholder={"Password"}
+                                    fullWidth
+                                    onChange={this.handleChange}
+                                />
+                            </div> }
                             <Divider 
                             variant="fullWidth"/>
-                            {(!isAbout) ? <SearchedStudentList
+                            {(isAbout==="Student") ? <SearchedStudentList
                                 classIdx={classIdx}
                                 token={token}
                                 studentList={this.state.BeforeApplyStudentList}
                                 handleApplyStudent={this.handleApplyStudent}
                             /> : null}
-                            {(isAbout) ? <Typography
-                                className={`${classes.btnmodal} ${classes.btncreate}`}
-                                variant="button"
-                                onClick={()=>this.handleClose}
-                            >
-                                commit
-                            </Typography> : null}
+                            {(isAbout==="About") ? this.btnCommit(isAbout) : (isAbout==="Register") ? this.btnCommit(isAbout) : null}
                         </Paper>
                     </div>
                 :
@@ -352,7 +400,9 @@ class TeacherBoard extends Component {
                                     style={{backgroundColor:"#75A7E8",
                                     color: "#FFFFFF"
                                     }}
-                                >원생 등록</Button>
+                                    onClick={()=>this.handleRegisterOpen()}
+                                >원생 등록
+                                </Button>
                             </div>
                             <div>
                                 <Button

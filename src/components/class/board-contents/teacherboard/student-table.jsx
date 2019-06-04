@@ -89,7 +89,7 @@ const StudentTable = ({ classes, studentList, classIdx, token, handleStudentOpen
             <TablePagination
                 rowsPerPageOptions={[5]}
                 component="div"
-                count={studentList.length}
+                count={studentList.size}
                 rowsPerPage={5}
                 page={page}
                 backIconButtonProps={{
