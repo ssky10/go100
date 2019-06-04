@@ -27,6 +27,7 @@ import ItalicIcon from "@material-ui/icons/FormatItalic";
 import FncIcon from "@material-ui/icons/Functions";
 
 import Editor from "./editor";
+import { Input } from "@material-ui/core";
 
 const styles = theme => ({
   content: {
@@ -90,6 +91,15 @@ const styles = theme => ({
   button: {
     width: "100%",
     marginTop: theme.spacing.unit * 2
+  },
+  exampleAnswer: {
+    backgroundColor: "#FDCF56",
+    "&:hover": {
+      backgroundColor: "#FDCF56"
+    },
+    "&:focus": {
+      backgroundColor: "#FDCF56"
+    }
   }
 });
 
@@ -100,10 +110,13 @@ const writeExam = ({
   examples,
   value,
   changeValue,
+  onChangeValue,
   onclickExample,
   onclickBack,
   onclickNext,
-  onSubmit
+  onselectAnswer,
+  onSubmit,
+  test
 }) => {
   return (
     <main className={classes.content}>
@@ -132,94 +145,72 @@ const writeExam = ({
       </Paper>
       <Slide direction="left" in={true} mountOnEnter unmountOnExit>
         <Paper className={classes.paper} elevation={1}>
-          <form className={classes.form} onSubmit={onSubmit} name="write">
+          <form className={classes.form} onSubmit={onSubmit}>
             <FormControl margin="normal" required fullWidth>
               <FormLabel component="legend">문제 유형</FormLabel>
+              {console.log(value.type)}
               <RadioGroup
                 aria-label="문제 유형"
                 name="type"
                 className={classes.group}
-                value={value}
-                onChange={changeValue}
+                value={value.type}
+                onChange={onChangeValue}
+                row
               >
-                <FormGroup row>
-                  <FormControlLabel
-                    value="객관식"
-                    control={<Radio />}
-                    label="객관식"
-                  />
-                  <FormControlLabel
-                    value="단답형"
-                    control={<Radio />}
-                    label="단답형"
-                  />
-                </FormGroup>
+                <FormControlLabel
+                  value="choiceable"
+                  control={<Radio color="default" />}
+                  label="객관식"
+                />
+                <FormControlLabel
+                  value="non-choiceable"
+                  control={<Radio color="default" />}
+                  label="단답형"
+                />
               </RadioGroup>
               <FormLabel component="legend">문제</FormLabel>
-              <Editor id="editorQ" />
+              <Editor
+                id="context"
+                onChange={onChangeValue}
+                value={value.context}
+                ableImg={true}
+              />
 
               <List className={classes.root}>
-                <ListItem alignItems="flex-start">
-                  <Chip
-                    className={classes.example}
-                    avatar={<Avatar>1</Avatar>}
-                    label={
-                      <div
-                        id="example1"
-                        contenteditable="true"
-                        style={{ minWidth: "53px" }}
-                      />
-                    }
-                  />
-                </ListItem>
-                <ListItem alignItems="flex-start">
-                  <Chip
-                    className={classes.example}
-                    avatar={<Avatar>2</Avatar>}
-                    label={
-                      <div
-                        id="example1"
-                        contenteditable="true"
-                        style={{ minWidth: "53px" }}
-                      />
-                    }
-                  />
-                </ListItem>
-                <ListItem alignItems="flex-start">
-                  <Chip
-                    className={classes.example}
-                    avatar={<Avatar>3</Avatar>}
-                    label={
-                      <div
-                        id="example1"
-                        contenteditable="true"
-                        style={{ minWidth: "53px" }}
-                      />
-                    }
-                  />
-                </ListItem>
-                <ListItem alignItems="flex-start">
-                  <Chip
-                    className={classes.example}
-                    avatar={<Avatar>4</Avatar>}
-                    label={
-                      <div
-                        id="example1"
-                        contenteditable="true"
-                        style={{ minWidth: "53px" }}
-                      />
-                    }
-                  />
-                </ListItem>
+                {value.example.toArray().map((item, idx) => (
+                  <ListItem alignItems="flex-start">
+                    <Chip
+                      className={
+                        idx === value.answer
+                          ? `${classes.example} ${classes.exampleAnswer}`
+                          : classes.example
+                      }
+                      avatar={<Avatar>{idx + 1}</Avatar>}
+                      key={idx}
+                      label={
+                        <FormControl>
+                          <Input
+                            name={`example${idx}`}
+                            fullWidth
+                            onChange={onChangeValue}
+                            value={item}
+                          />
+                        </FormControl>
+                      }
+                      onClick={() => onselectAnswer(idx)}
+                    />
+                  </ListItem>
+                ))}
               </List>
               <FormLabel component="legend">해설</FormLabel>
-              <Editor id="editorR" />
+              <Editor
+                id="explanation"
+                onChange={onChangeValue}
+                value={value.explanation}
+                ableImg={false}
+              />
               <Divider />
-              <Button
-                size="small"
-                className={classes.button}
-                onClick={onclickNext}
-              >
+              <Button size="small" className={classes.button} type="submit">
                 <CreateIcon />
                 문제 제출하기
               </Button>
@@ -238,10 +229,10 @@ writeExam.propTypes = {
   value: PropTypes.string,
   changeValue: PropTypes.func,
   onclickExample: PropTypes.func,
-  examples: PropTypes.array,
   onclickBack: PropTypes.func,
   onclickNext: PropTypes.func,
-  onSubmit: PropTypes.func
+  onSubmit: PropTypes.func,
+  onChangeValue: PropTypes.func
 };
 
 writeExam.defaultProps = {
@@ -251,7 +242,7 @@ writeExam.defaultProps = {
   examples: ["보기 1 번", "보기 2 번", "보기 3 번", "보기 4 번"],
   onclickBack: () => alert("이전 문제 클릭"),
   onclickNext: () => alert("다음 문제 클릭"),
-  value: "객관식",
+  value: "choiceable",
   changeValue: () => alert("유형변경"),
   onSubmit: () => alert("전송")
 };
