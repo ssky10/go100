@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withStyles, Typography, Paper, Input, Button, SvgIcon } from '@material-ui/core';
+import { withStyles, Typography, Paper, Button } from '@material-ui/core';
 
 import QnAEditor from "components/class/board-contents/qnaboard/qna-write";
+
+import * as axios from "services/post";
 
 const styles = theme => ({
     root:{
@@ -15,50 +17,6 @@ const styles = theme => ({
     boardheader:{
         padding: theme.spacing.unit,
         marginBottom: theme.spacing.unit * 2
-    },
-    header:{
-        display: "flex"
-    },
-    typotitle:{
-        marginLeft: theme.spacing.unit,
-        marginRight: theme.spacing.unit,
-        color: "#FFFFFF",
-        fontSize: "1.25rem"
-    },
-    paperinput:{
-        width: "100%"
-    },
-    editor:{
-        display: 'flex',
-        marginTop: theme.spacing.unit * 1,
-    },
-    editorbuttons:{
-        width:"269px",//
-        display: "flex",
-        '& + &':{
-            marginLeft: theme.spacing.unit * 2,
-            width: "288px"
-        }
-    },
-    button:{
-        margin: theme.spacing.unit / 2
-    },
-    fontsizepicker:{
-        margin: theme.spacing.unit / 2,
-        display: "flex"
-    },
-    contents:{
-        marginTop: theme.spacing.unit * 2,
-        width: "100%"
-    },
-    papercontents:{
-        marginTop: theme.spacing.unit * 1,
-        paddingRight: theme.spacing.unit / 2,
-        paddingBottom: theme.spacing.unit / 2,
-        paddingLeft: theme.spacing.unit / 2,
-    },
-    inputcontents:{
-        height: "435px"
     },
     footer:{
         marginTop: theme.spacing.unit * 2,
@@ -90,6 +48,11 @@ class QnAWrite extends Component {
         })
     }
 
+    handleSubmit = (e) => {
+        const { token, classIdx, user_id, title } = this.props
+        axios.writeQnAPost(token, classIdx, user_id, title, this.state.content)
+    }
+
     excuteEditButton = (e, exc) => {
         const found = document.getElementById('contents')
 
@@ -119,11 +82,30 @@ class QnAWrite extends Component {
                         글쓰기
                     </Typography>
                 </Paper>
-                <QnAEditor
-                    classes={this.props.classes}
-                    handleInputChange={this.handleInputChange}
-                    excuteEditButton={this.excuteEditButton}
-                />
+                <form>
+                    <QnAEditor
+                        handleInputChange={this.handleInputChange}
+                        excuteEditButton={this.excuteEditButton}
+                    />
+                    <div
+                        className={classes.footer}
+                    >
+                        <Button
+                            className={classes.csbuttons}
+                            variant="contained"
+                            color="primary"
+                            type="submit"
+                        >
+                            Post
+                        </Button>
+                        <Button
+                            className={classes.csbuttons}
+                            variant="contained"
+                        >
+                            Cancle
+                        </Button>
+                    </div>
+                </form>
             </div>
         );
     }

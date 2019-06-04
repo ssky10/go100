@@ -1,7 +1,55 @@
 import React, { Component } from 'react';
-import { Paper, Input, Button, SvgIcon } from '@material-ui/core';
+import PropTypes from 'prop-types';
+import { withStyles, Paper, Input, Button, SvgIcon } from '@material-ui/core';
 
 import { FormatBold, FormatUnderlined, FormatItalic, FormatAlignCenter, FormatAlignJustify, FormatAlignLeft, FormatAlignRight } from '@material-ui/icons'
+
+const styles = theme => ({
+    header:{
+        display: "flex"
+    },
+    typotitle:{
+        marginLeft: theme.spacing.unit,
+        marginRight: theme.spacing.unit,
+        color: "#FFFFFF",
+        fontSize: "1.25rem"
+    },
+    paperinput:{
+        width: "100%"
+    },
+    editor:{
+        display: 'flex',
+        marginTop: theme.spacing.unit * 1,
+    },
+    editorbuttons:{
+        width:"269px",//
+        display: "flex",
+        '& + &':{
+            marginLeft: theme.spacing.unit * 2,
+            width: "288px"
+        }
+    },
+    button:{
+        margin: theme.spacing.unit / 2
+    },
+    fontsizepicker:{
+        margin: theme.spacing.unit / 2,
+        display: "flex"
+    },
+    contents:{
+        marginTop: theme.spacing.unit * 2,
+        width: "100%"
+    },
+    papercontents:{
+        marginTop: theme.spacing.unit * 1,
+        paddingRight: theme.spacing.unit / 2,
+        paddingBottom: theme.spacing.unit / 2,
+        paddingLeft: theme.spacing.unit / 2,
+    },
+    inputcontents:{
+        height: "435px"
+    }
+})
 
 const btnsFontList = [
     {name: "bold"},
@@ -21,63 +69,64 @@ const btnIcons =[
     [<FormatAlignLeft/>,<FormatAlignJustify/>,<FormatAlignCenter/>,<FormatAlignRight/>]
 ]
 
-const Buttons = ({ theme, name, idx, icons}) => {
-    return(
-        <Button
-            className={theme.button}
-            name={`${name}`}
-            variant="contained"
-            color="primary"
-            size="small"
-            onClick={(e)=>this.excuteEditButton(e, `${name}`)}
-        >
-            <SvgIcon>{btnIcons[icons][idx]}</SvgIcon>
-        </Button>
-    )
-}
-
-const font = btnsFontList.map((btn, index)=>{
-    const { classes } = this.props;
-    const name = btn.name;
-    return (
-        <Buttons
-            key={index}
-            theme={classes}
-            name={name}
-            idx={index}
-            icons={0}
-        />
-    )
-})
-
-const align = btnsAlignList.map((btn, index)=>{
-    const { classes } = this.props;
-    const name = btn.name;
-    return (
-        <Buttons
-            key={index}
-            theme={classes}
-            name={name}
-            idx={index}
-            icons={1}
-        />
-    )
-})
-
-const makeButtons = (type) => {
-    if (type==='font') {return (font)} 
-    else if (type === 'align') {return (align)}
-}
-
 class QnAEditor extends Component {
     constructor(props) {
         super(props);
-        this.state = {  }
     }
     
     render() { 
+        const { classes, handleInputChange, excuteEditButton } = this.props;
+
+        const Buttons = ({ theme, name, idx, icons}) => {
+            return(
+                <Button
+                    className={theme.button}
+                    name={`${name}`}
+                    variant="contained"
+                    color="primary"
+                    size="small"
+                    onClick={(e)=>this.excuteEditButton(e, `${name}`)}
+                >
+                    <SvgIcon>{btnIcons[icons][idx]}</SvgIcon>
+                </Button>
+            )
+        }
+        
+        const font = btnsFontList.map((btn, index)=>{
+            const { classes } = this.props;
+            const name = btn.name;
+            return (
+                <Buttons
+                    key={index}
+                    theme={classes}
+                    name={name}
+                    idx={index}
+                    icons={0}
+                />
+            )
+        })
+        
+        const align = btnsAlignList.map((btn, index)=>{
+            const { classes } = this.props;
+            const name = btn.name;
+            return (
+                <Buttons
+                    key={index}
+                    theme={classes}
+                    name={name}
+                    idx={index}
+                    icons={1}
+                />
+            )
+        })
+
+        const makeButtons = (type) => {
+            if (type==='font') {return (font)} 
+            else if (type === 'align') {return (align)}
+        }
+        
         return (
-            <form>
+            <div>
                 <div
                     className={classes.header}
                 >
@@ -136,29 +185,14 @@ class QnAEditor extends Component {
                         contentEditable="true"
                         onChange={handleInputChange}
                     />
-                </Paper>
-                <div
-                    className={classes.footer}
-                >
-                    <Button
-                        className={classes.csbuttons}
-                        variant="contained"
-                        color="primary"
-                        type="submit"
-                    >
-                        Post
-                    </Button>
-                    <Button
-                        className={classes.csbuttons}
-                        variant="contained"
-                        onClick={handleInputChange}
-                    >
-                        Cancle
-                    </Button>
-                </div>
-            </form>
+                </Paper>                
+            </div>
         );
     }
 }
- 
-export default QnAEditor;
+
+QnAEditor.propTypes = {
+    classes: PropTypes.object.isRequired
+}
+
+export default withStyles(styles)(QnAEditor);

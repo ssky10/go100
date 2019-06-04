@@ -100,7 +100,9 @@ class ClassRouter extends Component {
                     <Route exact path={`${match.url}/qna`} render={()=>(
                         <QnABoard boardIdx={3} classIdx={match.params.id} token={token}/>
                     )}/>
-                    <Route path={`${match.url}/qna/write`} component={QnAWrite}/>
+                    <Route path={`${match.url}/qna/write`} render={()=>(
+                        <QnAWrite token={token} classIdx={match.params.id}/>
+                    )}/>
                     <Route path={`${match.url}/qna/post/:id`} component={QnAPost}/>
                     <Route path={`${match.url}/livequiz`} render={()=>(
                         <LiveQuizBoard boardIdx={4}  token={token}/>

@@ -71,3 +71,14 @@ export const getQnAPost = (token, classIdx, post_id) => {
     post_id: post_id
   });
 }
+
+export const writeQnAPost = (token, class_id, user_id, title, content) => {
+  return axios.post(URL+"qna/writeqna",{
+    Origin: window.loactaion.hostname,
+    user_token: token,
+    class_id: class_id,
+    user_id: user_id,
+    title: title,
+    content: content
+  })
+}

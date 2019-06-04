@@ -6,10 +6,12 @@ import { withStyles, Paper, Typography, Divider, SvgIcon, TextField, Button } fr
 
 import ClassroomAbout from "components/class/board-contents/teacherboard/about";
 import StudentTable from "components/class/board-contents/teacherboard/student-table";
+import SearchedStudentList from "components/class/board-contents/teacherboard/searched-studentlist";
 
 import { Clear } from "@material-ui/icons"
 
-import * as axios from "services/classroom"
+import * as axios from "services/classroom";
+import * as auth from "services/users"
 
 const styles = theme => ({
     root:{
@@ -75,6 +77,9 @@ const styles = theme => ({
     body:{
         padding: theme.spacing.unit * 2
     },
+    studenttable:{
+        minWidth: "452px"
+    },
     contentheader:{
         display: "flex",
         '& h5': {
@@ -106,9 +111,16 @@ const styles = theme => ({
     studenttable:{
         minWidth: 650
     },
-    classconfig:{
-    },
     btndelete:{
+        cursor: "pointer"
+    },
+    classconfig:{
+        marginLeft: theme.spacing.unit * 2,
+        '&> div + div': {
+            marginTop: theme.spacing.unit * 1
+        }
+    },
+    btnclassdelete:{
         backgroundColor: "#E81D35",
         color: "#FFFFFF"
     }
@@ -121,8 +133,10 @@ class TeacherBoard extends Component {
             about: '소개글',
             student_id: '',
             studentList: List(),
+            BeforeApplyStudentList: List(),
             open: false,
-            type: '',
+            isAbout: '',
+            isDelete: true,
         }
     }
 
@@ -132,7 +146,17 @@ class TeacherBoard extends Component {
         const value = target.value;
         
         console.log(name);
-
+        if(name==='student_id'){
+            auth
+                .findStudent(this.props.token, value)
+                .then(res => {
+                    if(res.data.list){
+                        this.setState({
+                            BeforeApplyStudentList: fromJS(res.data.list)
+                        })
+                    }
+                })
+        }
         this.setState({
             [name]: value
         })
@@ -142,27 +166,75 @@ class TeacherBoard extends Component {
         console.log(e);
         this.setState({
             open: !this.state.open,
-            type: "About"
+            isAbout: true
         })
     }
 
     handleStudentOpen = (e) => {
         this.setState({
             open: !this.state.open,
-            type: "Student"
+            isAbout: false
         })
     }
 
     handleClose = (e) => {
         this.setState({
             open: !this.state.open,
-            type: ''
+            student_id: '',
+            isAbout: ''
         })
     }
 
+    handleApplyStudent = (class_id, user_id, user_token) => {
+        if(window.confirm(user_id+"학생을 등록하시겠습니까?")){
+            axios
+                .applyStudent(class_id, user_id, user_token)
+                .then(res => {
+                    if(res.data.status){
+                        axios
+                            .getStudentList(class_id, user_token)
+                            .then(r => {
+                                if(r.data){
+                                    console.log("추가 후 리스트 갱신");
+                                    this.setState({
+                                        studentList: fromJS(r.data.list)
+                                    })
+                                }
+                            })
+                    }
+                })
+        }
+        else
+            return null;
+    }
+
     handleDeleteStudent = (class_id, user_id, user_token) => {
-        axios
-            .deleteStudent(class_id, user_id, user_token)
+        if(window.confirm(user_id+"학생을 삭제하시겠습니까?")){
+            axios
+                .deleteStudent(class_id, user_id, user_token)
+                .then(res => {
+                    if(res.data.status){
+                        axios
+                            .getStudentList(class_id, user_token)
+                            .then(r => {
+                                if(r.data){
+                                    console.log("삭제 후 리스트 갱신");
+                                    this.setState({
+                                        studentList: fromJS(r.data.list)
+                                    })
+                                }
+                            })
+                    }
+                })
+        }
+        else
+            return null;
+    }
+
+    handleDeleteClass = (token, classIdx) => {
+        if(window.confirm("학급 삭제를 정말로 하시겠습니까?")){
+            axios.deleteClass(token, classIdx)
+        }
     }
 
     componentDidMount(){
@@ -170,7 +242,6 @@ class TeacherBoard extends Component {
         axios
             .getStudentList(classIdx, token)
             .then(res=>{
-                console.log(res)
                 if(res.data){
                     this.setState({
                         studentList: fromJS(res.data.list)
@@ -179,11 +250,16 @@ class TeacherBoard extends Component {
             })
     }
 
-    
+    shouldComponentUpdate(nextProps, nextState){
+        
+        const vitalPropsChange = this.props !== nextProps;
+        const vitalStateChange = this.state !== nextState;    
+        return vitalPropsChange || vitalStateChange;
+    }
 
     render() { 
         const { classes, token, classIdx } = this.props;
-        const { about, student_id, studentList, open, type } = this.state;
+        const { about, student_id, studentList, open, isAbout } = this.state;
 
         console.log(studentList);
         return (
@@ -195,7 +271,7 @@ class TeacherBoard extends Component {
                         className={classes.modalbackground}
                     >
                         <Paper
-                            className={(type==='About') ? classes.aboutmodal : classes.studentmodal}
+                            className={(isAbout) ? classes.aboutmodal : classes.studentmodal}
                         >
                             <div
                                 className={classes.modalheader}
@@ -203,9 +279,9 @@ class TeacherBoard extends Component {
                                 <Typography
                                     variant="h5"
                                     component="h5"
-                                    className={(type==='Student') ? classes.studentmodalheader : null}
+                                    className={(isAbout) ? null : classes.studentmodalheader}
                                 >
-                                    { (type==='About') ? "학원 소개글" : "학생 추가" }
+                                    { (isAbout) ? "학원 소개글" : "학생 추가" }
                                 </Typography>
                                 <SvgIcon
                                     className={`${classes.btncreate} ${classes.btncancel}`}
@@ -218,21 +294,29 @@ class TeacherBoard extends Component {
                                 className={classes.divider}
                             />
                             <TextField
-                                name={(type==='About') ? "about" : "student_id"}
+                                name={(isAbout) ? "about" : "student_id"}
                                 variant="outlined"
                                 className={classes.modalinput}
-                                value={(type==='About') ? about : student_id}
-                                placeholder={(type==='About') ? null : "학생 아이디"}
+                                value={(isAbout) ? about : student_id}
+                                placeholder={( isAbout ) ? null : "학생 아이디"}
                                 fullWidth
                                 onChange={this.handleChange}
                             />
-                            <Typography
+                            <Divider 
+                            variant="fullWidth"/>
+                            {(!isAbout) ? <SearchedStudentList
+                                classIdx={classIdx}
+                                token={token}
+                                studentList={this.state.BeforeApplyStudentList}
+                                handleApplyStudent={this.handleApplyStudent}
+                            /> : null}
+                            {(isAbout) ? <Typography
                                 className={`${classes.btnmodal} ${classes.btncreate}`}
                                 variant="button"
-                                onClick={this.handleClose}
+                                onClick={()=>this.handleClose}
                             >
                                 commit
-                            </Typography>
+                            </Typography> : null}
                         </Paper>
                     </div>
                 :
@@ -263,12 +347,24 @@ class TeacherBoard extends Component {
                             className={classes.classconfig}
                         >
                             <div>
-                                <Button>학급 수정</Button>
+                                <Button
+                                    size="large"
+                                    style={{backgroundColor:"#75A7E8",
+                                    color: "#FFFFFF"
+                                    }}
+                                >원생 등록</Button>
                             </div>
                             <div>
                                 <Button
                                     size="large"
-                                    className={classes.btndelete}
+                                    style={{backgroundColor:"#DBDBDB"}}
+                                >학급 수정</Button>
+                            </div>
+                            <div>
+                                <Button
+                                    size="large"
+                                    className={classes.btnclassdelete}
+                                    onClick={()=>this.handleDeleteClass(token, classIdx)}
                                 >
                                 학급 삭제
                                 </Button>

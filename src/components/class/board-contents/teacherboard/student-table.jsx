@@ -1,19 +1,30 @@
 //node_modules
-import React from 'react';
+import React, {useState} from 'react';
 import { Typography, SvgIcon } from "@material-ui/core";
 import {
     Table,
     TableBody,
     TableCell,
     TableHead,
-    TableRow
+    TableRow,
+    TablePagination
 } from "@material-ui/core";
 
 import { Clear, PersonAdd } from "@material-ui/icons"
 
 const StudentTable = ({ classes, studentList, classIdx, token, handleStudentOpen, handleDeleteStudent}) => {
+    const [page, setPage] = useState(0);
+
+    function handleChangePage(e, newPage){
+        setPage(newPage);
+    }
+
+    const emptyRows = 5 - Math.min(5, studentList.size - page * 5);
+
     return (
-        <div>
+        <div
+            className={classes.studenttable}
+        >
             <div
                 className={classes.contentheader}
             >
@@ -42,11 +53,11 @@ const StudentTable = ({ classes, studentList, classIdx, token, handleStudentOpen
                 <TableBody>
                     {studentList.map((post, index) => {
                         const { user_id, name } = post.toJS();
-
+                        console.log("학생 리스트 row 생성")
                         return(
                             <TableRow key={index}>
                                 <TableCell align="right">
-                                    {index}
+                                    {index+1}
                                 </TableCell>
                                 <TableCell align="right">
                                     {user_id}
@@ -56,7 +67,10 @@ const StudentTable = ({ classes, studentList, classIdx, token, handleStudentOpen
                                 </TableCell>
                                 <TableCell align="right">
                                     <SvgIcon
-                                        onClick={handleDeleteStudent(classIdx, user_id, token)}
+                                        className={
+                                            classes.btndelete
+                                        }
+                                        onClick={()=>handleDeleteStudent(classIdx, user_id, token)}
                                     >
                                         <Clear/>
                                     </SvgIcon>
@@ -64,8 +78,28 @@ const StudentTable = ({ classes, studentList, classIdx, token, handleStudentOpen
                             </TableRow>
                         )
                     })}
+                    {console.log(emptyRows)}
+                    {emptyRows > 0 && (
+                        <TableRow style={{ height: 49 * emptyRows }}>
+                            <TableCell colSpan={6}/>
+                        </TableRow>
+                    )}
                 </TableBody>
             </Table>
+            <TablePagination
+                rowsPerPageOptions={[5]}
+                component="div"
+                count={studentList.length}
+                rowsPerPage={5}
+                page={page}
+                backIconButtonProps={{
+                    'aria-label': 'Previous Page',
+                }}
+                nextIconButtonProps={{
+                    'aria-label': 'Next Page',
+                }}
+                onChangePage={handleChangePage}
+            />
         </div>
     );
 }

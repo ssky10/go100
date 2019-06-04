@@ -84,6 +84,7 @@ class NoticeCardPost extends Component {
                 )
             }
         )
+        
         return (
             <div className={classes.layout}>
                 {PostList}
