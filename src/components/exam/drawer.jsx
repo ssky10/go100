@@ -68,6 +68,9 @@ const Drawer = ({
   onClickSubSubject,
   subjectIcons,
   onClickSearch,
+  searchCode,
+  onChangeSearchCode,
+  values,
   ...props
 }) => {
   return (
@@ -85,11 +88,15 @@ const Drawer = ({
         <InputBase
           type="number"
           placeholder="문제번호"
+          name="code"
           classes={{
             root: classes.inputRoot,
             input: classes.inputInput
           }}
-        />
+          onChange={onChangeSearchCode}
+        >
+          {values.searchCode}
+        </InputBase>
       </form>
       <Divider />
       <ListItem button component={onClickSubSubject} subject={-2}>
@@ -148,7 +155,9 @@ Drawer.propTypes = {
   subsubjectNames: PropTypes.array,
   onClickSubSubject: PropTypes.func,
   subjectIcons: PropTypes.array,
-  onClickSearch: PropTypes.func
+  onClickSearch: PropTypes.func,
+  onChangeSearchCode: PropTypes.func,
+  values: PropTypes.object
 };
 
 Drawer.defaultProps = {

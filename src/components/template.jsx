@@ -232,4 +232,6 @@ Template.propTypes = {
   theme: PropTypes.object.isRequired
 };
 
+Template.defaultProps = {};
+
 export default withStyles(styles, { withTheme: true })(Template);

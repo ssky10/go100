@@ -118,7 +118,7 @@ const ExamBoard = ({
       <Paper className={classes.paper} elevation={1}>
         <Typography className={classes.title} variant="h4" gutterBottom>
           {subject}
-          {subject !== "오답노트" && (
+          {subject !== "오답노트" && subject !== "내가 작성한 문제" && (
             <Tooltip title="문제 만들기">
               <IconButton aria-label="Create" onClick={onclickCreate}>
                 <CreateIcon />
@@ -149,7 +149,11 @@ const ExamBoard = ({
           </Paper>
         </Slide>
       ) : (
-        <Question question={question} onclickExample={onclickExample} />
+        <Question
+          question={question}
+          onclickExample={onclickExample}
+          myQ={subject === "내가 작성한 문제"}
+        />
       )}
       <Paper className={classes.paper} elevation={1}>
         <Button size="small" className={classes.button} onClick={onclickBack}>

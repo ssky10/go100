@@ -26,6 +26,10 @@ const styles = theme => ({
     marginBottom: theme.spacing.unit,
     backgroundColor: "white"
   },
+  fileInput: {
+    marginRight: theme.spacing.unit,
+    marginTop: theme.spacing.unit
+  },
   editorDiv: {
     marginTop: theme.spacing.unit,
     backgroundColor: "white"
@@ -49,6 +53,12 @@ class editor extends React.Component {
     anchorNode: null,
     anchorOffset: 0
   };
+
+  componentDidMount() {
+    document
+      .getElementById(this.props.id)
+      .addEventListener("input", this.props.onChange);
+  }
 
   excuteEditButton = exc => {
     const selection = window.getSelection();
@@ -109,7 +119,8 @@ class editor extends React.Component {
   };
 
   render() {
-    const { id, classes } = this.props;
+    const { id, classes, ableImg, onChange, value } = this.props;
+
     return (
       <Paper
         className={classes.paper}
@@ -320,9 +331,13 @@ class editor extends React.Component {
           id={id}
           autoFocus
           contentEditable="true"
-        >
-          문제를 작성하세요.
-        </div>
+          suppressContentEditableWarning={true}
+          onChange={onChange}
+        />
+        <Divider />
+        {ableImg ? (
+          <input type="file" name="img" className={classes.fileInput} />
+        ) : null}
       </Paper>
     );
   }
