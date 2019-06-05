@@ -1,5 +1,6 @@
 //node_modules
 import React, { Component } from 'react';
+import { List, fromJS } from 'immutable';
 import PropTypes from "prop-types";
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
@@ -8,13 +9,14 @@ import { Grid } from '@material-ui/core';
 //components
 import NoticeCard from 'components/class/board-contents/noticeboard/notice-card';
 import NoticeWrite from 'components/class/board-contents/noticeboard/notice-write';
+import Write from 'components/commons/write';
 
 //sevices
 import * as axios from "services/post";
 
 const styles = theme => ({
     root:{
-        paddingTop: theme.spacing.unit * 10,
+        paddingTop: theme.spacing.unit * 5,
         paddingBottom : theme.spacing.unit * 2,
         paddingLeft: theme.spacing.unit * 10,
         paddingRight: theme.spacing.unit * 2,
@@ -37,26 +39,45 @@ class NoticeBoard extends Component {
         super(props);
         this.state = {
             title: "Notice",
+            posttitle: '',
             isTeacher: true,
-            textfield: ''
+            textfield: '',
+            postlists: List()
         }
     }
 
-    handleSumbit = e => {
+    handleSubmit = e => {
+        const { token, classIdx } = this.props;
         const target = e.target;
-        console.log("전송 시작");
         if (target.name === "post") {
             axios
-                .setNoticePost(this.props.boardIdx, new Date(), this.state.textfield);
+                .setNoticePost(token, classIdx, this.state.textfield, this.state.posttitle);
         }
     }
 
-    handleContentsChange = e => {
+    handleChange = e => {
+        const target = e.target;
+        const name = target.name;
+        console.log("name : "+name);
+        console.log("target : "+target.value);
         this.setState({
-            textfield: e.target.value
+            [name]: target.value
         });
     };
 
+    componentDidMount() {
+        const { classIdx, boardIdx, token } = this.props;
+        axios
+            .getNoticePostList(token, classIdx, boardIdx)
+            .then(res => {
+                if( res.data.list ){
+                    this.setState({
+                        postlists: fromJS(res.data.list)
+                    })
+                }
+            })
+
+    }
     render() { 
         const { classes } = this.props;
         const title = this.state.title;
@@ -90,10 +111,18 @@ class NoticeBoard extends Component {
                             item
                             xs={12}
                         >
-                            <NoticeWrite
+                            {/* <NoticeWrite
+                                title={this.state.posttitle}
                                 contents={this.state.textfield}
-                                onChange={this.handleContentsChange}
-                                onSubmit={this.handleSumbit}
+                                onChange={this.handleChange}
+                                onSubmit={this.handleSubmit}
+                            /> */}
+                            <Write
+                                isCard="Notice"
+                                title={this.state.posttitle}
+                                contents={this.state.textfield}
+                                handleChange={this.handleChange}
+                                handleSubmit={this.handleSubmit}
                             />
                         </Grid>
                         }
@@ -101,10 +130,8 @@ class NoticeBoard extends Component {
                             item
                             xs={12}
                         >
-                            <NoticeCard
-                                user="teacher"
-                                date="MM-DD"
-                                contents="test"
+                                <NoticeCard
+                                posts={this.state.postlists}
                             />
                         </Grid>
                     </Grid>                    

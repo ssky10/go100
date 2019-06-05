@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import { withStyles, Typography, Paper, Button } from '@material-ui/core';
 
@@ -35,6 +36,7 @@ class QnAWrite extends Component {
         this.state = {
             title: '',
             contents: '',
+            myRequestedRefs: '',
         }
     }
 
@@ -42,7 +44,7 @@ class QnAWrite extends Component {
         const target = e.target;
         const value = target.value;
         const name = target.name;
-
+        console.log(value);
         this.setState({
             [name]: value
         })
@@ -50,22 +52,25 @@ class QnAWrite extends Component {
 
     handleSubmit = (e) => {
         const { token, classIdx, user_id, title } = this.props
-        axios.writeQnAPost(token, classIdx, user_id, title, this.state.content)
+        axios.writeQnAPost(token, classIdx, user_id, title, this.state.contents)
     }
 
     excuteEditButton = (e, exc) => {
         const found = document.getElementById('contents')
 
         if( found && e.target.id === "fontSize" ){
-            document.execCommand(exc, false, e.target.value);
+            document.execCommand(exc, false, e.target.value);            
         }
 
         if(found){
             document.execCommand(exc, false, "");
         }
+        
+        this.setState({
+            contents: document.getElementById('contents').innerHTML
+        })
     };
 
-    
     render() { 
         const { classes } = this.props;
         return (
@@ -94,7 +99,7 @@ class QnAWrite extends Component {
                             className={classes.csbuttons}
                             variant="contained"
                             color="primary"
-                            type="submit"
+                            onClick={(e)=>this.handleSubmit(e)}
                         >
                             Post
                         </Button>

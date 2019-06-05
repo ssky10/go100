@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { withStyles, Card, Grid, Avatar, Typography, Button, Divider, TextField } from '@material-ui/core';
 
 //stylesheet
-import './work-write.css'
+import './write.css'
 import { CalendarToday } from '@material-ui/icons';
 
 const styles = theme => ({
@@ -60,13 +60,14 @@ const styles = theme => ({
     },
 })
 
-class NoticeWrite extends Component {
+class Write extends Component {
     constructor(props) {
         super(props);
         this.state = {
             checked: false,
         };
     }
+
     handleChange = (e) => {
         console.log(e.target.id);
         if(!(e.target.id))
@@ -74,8 +75,21 @@ class NoticeWrite extends Component {
     };
 
     render() { 
-        const { classes, contents, onChange, onSubmit } = this.props;
+        const { classes, isCard, title, contents, handleChange, handleSubmit } = this.props;
+        const { deadline } = (isCard==="Homework") ? this.props : '';
+
+        console.log(deadline);
+
+        const cardTitle =
+        (isCard==="Notice") ? "Click for writing something that sharing in your class...." : 
+        (isCard==="Homework") ? "Click for writing homework that sharing in your class...." : 
+        "Click for writing answer"
+
+        const placeholder =
+        (isCard==="Notice") ? "Writing something that sharing in your class...." :
+        (isCard==="Homework") ? "Writing homework that sharing in your class...." : "Writing answer for Question...."
         
+
         const DefalutCard = () => {
             return (
                 <Typography
@@ -83,7 +97,7 @@ class NoticeWrite extends Component {
                     variant="subtitle2"
                     onClick={this.handleChange}
                 >   
-                    Click for writing something that sharing in your class....
+                    {cardTitle}
                 </Typography>
             )
         }
@@ -114,6 +128,7 @@ class NoticeWrite extends Component {
         }
 
         const cardWrite = () => {
+            const { handleChange } = this.props
             return(
                 <Grid
                     className={classes.footer}
@@ -129,20 +144,27 @@ class NoticeWrite extends Component {
                     >
                         <Divider/>
                     </Grid>
-                    <Grid
+                    {(isCard==="Homework") ? <Grid
                         className={classes.calendar}
                         item
                         xs={6}
                     >
                          <TextField
                             id="datetime-local"
+                            name="deadline"
                             label="DeadLine"
                             type="datetime-local"
+                            value={deadline}
                             InputLabelProps={{
                             shrink: true,
                             }}
+                            onChange={(e)=>handleChange}
                         />
-                    </Grid>
+                    </Grid> : <Grid
+                    item
+                    xs={6} />                    
+                    }
+
                     <Grid
                         item
                         xs={6}
@@ -156,7 +178,7 @@ class NoticeWrite extends Component {
 
         return (
             <form
-                onSubmit={onSubmit}
+                onSubmit={handleSubmit}
                 name="post"
                 autoComplete="off"
             >
@@ -183,32 +205,28 @@ class NoticeWrite extends Component {
                                     T
                                 </Avatar>
                             </Grid>
-                            {!this.state.checked ?
                             <Grid
-                                className={classes.defaultbox}
+                                className={(!(this.state.checked)&&(!(isCard==="Answer")))? classes.defaultbox : classes.posttitle}
                                 item
                                 xs={10}
                             >
-                                <DefalutCard/>
-                            </Grid>:
-                            <Grid
-                                item
-                                xs={10}
-                            >
+                            {(!(this.state.checked)) ? 
+                                <DefalutCard/> :
+                                (!(isCard==="Answer")) ? 
                                 <TextField
                                     id="title-textarea"
                                     name="posttitle"
                                     className={classes.inputbox}
-                                    value={contents}
-                                    onChange={onChange}
+                                    value={title}
+                                    onChange={handleChange}
                                     rows="1"
                                     rowsMax="1"
                                     margin="none"
                                     variant="outlined"
                                     placeholder="Writing Table"
-                                />
-                            </Grid>
+                                />:null
                             }
+                            </Grid>
                         </Grid>
                         {this.state.checked &&
                             <Grid
@@ -227,13 +245,13 @@ class NoticeWrite extends Component {
                                         name="textfield"
                                         className={classes.inputbox}
                                         value={contents}
-                                        onChange={onChange}
+                                        onChange={handleChange}
                                         multiline
                                         rows="6"
                                         rowsMax="6"
                                         margin="none"
                                         variant="outlined"
-                                        placeholder="Writing something that sharing in your class...."
+                                        placeholder={placeholder}
                                     />
                                 </Grid>  
                             </Grid>
@@ -256,7 +274,7 @@ class NoticeWrite extends Component {
 
                             
 
-NoticeWrite.propTypes = {
+Write.propTypes = {
     classes: PropTypes.object.isRequired,
 }
-export default withStyles(styles)(NoticeWrite);
+export default withStyles(styles)(Write);

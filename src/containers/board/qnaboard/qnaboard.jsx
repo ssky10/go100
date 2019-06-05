@@ -12,17 +12,16 @@ import { getQnAPostList } from "store/modules/post";
 
 const styles = theme => ({
     root:{
-        paddingTop: theme.spacing.unit * 10,
+        paddingTop: theme.spacing.unit * 5,
         paddingBottom : theme.spacing.unit * 2,
         paddingLeft: theme.spacing.unit * 10,
-        paddingRight: theme.spacing.unit * 10,
-        flexGrow: 1
+        paddingRight: theme.spacing.unit * 2,
+        marginRight: theme.spacing.unit * 10,
     },
     boardtitle:{
         marginBottom: theme.spacing.unit * 3,
     },
     linkwrite:{
-        
         float: "right",
     },
     writepaper:{
@@ -70,6 +69,7 @@ const styles = theme => ({
         userSelect: 'none'
     },
     contentsdate:{
+        textAlign:"center",
         userSelect: 'none'
     }
 })
@@ -83,7 +83,7 @@ class QnABoard extends Component {
     }
 
     componentDidMount(){
-        const { getQnAPostList, boardIdx, token, classIdx } = this.props;
+        const { getQnAPostList, token, classIdx } = this.props;
         
         getQnAPostList(token, classIdx);
     }
@@ -140,7 +140,7 @@ class QnABoard extends Component {
                     </Grid>
                     <Grid
                         item
-                        xs={9}
+                        xs={8}
                     >
                         <Typography
                             className={classes.contentstitle}
@@ -151,7 +151,7 @@ class QnABoard extends Component {
                     </Grid>
                     <Grid
                         item
-                        xs={1}
+                        xs={2}
                     >
                         <Typography
                             className={classes.contentsdate}
@@ -268,7 +268,7 @@ class QnABoard extends Component {
                                 </Grid>
                                 <Grid
                                     item
-                                    xs={9}
+                                    xs={8}
                                 >
                                     <Typography
                                         className={classes.listtitletypo}
@@ -279,7 +279,7 @@ class QnABoard extends Component {
                                 </Grid>
                                 <Grid
                                     item
-                                    xs={1}
+                                    xs={2}
                                 >
                                     <Typography
                                         className={classes.listtitletypo}

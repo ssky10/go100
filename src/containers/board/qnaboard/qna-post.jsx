@@ -10,6 +10,7 @@ import * as axios from 'services/post'
 
 //components
 import PostItem from 'components/class/board-contents/qnaboard/qna-post'
+import Write from 'components/commons/write'
 
 const styles = theme => ({
     root:{
@@ -40,14 +41,13 @@ const styles = theme => ({
         padding: theme.spacing.unit * 1,
         borderBottom: '1px solid #e9e9e9',
     }
-
 })
 
 class QnAPost extends Component{
     constructor(props) {
         super(props);
         this.state = {
-            post: List()
+            qpost: List()
         }
     }
 
@@ -61,7 +61,7 @@ class QnAPost extends Component{
             console.log(res.data);
             if(res.data){
                 this.setState({
-                post: fromJS(res.data)
+                qpost: fromJS(res.data)
                 })
             }
         })
@@ -69,12 +69,12 @@ class QnAPost extends Component{
 
     render(){
         const { classes, match } = this.props
-        const post = this.state.post;
+        const qpost = this.state.qpost;
 
         console.log("After toJS");   
 
-        if(post){
-            const { title, writer_id, date,  isAnswered, is_teacher, q_contents, a_contents } = post.toJS();
+        if(qpost){
+            const { title, writer_id, date,  isAnswered, is_teacher, q_contents} = qpost.toJS();
             return (
                 <div>
                     <Grid
@@ -82,26 +82,54 @@ class QnAPost extends Component{
                         spacing={0}
                     >
                         <Grid
+                            container
                             item
-                            xs={2}
-                        />
-                        <Grid
-                            item
-                            xs={8}
+                            xs={12}
                         >
-                            <PostItem
-                                classes={this.props.classes}
-                                title={title}
-                                isAnswered={isAnswered}
-                                writer_id={writer_id}
-                                date={date}
-                                q_contents={q_contents}
+                            <Grid
+                                item
+                                xs={2}
+                            />
+                            <Grid
+                                item
+                                xs={8}
+                            >
+                                <PostItem
+                                    classes={this.props.classes}
+                                    title={title}
+                                    isAnswered={isAnswered}
+                                    writer_id={writer_id}
+                                    date={date}
+                                    q_contents={q_contents}
+                                />
+                            </Grid>
+                            <Grid
+                                item
+                                xs={2}
                             />
                         </Grid>
                         <Grid
+                            container
                             item
-                            xs={2}
-                        />
+                            xs={12}
+                        >
+                            <Grid
+                                item
+                                xs={2}
+                            />
+                            <Grid
+                                item
+                                xs={8}
+                            >
+                                <Write
+                                    isCard={"Answer"}
+                                />
+                            </Grid>
+                            <Grid
+                                item
+                                xs={2}
+                            />
+                        </Grid>
                     </Grid>
                 </div>
             );

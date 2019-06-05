@@ -4,30 +4,15 @@ const DummyURL ="http://203.255.3.223";
 
 const URL = "https://golony.dev/api/";
 
-export const setNoticePost = (boardIdx, date, contents) => 
+export const setNoticePost = (token, classIdx, contents, title) => 
 {
-  axios.post(URL+"setNotice.php",{
+  axios.post(URL+"classroom/writenotice",{
     Origin: window.location.hostname,
-    boardIdx: boardIdx,
-    userID: "Teacher",
-    date: date,
-    contents: contents
-  },{
-    method: "post"
+    user_token: token,
+    class_id:classIdx,
+    content: contents,
+    title: title
   })
-  .then(res => {
-    if(res){
-      console.log("boardIdx : " + boardIdx);
-      console.log("Date : "+date);
-      console.log("contnets : "+contents);
-      console.log(res);
-      alert("Then : " + res.data.result);
-      alert(res);
-    }else{
-      console.log(res);
-      alert("실패");
-    }
-  });
 }
 
 export const getNoticePostList = (token, classIdx, boardIdx) => {
@@ -73,12 +58,30 @@ export const getQnAPost = (token, classIdx, post_id) => {
 }
 
 export const writeQnAPost = (token, class_id, user_id, title, content) => {
-  return axios.post(URL+"qna/writeqna",{
-    Origin: window.loactaion.hostname,
+  return axios.post(URL+"classroom/writeqna",{
+    Origin: window.location.hostname,
     user_token: token,
     class_id: class_id,
     user_id: user_id,
     title: title,
     content: content
+  })
+}
+
+export const getHomeworkPostList = (classIdx, token) =>{
+  return axios.post(URL+"classroom/homework",{
+    Origin: window.location.hostname,
+    class: classIdx,
+    user_token: token
+  })
+}
+export const writeHomework = (classIdx, token, title, contents, deadline) => {
+  return axios.post(URL+"classroom/writehomework",{
+    Origin: window.location.hostname,
+    class_id: classIdx,
+    user_token: token,
+    title: title,
+    content: contents,
+    deadline: deadline,
   })
 }

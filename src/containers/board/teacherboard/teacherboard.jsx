@@ -69,6 +69,12 @@ const styles = theme => ({
         marginTop:theme.spacing.unit * 3,
         marginBottom:theme.spacing.unit
     },
+    username:{
+        display:"flex",
+        '&> div + div':{
+            marginLeft:theme.spacing.unit,
+        }
+    },
     btnmodal:{
         position:"fixed",
         right:"0px",
@@ -145,6 +151,8 @@ class TeacherBoard extends Component {
             about: '소개글',
             student_id: '',
             password: '',
+            firstname:'',
+            lastname:'',
             studentList: List(),
             BeforeApplyStudentList: List(),
             open: false,
@@ -345,6 +353,30 @@ class TeacherBoard extends Component {
                                     fullWidth
                                     onChange={this.handleChange}
                                 />
+                                <div
+                                    className={classes.username}
+                                >
+                                    <TextField
+                                        name={"firstname"}
+                                        variant="outlined"
+                                        type="text"
+                                        className={classes.modalinput}
+                                        value={this.state.firstname}
+                                        placeholder={"First name"}
+                                        fullWidth
+                                        onChange={this.handleChange}
+                                    />
+                                    <TextField
+                                        name={"lastname"}
+                                        variant="outlined"
+                                        type="text"
+                                        className={classes.modalinput}
+                                        value={this.state.lastname}
+                                        placeholder={"Last name"}
+                                        fullWidth
+                                        onChange={this.handleChange}
+                                    />
+                                </div>
                                 <TextField
                                     name={"password"}
                                     variant="outlined"

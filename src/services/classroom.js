@@ -35,3 +35,12 @@ export const getStudentList = (class_id, user_token) => {
         user_token: user_token,
     })
 }
+
+export const modifyClassAbout = (token, classIdx, about) => {
+    return axios.post(URL+"classroom/setdescription",{
+        Origin: window.location.hostname,
+        user_token: token,
+        class_id: classIdx,
+        about: about
+    })
+}

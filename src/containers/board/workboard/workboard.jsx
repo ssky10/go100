@@ -3,10 +3,10 @@ import React, { Component } from 'react';
 import PropTypes from "prop-types";
 import { fromJS, List } from 'immutable';
 import { withStyles, Paper, Grid, Typography } from '@material-ui/core';
-import { CalendarToday } from '@material-ui/icons';
 
 //components
-import WorkWrite from 'components/class/board-contents/workboard/work-write';
+import Write from 'components/commons/write';
+import PostCard from 'components/commons/postcard';
 import WorkCard from 'components/class/board-contents/workboard/work-card';
 
 //service
@@ -23,7 +23,7 @@ const styles = theme => ({
     title:{
         marginBottom: theme.spacing.unit * 2
     },
-    contents:{        
+    contents:{
         marginTop: theme.spacing.unit * 3,
         marginRight: theme.spacing.unit * 10,
     },
@@ -38,25 +38,49 @@ class WorkBoard extends Component {
         super(props);
         this.state = {
             title: "Work",
+            posttitle: '',
             isTeacher: true,
-            textfield: ''
+            textfield: '',
+            deadline:new Date(),
+            postList: List()
         }
     }
 
     handleSumbit = e => {
+        const { classIdx, token } = this.props
         const target = e.target;
         console.log("전송 시작");
+        e.preventDefault();
         if (target.name === "post") {
+            axios.writeHomework(classIdx, token, this.state.posttitle, this.state.textfield,this.state.deadline)
         }
     }
 
-    handleContentsChange = e => {
+    handleChange = e => {
+        const target = e.target
+        const name = e.target.name
+
+        console.log(name);
+        console.log(target.value);
+
         this.setState({
-            textfield: e.target.value
+            [name]: target.value
         });
     };
 
-    render() { 
+    componentDidMount(){
+        const {classIdx, token}=this.props;
+
+        axios.getHomeworkPostList(classIdx, token)
+        .then(res =>{
+            if(res.data){
+                this.setState({
+                    postList: fromJS(res.data.list)
+                })
+            }
+        })
+    }
+    render() {
         const { classes } = this.props;
         const title = this.state.title;
         const isTeacher = this.state.isTeacher;
@@ -83,16 +107,19 @@ class WorkBoard extends Component {
                         item
                         xs={12}
                     >
-                        {isTeacher && 
+                        {isTeacher &&
                         <Grid
                             className={classes.write}
                             item
                             xs={12}
                         >
-                            <WorkWrite
+                            <Write
+                                isCard="Homework"
+                                title={this.state.posttitle}
                                 contents={this.state.textfield}
-                                onChange={this.handleContentsChange}
-                                onSubmit={this.handleSumbit}
+                                deadline={this.state.deadline}
+                                handleChange={this.handleChange}
+                                handleSumbit={this.handleSumbit}
                             />
                         </Grid>
                         }
@@ -102,13 +129,11 @@ class WorkBoard extends Component {
                             xs={12}
                         >
                             <WorkCard
-                                user="teacher"
-                                date="MM-DD"
-                                contents="test"
+                                posts={this.state.postList}
                             />
                         </Grid>
-                    </Grid>                    
-                </Grid>               
+                    </Grid>
+                </Grid>
             </div>
         );
     }

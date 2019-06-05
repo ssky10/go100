@@ -73,7 +73,7 @@ class QnAEditor extends Component {
     constructor(props) {
         super(props);
     }
-    
+
     render() { 
         const { classes, handleInputChange, excuteEditButton } = this.props;
 
@@ -85,7 +85,7 @@ class QnAEditor extends Component {
                     variant="contained"
                     color="primary"
                     size="small"
-                    onClick={(e)=>this.excuteEditButton(e, `${name}`)}
+                    onClick={(e)=>excuteEditButton(e, `${name}`)}
                 >
                     <SvgIcon>{btnIcons[icons][idx]}</SvgIcon>
                 </Button>
