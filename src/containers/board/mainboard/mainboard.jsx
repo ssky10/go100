@@ -15,22 +15,28 @@ import QnACard from 'components/class/board-contents/mainboard/mainboard-content
 
 const styles = theme => ({
     root:{
-        marginLeft: theme.spacing.unit * 1,
-        padding: theme.spacing.unit * 1,
-        paddingTop: theme.spacing.unit * 10,
+        paddingTop: theme.spacing.unit * 5,
+        paddingBottom : theme.spacing.unit * 2,
+        paddingLeft: theme.spacing.unit * 10,
+        paddingRight: theme.spacing.unit * 2,
         flexGrow: 1
+    },
+    noticepaper:{
+        padding: theme.spacing.unit * 1,
+        marginTop: theme.spacing.unit * 3,
+        marginRight: theme.spacing.unit * 10,
+        textAlign: "center",
+        height: "380px",
+    },
+    secondrow:{
+        marginTop: theme.spacing.unit / 2 * 3,
+        marginRight: theme.spacing.unit / 2 * 17,
     },
     paper: {
         padding: theme.spacing.unit * 1,
         textAlign: "center"
     },
-    noticepaper:{
-        padding: theme.spacing.unit * 1,
-        textAlign: "center",
-        height: "380px",
-    },
     posts:{
-        width: "100%",
         height: "26vh",
         overflow: "auto"
     },
@@ -49,7 +55,6 @@ class MainBoard extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            spacing: '16',
             noticePosts: List(),
             workPosts: List(),
             qnaPosts: List()
@@ -118,9 +123,10 @@ class MainBoard extends Component {
              >
                 <Grid
                     container
-                    spacing={24}
+                    spacing={0}
                 >
                     <Grid
+                        className={classes.firstrow}
                         item
                         xs={12}
                     >
@@ -148,61 +154,69 @@ class MainBoard extends Component {
                         </Paper>
                     </Grid>
                     <Grid
+                        className={classes.secondrow}
+                        container
                         item
-                        xs={2}
+                        spacing={24}
+                        xs={12}
                     >
-                        <Paper
-                            className={classes.paper}
-                            elevation={1}
-                            square={true}
+                        <Grid
+                            item
+                            xs={2}
                         >
-                            <Typography
-                                component="h3"
-                                variant="h6"
-                                gutterBottom
-                                className={classes.title}
+                            <Paper
+                                className={classes.paper}
+                                elevation={1}
+                                square={true}
                             >
-                                Recent Work
-                            </Typography>
-                            <Divider
-                                className={classes.divider}
-                            />
-                            <div
-                                className={classes.posts}
-                            >
-                                {<WorkCard posts={workPosts}/>}
-                            </div>
-                        </Paper>
-                    </Grid>
-                    <Grid
-                        item
-                        xs={10}
-                    >
-                        <Paper
-                            className={classes.paper}
-                            elevation={1}
-                            square={true}
-                        >
-                            <Typography
-                                component="h3"
-                                variant="h6"
-                                gutterBottom
-                                className={classes.title}
-                            >
-                                Q&A
-                            </Typography>
-                            <Divider
-                                className={classes.divider}
-                            />
-                            <div
-                                className={classes.posts}
-                            >
-                                <QnACard 
-                                posts={qnaPosts}
-                                classIdx={classIdx}
+                                <Typography
+                                    component="h3"
+                                    variant="h6"
+                                    gutterBottom
+                                    className={classes.title}
+                                >
+                                    Recent Work
+                                </Typography>
+                                <Divider
+                                    className={classes.divider}
                                 />
-                            </div>
-                        </Paper>
+                                <div
+                                    className={classes.posts}
+                                >
+                                    {<WorkCard posts={workPosts}/>}
+                                </div>
+                            </Paper>
+                        </Grid>
+                        <Grid
+                            item
+                            xs={10}
+                        >
+                            <Paper
+                                className={classes.paper}
+                                elevation={1}
+                                square={true}
+                            >
+                                <Typography
+                                    component="h3"
+                                    variant="h6"
+                                    gutterBottom
+                                    className={classes.title}
+                                >
+                                    Q&A
+                                </Typography>
+                                <Divider
+                                    className={classes.divider}
+                                />
+                                <div
+                                    className={classes.posts}
+                                >
+                                    <QnACard 
+                                    posts={qnaPosts}
+                                    classIdx={classIdx}
+                                    />
+                                </div>
+                            </Paper>
+                        </Grid>
                     </Grid>
                 </Grid>
             </div>

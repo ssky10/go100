@@ -30,3 +30,11 @@ export function deleteToken(user_token, fcm_token) {
     fcm_token: fcm_token
   });
 }
+
+export const findStudent=( user_token, stu_id )=>{
+  return axios.post("https://golony.dev/api/auth/find_student",{
+    Origin: window.location.hostname,
+    user_token: user_token,
+    stu_id:stu_id
+  })
+}
