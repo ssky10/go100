@@ -112,6 +112,7 @@ const ExamBoard = ({
   onclickBack,
   onclickNext,
   onclickCreate,
+  handleCreateSolotion,
   isTeacher
 }) => {
   return (
@@ -155,6 +156,7 @@ const ExamBoard = ({
           onclickExample={onclickExample}
           isTeacher={isTeacher}
           myQ={subject === "내가 작성한 문제"}
+          handleCreateSolotion={handleCreateSolotion}
         />
       )}
       <Paper className={classes.paper} elevation={1}>

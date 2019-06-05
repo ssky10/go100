@@ -61,7 +61,7 @@ const styles = theme => ({
   }
 });
 
-const AfterSolve = ({ classes, question, isTeacher }) => {
+const AfterSolve = ({ classes, question, isTeacher, handleCreateSolotion }) => {
   return (
     <Slide direction="left" in={true} mountOnEnter unmountOnExit>
       <Paper className={classes.paper} elevation={1}>
@@ -72,7 +72,7 @@ const AfterSolve = ({ classes, question, isTeacher }) => {
                 <IconButton
                   color="inherit"
                   aria-label="set Notification"
-                  onClick={this.handleNotiToggle}
+                  onClick={handleCreateSolotion}
                 >
                   <SolutionIcon />
                 </IconButton>
@@ -241,7 +241,14 @@ const MyQuestion = ({ classes, question }) => {
   );
 };
 
-const Question = ({ classes, question, onclickExample, myQ, isTeacher }) => {
+const Question = ({
+  classes,
+  question,
+  onclickExample,
+  myQ,
+  isTeacher,
+  handleCreateSolotion
+}) => {
   return (
     <React.Fragment>
       {myQ ? (
@@ -257,6 +264,7 @@ const Question = ({ classes, question, onclickExample, myQ, isTeacher }) => {
           classes={classes}
           question={question}
           isTeacher={isTeacher}
+          handleCreateSolotion={handleCreateSolotion}
         />
       )}
     </React.Fragment>

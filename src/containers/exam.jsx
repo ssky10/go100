@@ -20,6 +20,7 @@ import TemplateContainer from "containers/template-container";
 //components
 import ExamBoard from "components/exam/examBoard";
 import WriteExam from "components/exam/writeExam";
+import WriteSolution from "components/exam/writeSolution";
 import Drawer from "components/exam/drawer";
 
 //stores
@@ -265,6 +266,7 @@ class Exam extends Component {
             example: List(["", ""])
           },
           isTeacher: false,
+          isSolutionMode: false,
           snack: { open: true, msg: "문제가 등록되었습니다." }
         }));
       }
@@ -329,6 +331,10 @@ class Exam extends Component {
     this.setState({ snack: { open: false, msg: "" } });
   };
 
+  handleCreateSolotion = () => {
+    this.setState({ isSolutionMode: true });
+  };
+
   subjectNames = ["국어", "영어", "수학", "한국사", "사회", "과학"];
   subjectIcons = [
     <HangleIcon size="24" />,
@@ -385,7 +391,9 @@ class Exam extends Component {
           token={this.props.token}
         >
           {/**현재 페이지가 쓰기 모드인 경우 쓰기 화면 컴포넌트실행 */}
-          {this.state.isWrite ? (
+          {this.state.isSolutionMode ? (
+            <WriteSolution />
+          ) : this.state.isWrite ? (
             <WriteExam
               subject={
                 this.subsubjectNames[parseInt(subject / 100)][
@@ -413,6 +421,7 @@ class Exam extends Component {
               onclickBack={this.onclickBack}
               onclickNext={this.onclickNext}
               onclickCreate={this.onclickCreate}
+              handleCreateSolotion={this.handleCreateSolotion}
               isTeacher={isTeacher}
             />
           )}
