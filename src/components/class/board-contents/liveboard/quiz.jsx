@@ -75,7 +75,7 @@ const AfterSolve = ({ classes, question, isTeacher, userList }) => {
   return (
     <div>
       <div className={classes.context}>
-        {!isTeacher && question.choice == question.answer ? (
+        {isTeacher ? null : question.choice == question.answer ? (
           <CorrectIcon style={{ fontSize: "6em", color: "#FDCF56" }} />
         ) : (
           <WrongIcon style={{ fontSize: "6em", color: "#ff86bc" }} />
@@ -130,7 +130,11 @@ const BeforeSolve = ({ classes, question, onclickExample, isTeacher }) => {
           dangerouslySetInnerHTML={{ __html: question.context }}
         />
         {question.img !== undefined ? (
-          <img src={`https://golony.dev${question.img}`} alt="문제 이미지" />
+          <img
+            className={classes.img}
+            src={`https://golony.dev${question.img}`}
+            alt="문제 이미지"
+          />
         ) : null}
       </div>
 
@@ -178,6 +182,7 @@ const Wait = ({ classes, isTeacher, userList }) => {
 
 const Result = ({ classes, isTeacher, scoreView }) => {
   const list = [];
+  console.log(scoreView);
   let old_score = scoreView[0].score + 1,
     No = 0;
 
@@ -193,12 +198,12 @@ const Result = ({ classes, isTeacher, scoreView }) => {
     <React.Fragment>
       <div className={classes.context}>
         <Typography className={classes.title} variant="h6">
-          최종 순위
+          최종 결과
         </Typography>
         <Table className={classes.table}>
           <TableHead>
             <TableRow>
-              <TableCell>순위</TableCell>
+              {isTeacher ? <TableCell>순위</TableCell> : null}
               <TableCell align="right">ID</TableCell>
               <TableCell align="right">점수</TableCell>
             </TableRow>
@@ -206,9 +211,11 @@ const Result = ({ classes, isTeacher, scoreView }) => {
           <TableBody>
             {list.map(row => (
               <TableRow key={row.id}>
-                <TableCell component="th" scope="row">
-                  {row.No}
-                </TableCell>
+                {isTeacher ? (
+                  <TableCell component="th" scope="row">
+                    {row.No}
+                  </TableCell>
+                ) : null}
                 <TableCell align="right">{row.user_id}</TableCell>
                 <TableCell align="right">{row.score}</TableCell>
               </TableRow>
@@ -262,7 +269,7 @@ const Quiz = ({
             />
           ) : null}
         </Paper>
-        {isTeacher ? (
+        {isTeacher || state === "result" ? (
           <Paper
             className={classes.paper}
             elevation={1}

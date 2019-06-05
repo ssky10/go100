@@ -106,6 +106,7 @@ class LiveQuiz extends Component {
           break;
         case "s2c_report":
           //최종결과(교사)
+          console.log(data.list);
           this.setState(state => ({
             state: "result",
             scoreView: data.list
@@ -204,14 +205,8 @@ class LiveQuiz extends Component {
         try {
           if (nowIdx >= total) {
             this.sendWSMessage("c2s_result");
-            this.setState(state => ({
-              state: "result"
-            }));
           } else {
             this.sendWSMessage("c2s_start");
-            this.setState(state => ({
-              state: "start"
-            }));
           }
         } catch (err) {
           alert(err);
@@ -219,7 +214,7 @@ class LiveQuiz extends Component {
         break;
       case "result":
         this.connection.close();
-        this.props.history.pop();
+        this.props.history.goBack();
         break;
       default:
         break;
@@ -240,6 +235,7 @@ class LiveQuiz extends Component {
           onclickNext={this.onclickNext}
           onclickExample={this.onclickExample}
         />
+        {console.log("scoreView_Quiz:", scoreView)}
       </React.Fragment>
     );
   }
