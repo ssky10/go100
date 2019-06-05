@@ -30,6 +30,7 @@ const styles = theme => ({
     marginBottom: theme.spacing.unit * 1
   },
   title: {
+    ...theme.typography.h6,
     margin: 0
   },
   context: {
@@ -63,6 +64,10 @@ const styles = theme => ({
     "&:focus": {
       backgroundColor: "#ff86bc"
     }
+  },
+  img: {
+    maxWidth: "300px",
+    height: "auto"
   }
 });
 
@@ -70,7 +75,7 @@ const AfterSolve = ({ classes, question, isTeacher, userList }) => {
   return (
     <div>
       <div className={classes.context}>
-        {question.get("choice") == question.get("answer") ? (
+        {!isTeacher && question.choice == question.answer ? (
           <CorrectIcon style={{ fontSize: "6em", color: "#FDCF56" }} />
         ) : (
           <WrongIcon style={{ fontSize: "6em", color: "#ff86bc" }} />
@@ -78,26 +83,27 @@ const AfterSolve = ({ classes, question, isTeacher, userList }) => {
         <div
           className={classes.title}
           id="context"
-          dangerouslySetInnerHTML={{ __html: question.get("context") }}
+          dangerouslySetInnerHTML={{ __html: question.context }}
         />
-        {question.get("img") !== undefined ? (
+        {question.img !== undefined ? (
           <img
-            src={`https://golony.dev${question.get("img")}`}
+            className={classes.img}
+            src={`https://golony.dev${question.img}`}
             alt="문제 이미지"
           />
         ) : null}
       </div>
 
-      {question.get("choiceable") ? (
+      {question.choiceable ? (
         <List className={classes.root}>
           {/* 객관식 보기 출력 부분*/}
-          {question.get("example").map((example, idx) => (
+          {question.example.map((example, idx) => (
             <ListItem alignItems="flex-start" key={idx}>
               <Chip
                 className={
-                  example.code === question.get("choice")
+                  example.code === question.choice
                     ? `${classes.example} ${classes.exampleSelect}`
-                    : example.code == question.get("answer")
+                    : example.code == question.answer
                     ? `${classes.example} ${classes.exampleAnswer}`
                     : classes.example
                 }
@@ -121,30 +127,31 @@ const BeforeSolve = ({ classes, question, onclickExample, isTeacher }) => {
         <div
           className={classes.title}
           id="context"
-          dangerouslySetInnerHTML={{ __html: question.get("context") }}
+          dangerouslySetInnerHTML={{ __html: question.context }}
         />
-        {question.get("img") !== undefined ? (
-          <img
-            src={`https://golony.dev${question.get("img")}`}
-            alt="문제 이미지"
-          />
+        {question.img !== undefined ? (
+          <img src={`https://golony.dev${question.img}`} alt="문제 이미지" />
         ) : null}
       </div>
 
-      {question.get("choiceable") ? (
+      {question.choiceable ? (
         <List className={classes.root}>
           {/* 객관식 보기 출력 부분*/}
-          {question.get("example").map((example, idx) => (
+          {question.example.map((example, idx) => (
             <ListItem alignItems="flex-start" key={idx}>
               {console.log(example)}
               <Chip
                 className={
-                  example.code === question.get("choice")
+                  example.code === question.choice
                     ? `${classes.example} ${classes.exampleSelect}`
                     : classes.example
                 }
                 avatar={<Avatar>{idx + 1}</Avatar>}
-                onClick={!isTeacher ? () => onclickExample(example.code) : null}
+                onClick={
+                  !isTeacher && question.choice === -1
+                    ? () => onclickExample(example.code)
+                    : null
+                }
                 label={example.context}
               />
             </ListItem>
@@ -240,7 +247,11 @@ const Quiz = ({
               onclickExample={onclickExample}
             />
           ) : state === "next" ? (
-            <AfterSolve classes={classes} question={quiz} />
+            <AfterSolve
+              classes={classes}
+              question={quiz}
+              isTeacher={isTeacher}
+            />
           ) : state === "result" ? (
             <Result
               classes={classes}

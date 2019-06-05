@@ -9,7 +9,7 @@ class LiveQuiz extends Component {
     super(props);
     this.state = {
       isTeacher: false,
-      nowIdx: 0,
+      nowIdx: 1,
       total: 0,
       user_num: 0,
       quiz: {
@@ -17,11 +17,27 @@ class LiveQuiz extends Component {
         context: "",
         img: null,
         answer: -1,
+        choice: -1,
         example: []
       },
       scoreView: {},
       state: "wait"
     };
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    console.log(
+      "componentDidUpdate: " +
+        JSON.stringify(prevProps) +
+        " " +
+        JSON.stringify(prevState)
+    );
+    console.log(
+      "componentDidUpdateNew: " +
+        JSON.stringify(this.props) +
+        " " +
+        JSON.stringify(this.state)
+    );
   }
 
   componentDidMount() {
@@ -39,54 +55,65 @@ class LiveQuiz extends Component {
     // listen to onmessage event
     this.connection.onmessage = evt => {
       // add the new message to state
-      switch (evt.data.method) {
+      const data = JSON.parse(evt.data);
+      console.log(data);
+      console.log(this.state);
+      switch (data.method) {
         case "s2c_init":
           this.setState({
-            isTeacher: evt.data.is_teacher
+            isTeacher: data.is_teacher
           });
           break;
         case "s2c_update_count":
           //현재 접속자수 업데이트
           this.setState({
-            user_num: evt.data.user_count
+            user_num: data.user_count
           });
           break;
         case "s2c_start":
           //문제 시작
           this.setState({
+            state: "start",
+            nowIdx: data.reqIdx,
+            total: data.count,
             quiz: {
-              total: evt.data.count,
-              type: evt.data.choiceable ? "choiceable" : "non-choiceable",
-              context: evt.data.context,
-              img: evt.data.img,
-              example: evt.data.example
+              choiceable: data.choiceable,
+              context: data.context,
+              img: data.img,
+              example: data.example,
+              choice: -1,
+              answer: -1
             }
           });
           break;
         case "s2c_next":
           //문제 종료
           this.setState(state => ({
+            state: "next",
+            nowIdx: state.nowIdx + 1,
             quiz: {
               ...state.quiz,
-              answer: evt.data.answer
+              answer: data.answer
             }
           }));
           break;
         case "s2c_result":
           //최종결과
           this.setState(state => ({
+            state: "result",
             quiz: {
               ...state.quiz,
-              answer: evt.data.answer
+              answer: data.answer
             }
           }));
           break;
         case "s2c_report":
           //최종결과
           this.setState(state => ({
+            state: "result",
             quiz: {
               ...state.quiz,
-              answer: evt.data.answer
+              answer: data.answer
             }
           }));
           break;
@@ -110,7 +137,7 @@ class LiveQuiz extends Component {
           JSON.stringify({
             method: msg,
             user_token: token,
-            reqIdx: nowIdx + 1
+            reqIdx: nowIdx
           })
         );
         break;
@@ -155,7 +182,7 @@ class LiveQuiz extends Component {
       this.setState(state => ({
         quiz: {
           ...state.quiz,
-          answer: choice
+          choice: choice
         }
       }));
     }
@@ -169,10 +196,6 @@ class LiveQuiz extends Component {
           this.sendWSMessage("c2s_start");
         } catch (err) {
           alert(err);
-        } finally {
-          this.setState(state => ({
-            state: "start"
-          }));
         }
         break;
       case "start":
@@ -180,32 +203,23 @@ class LiveQuiz extends Component {
           this.sendWSMessage("c2s_next");
         } catch (err) {
           alert(err);
-        } finally {
-          this.setState(state => ({
-            state: "next"
-          }));
         }
         break;
       case "next":
         try {
-          if (nowIdx === total) {
+          if (nowIdx >= total) {
             this.sendWSMessage("c2s_result");
-          } else {
-            this.sendWSMessage("c2s_start");
-          }
-        } catch (err) {
-          alert(err);
-        } finally {
-          if (nowIdx === total) {
             this.setState(state => ({
               state: "result"
             }));
           } else {
+            this.sendWSMessage("c2s_start");
             this.setState(state => ({
-              nowIdx: state.nowIdx + 1,
               state: "start"
             }));
           }
+        } catch (err) {
+          alert(err);
         }
         break;
       case "result":
@@ -215,10 +229,6 @@ class LiveQuiz extends Component {
       default:
         break;
     }
-  };
-
-  onclickCreate = () => {
-    this.setState(state => ({ isWrite: true }));
   };
 
   render() {
