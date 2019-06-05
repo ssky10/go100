@@ -60,7 +60,8 @@ const styles = theme => ({
   footButton: {
     position: "fixed",
     bottom: 0,
-    width: drawerWidth
+    width: drawerWidth,
+    backgroundColor: "#7cb6f3"
   },
   drawerPaper: {
     width: drawerWidth,

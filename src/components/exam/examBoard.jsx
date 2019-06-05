@@ -104,9 +104,6 @@ const styles = theme => ({
   }
 });
 
-{
-  /* 서버로 부터 전달 받은 문제를 화면에 랜더링(이하 생략) */
-}
 const ExamBoard = ({
   subject,
   classes,
@@ -114,7 +111,8 @@ const ExamBoard = ({
   onclickExample,
   onclickBack,
   onclickNext,
-  onclickCreate
+  onclickCreate,
+  isTeacher
 }) => {
   return (
     <main className={classes.content}>
@@ -155,6 +153,7 @@ const ExamBoard = ({
         <Question
           question={question}
           onclickExample={onclickExample}
+          isTeacher={isTeacher}
           myQ={subject === "내가 작성한 문제"}
         />
       )}

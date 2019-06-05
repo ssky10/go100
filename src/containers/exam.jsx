@@ -136,10 +136,17 @@ class Exam extends Component {
             const element = array[index];
             addQuestion(element);
           }
-          setState(state => ({ ID: response.data.id, total: array.length }));
+          setState(state => ({
+            ID: response.data.id,
+            isTeacher: response.data.is_teacher,
+            total: array.length
+          }));
         }
       }
-      setState(state => ({ ID: response.data.id }));
+      setState(state => ({
+        ID: response.data.id,
+        isTeacher: response.data.is_teacher
+      }));
     });
   };
 
@@ -257,6 +264,7 @@ class Exam extends Component {
             explanation: "",
             example: List(["", ""])
           },
+          isTeacher: false,
           snack: { open: true, msg: "문제가 등록되었습니다." }
         }));
       }
@@ -347,7 +355,7 @@ class Exam extends Component {
       ID,
       subject,
       template,
-      test,
+      isTeacher,
       writeExam
     } = this.state;
     const drawer = (
@@ -405,6 +413,7 @@ class Exam extends Component {
               onclickBack={this.onclickBack}
               onclickNext={this.onclickNext}
               onclickCreate={this.onclickCreate}
+              isTeacher={isTeacher}
             />
           )}
           <Snackbar
