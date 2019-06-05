@@ -1,7 +1,13 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import { Route, Switch, Link } from "react-router-dom";
 import PropTypes from "prop-types";
-import { ListItem, ListItemIcon, ListItemText, Divider, SvgIcon } from '@material-ui/core'
+import {
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Divider,
+  SvgIcon
+} from "@material-ui/core";
 
 //containers
 import {
@@ -17,43 +23,43 @@ import {
 import { TemplateContainer } from "containers";
 
 //services
-import { useAuth } from 'context/loginProvider';
+import { useAuth } from "context/loginProvider";
 
 //Icons
 import HomeIcon from "@material-ui/icons/Home";
 import NoticeIcon from "@material-ui/icons/Announcement";
 import QNAIcon from "@material-ui/icons/QuestionAnswer";
-import CreateIcon from "@material-ui/icons/Create"
+import CreateIcon from "@material-ui/icons/Create";
 import TeacherIcon from "@material-ui/icons/School";
 import WorkIcon from "@material-ui/icons/Event";
 
 class ClassRouter extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            isTeacher: true
-        }
-    }
+  constructor(props) {
+    super(props);
+    this.state = {
+      isTeacher: true
+    };
+  }
 
-    render() { 
-        const { theme, match, token } = this.props;
-        console.log(this.props);
-        
-        console.log(match.params.id);
-        let boardNames = ["Main","공지사항", "과제", "Q&A", "LiveQuiz"];
+  render() {
+    const { theme, match, token } = this.props;
+    console.log(this.props);
 
-        this.state.isTeacher ? boardNames.push("강사") : boardNames = boardNames;
+    console.log(match.params.id);
+    let boardNames = ["Main", "공지사항", "과제", "Q&A", "LiveQuiz"];
 
-        const boardIcons = [
-            <HomeIcon />,
-            <NoticeIcon />,
-            <WorkIcon />,
-            <QNAIcon />,
-            <CreateIcon />,
-            <TeacherIcon />
-        ];
+    this.state.isTeacher ? boardNames.push("강사") : (boardNames = boardNames);
 
-        const ListItems = (text, index, URLs=["","/notice","/work","/qna","/livequiz","/teacher"]) => (
+    const boardIcons = [
+      <HomeIcon />,
+      <NoticeIcon />,
+      <WorkIcon />,
+      <QNAIcon />,
+      <CreateIcon />,
+      <TeacherIcon />
+    ];
+
+const ListItems = (text, index, URLs=["","/notice","/work","/qna","/livequiz","/teacher"]) => (
 			<ListItem 
 				button
                 component={Link}
@@ -69,7 +75,8 @@ class ClassRouter extends Component {
             </ListItem>
         )
     
-        const drawer = (
+
+     const drawer = (
             <div>
               {boardNames.map((text, index) => (
                 <div key = {index*10}>
@@ -79,7 +86,6 @@ class ClassRouter extends Component {
               ))}
             </div>
         );
-        console.log("router: "+token);
         return (
             <TemplateContainer 
                 theme={theme}
@@ -105,9 +111,16 @@ class ClassRouter extends Component {
                         <QnAWrite classIdx={match.params.id} token={token}/>
                     )}/>
                     <Route path={`${match.url}/qna/post/:id`} component={QnAPost}/>
-                    <Route path={`${match.url}/livequiz`} render={()=>(
-                        <LiveQuizBoard boardIdx={4}  token={token}/>
-                    )}/>
+                    <Route
+            path={`${match.url}/livequiz/:id`}
+            render={props => <LiveQuiz token={token} {...props} />}
+          />
+          <Route
+            path={`${match.url}/livequiz`}
+            render={() => (
+              <LiveQuizBoard boardIdx={4} token={token} match={match} />
+            )}
+          />
                     <Route path={`${match.url}/teacher`} render={()=>(
                         <TeacherBoard classIdx={match.params.id} boardIdx={5}  token={token}/>
                     )}/> 
@@ -116,4 +129,4 @@ class ClassRouter extends Component {
         );
     }
 }
-export default (useAuth(ClassRouter));
+export default useAuth(ClassRouter);

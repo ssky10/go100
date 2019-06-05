@@ -13,7 +13,7 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import Slide from "@material-ui/core/Slide";
 import Button from "@material-ui/core/Button";
-import CreateIcon from "@material-ui/icons/Create";
+import CreateIcon from "@material-ui/icons/Add";
 import FormControl from "@material-ui/core/FormControl";
 import FormLabel from "@material-ui/core/FormLabel";
 import Radio from "@material-ui/core/Radio";
@@ -21,12 +21,16 @@ import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormGroup from "@material-ui/core/FormGroup";
 import Divider from "@material-ui/core/Divider";
+import IconButton from "@material-ui/core/IconButton";
 import BoldIcon from "@material-ui/icons/FormatBold";
 import UnderLineIcon from "@material-ui/icons/FormatUnderlined";
 import ItalicIcon from "@material-ui/icons/FormatItalic";
 import FncIcon from "@material-ui/icons/Functions";
+import BackIcon from "@material-ui/icons/ArrowBackIos";
+import NextIcon from "@material-ui/icons/ArrowForwardIos";
+import Tooltip from "@material-ui/core/Tooltip";
 
-import Editor from "./editor";
+import Editor from "../../../exam/editor";
 import { Input } from "@material-ui/core";
 
 const styles = theme => ({
@@ -42,53 +46,16 @@ const styles = theme => ({
   title: {
     margin: 0
   },
-  search: {
-    position: "relative",
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: fade(theme.palette.common.black, 0.15),
-    "&:hover": {
-      backgroundColor: fade(theme.palette.common.black, 0.25)
-    },
-    marginLeft: 0,
-    width: "100%",
-    [theme.breakpoints.up("sm")]: {
-      marginLeft: theme.spacing.unit,
-      width: "auto"
-    }
-  },
-  searchIcon: {
-    width: theme.spacing.unit * 5,
-    height: "100%",
-    position: "absolute",
-    pointerEvents: "none",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center"
-  },
-  inputRoot: {
-    color: "inherit",
-    width: "100%"
-  },
-  inputInput: {
-    paddingTop: theme.spacing.unit,
-    paddingRight: theme.spacing.unit,
-    paddingBottom: theme.spacing.unit,
-    paddingLeft: theme.spacing.unit * 5,
-    transition: theme.transitions.create("width"),
-    width: "100%",
-    [theme.breakpoints.up("sm")]: {
-      width: 120,
-      "&:focus": {
-        width: 200
-      }
-    }
+  code: {
+    margin: 0,
+    color: "rgba(0,0,0,0.5)"
   },
   example: {
     display: "-webkit-inline-box",
     width: "100%",
     fontSize: "inherit"
   },
-  button: {
+  submitButton: {
     width: "100%",
     marginTop: theme.spacing.unit * 2
   },
@@ -103,29 +70,45 @@ const styles = theme => ({
   }
 });
 
-{
-  /**화면 랜더링 컴포넌트(이하 생략) */
-}
-const writeExam = ({
+const makeQuiz = ({
   classes,
   value,
   onChangeValue,
+  onclickBack,
+  onclickNext,
   onselectAnswer,
-  onSubmit
+  onclickAdd,
+  onSubmit,
+  isReset,
+  title,
+  idx
 }) => {
   return (
     <main className={classes.content}>
-      <Paper className={classes.paper} elevation={1}>
-        <Typography className={classes.title} variant="h4" gutterBottom>
-          문제 만들기
-        </Typography>
-      </Paper>
-      <Slide direction="left" in={true} mountOnEnter unmountOnExit>
+      <form className={classes.form} onSubmit={onSubmit}>
         <Paper className={classes.paper} elevation={1}>
-          <form className={classes.form} onSubmit={onSubmit}>
+          <Typography className={classes.title} variant="h4" gutterBottom>
+            <Input
+              name="title"
+              placeholder="퀴즈 제목"
+              onChange={onChangeValue}
+              value={title}
+            />
+            <Tooltip title="문항 추가하기">
+              <IconButton aria-label="Create" onClick={onclickAdd}>
+                <CreateIcon />
+              </IconButton>
+            </Tooltip>
+          </Typography>
+        </Paper>
+        <Slide direction="left" in={true} mountOnEnter unmountOnExit>
+          <Paper className={classes.paper} elevation={1}>
+            <Typography className={classes.code} variant="h6" gutterBottom>
+              #{idx + 1}번
+            </Typography>
             <FormControl margin="normal" required fullWidth>
               <FormLabel component="legend">문제 유형</FormLabel>
-              {console.log(value.type)}
+              {console.log(value)}
               <RadioGroup
                 aria-label="문제 유형"
                 name="type"
@@ -151,6 +134,7 @@ const writeExam = ({
                 onChange={onChangeValue}
                 value={value.context}
                 ableImg={true}
+                isReset={isReset}
               />
 
               <List className={classes.root}>
@@ -179,49 +163,52 @@ const writeExam = ({
                   </ListItem>
                 ))}
               </List>
-              <FormLabel component="legend">해설</FormLabel>
-              <Editor
-                id="explanation"
-                onChange={onChangeValue}
-                value={value.explanation}
-                ableImg={false}
-              />
               <Divider />
-              <Button size="small" className={classes.button} type="submit">
-                <CreateIcon />
-                문제 제출하기
-              </Button>
             </FormControl>
-          </form>
+          </Paper>
+        </Slide>
+        <Paper
+          className={classes.paper}
+          style={{ display: "flex" }}
+          elevation={1}
+        >
+          <Button size="small" className={classes.button} onClick={onclickBack}>
+            <BackIcon />
+            이전문제
+          </Button>
+          <Button size="small" style={{ margin: "0 auto" }} type="submit">
+            <CreateIcon />
+            라이브퀴즈 생성하기
+          </Button>
+          <Button size="small" className={classes.button} onClick={onclickNext}>
+            다음문제
+            <NextIcon />
+          </Button>
         </Paper>
-      </Slide>
+      </form>
     </main>
   );
 };
 
-writeExam.propTypes = {
+makeQuiz.propTypes = {
   classes: PropTypes.object.isRequired,
   subject: PropTypes.string,
   question: PropTypes.string,
   value: PropTypes.string,
   changeValue: PropTypes.func,
   onclickExample: PropTypes.func,
-  onclickBack: PropTypes.func,
-  onclickNext: PropTypes.func,
   onSubmit: PropTypes.func,
   onChangeValue: PropTypes.func
 };
 
-writeExam.defaultProps = {
+makeQuiz.defaultProps = {
   subject: "테스트 과목명",
   question: "문제가 나오는 부분",
   onclickExample: num => alert(num + "번 보기 선택"),
   examples: ["보기 1 번", "보기 2 번", "보기 3 번", "보기 4 번"],
-  onclickBack: () => alert("이전 문제 클릭"),
-  onclickNext: () => alert("다음 문제 클릭"),
   value: "choiceable",
   changeValue: () => alert("유형변경"),
   onSubmit: () => alert("전송")
 };
 
-export default withStyles(styles, { withTheme: true })(writeExam);
+export default withStyles(styles, { withTheme: true })(makeQuiz);

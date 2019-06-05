@@ -10,9 +10,12 @@ import ListItem from "@material-ui/core/ListItem";
 import Slide from "@material-ui/core/Slide";
 import TextField from "@material-ui/core/TextField";
 import CorrectIcon from "@material-ui/icons/RadioButtonUnchecked";
+import Tooltip from "@material-ui/core/Tooltip";
+import IconButton from "@material-ui/core/IconButton";
 
 //Icon
 import WrongIcon from "@material-ui/icons/Close";
+import SolutionIcon from "@material-ui/icons/AddComment";
 
 const styles = theme => ({
   paper: {
@@ -58,12 +61,23 @@ const styles = theme => ({
   }
 });
 
-const AfterSolve = ({ classes, question }) => {
+const AfterSolve = ({ classes, question, isTeacher }) => {
   return (
     <Slide direction="left" in={true} mountOnEnter unmountOnExit>
       <Paper className={classes.paper} elevation={1}>
         <div>
           <Typography className={classes.code} variant="h6" gutterBottom>
+            {isTeacher ? (
+              <Tooltip title="첨삭하기">
+                <IconButton
+                  color="inherit"
+                  aria-label="set Notification"
+                  onClick={this.handleNotiToggle}
+                >
+                  <SolutionIcon />
+                </IconButton>
+              </Tooltip>
+            ) : null}
             #{question.get("code")}
           </Typography>
           <div className={classes.context}>
@@ -227,7 +241,7 @@ const MyQuestion = ({ classes, question }) => {
   );
 };
 
-const Question = ({ classes, question, onclickExample, myQ }) => {
+const Question = ({ classes, question, onclickExample, myQ, isTeacher }) => {
   return (
     <React.Fragment>
       {myQ ? (
@@ -239,7 +253,11 @@ const Question = ({ classes, question, onclickExample, myQ }) => {
           onclickExample={onclickExample}
         />
       ) : (
-        <AfterSolve classes={classes} question={question} />
+        <AfterSolve
+          classes={classes}
+          question={question}
+          isTeacher={isTeacher}
+        />
       )}
     </React.Fragment>
   );

@@ -60,6 +60,11 @@ class editor extends React.Component {
       .addEventListener("input", this.props.onChange);
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    if (!nextProps.isReset) return false;
+    return true;
+  }
+
   excuteEditButton = exc => {
     const selection = window.getSelection();
     const found = selection.containsNode(
@@ -119,7 +124,7 @@ class editor extends React.Component {
   };
 
   render() {
-    const { id, classes, ableImg, onChange, value } = this.props;
+    const { id, classes, ableImg, onChange, value, isReset } = this.props;
 
     return (
       <Paper
@@ -326,6 +331,7 @@ class editor extends React.Component {
           </DialogActions>
         </Dialog>
         <Divider />
+        {console.log(isReset, value)}
         <div
           className={classes.editorDiv}
           id={id}
@@ -333,6 +339,7 @@ class editor extends React.Component {
           contentEditable="true"
           suppressContentEditableWarning={true}
           onChange={onChange}
+          dangerouslySetInnerHTML={{ __html: value }}
         />
         <Divider />
         {ableImg ? (

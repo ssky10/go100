@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 import Typography from "@material-ui/core/Typography";
 import { withStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
@@ -13,8 +14,11 @@ import CreateIcon from "@material-ui/icons/Create";
 import Tooltip from "@material-ui/core/Tooltip";
 import SadIcon from "@material-ui/icons/SentimentDissatisfied";
 import GoodIcon from "@material-ui/icons/ThumbUpAlt";
-
-import Question from "./question";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
 
 const styles = theme => ({
   content: {
@@ -104,23 +108,14 @@ const styles = theme => ({
   }
 });
 
-const ExamBoard = ({
-  subject,
-  classes,
-  question,
-  onclickExample,
-  onclickBack,
-  onclickNext,
-  onclickCreate,
-  isTeacher
-}) => {
+const QuizList = ({ classes, list, onclickCreate, isTeacher, url }) => {
   return (
     <main className={classes.content}>
       <Paper className={classes.paper} elevation={1}>
         <Typography className={classes.title} variant="h4" gutterBottom>
-          {subject}
-          {subject !== "오답노트" && subject !== "내가 작성한 문제" && (
-            <Tooltip title="문제 만들기">
+          라이브퀴즈 목록
+          {isTeacher && (
+            <Tooltip title="퀴즈 만들기">
               <IconButton aria-label="Create" onClick={onclickCreate}>
                 <CreateIcon />
               </IconButton>
@@ -128,69 +123,75 @@ const ExamBoard = ({
           )}
         </Typography>
       </Paper>
-      {question === false ? (
-        <Slide direction="left" in={true} mountOnEnter unmountOnExit>
-          <Paper className={classes.paper} elevation={1}>
-            <div style={{ textAlign: "center" }}>
-              {subject === "오답노트" ? (
-                <GoodIcon
-                  style={{ fontSize: "15em", color: "rgba(0,0,0,0.1)" }}
-                />
-              ) : (
-                <SadIcon
-                  style={{ fontSize: "15em", color: "rgba(0,0,0,0.1)" }}
-                />
-              )}
-              <Typography className={classes.title} variant="h6" gutterBottom>
-                {subject === "오답노트"
-                  ? "현재 틀린문제가 없어요!"
-                  : "현재 만들어진 문제가 없어요.... 문제를 만들어 주세요!"}
-              </Typography>
-            </div>
-          </Paper>
-        </Slide>
-      ) : (
-        <Question
-          question={question}
-          onclickExample={onclickExample}
-          isTeacher={isTeacher}
-          myQ={subject === "내가 작성한 문제"}
-        />
-      )}
       <Paper className={classes.paper} elevation={1}>
-        <Button size="small" className={classes.button} onClick={onclickBack}>
-          <BackIcon />
-          이전문제
-        </Button>
-        <Button
-          size="small"
-          className={classes.button}
-          style={{ float: "right" }}
-          onClick={onclickNext}
-        >
-          다음문제
-          <NextIcon />
-        </Button>
+        <Table className={classes.table}>
+          <TableHead>
+            <TableRow>
+              <TableCell>라이브 퀴즈 제목</TableCell>
+              <TableCell align="right">문항수</TableCell>
+              <TableCell align="right">생성일</TableCell>
+              <TableCell align="right">시작하기</TableCell>
+              {isTeacher ? <TableCell align="right">삭제하기</TableCell> : null}
+            </TableRow>
+          </TableHead>
+
+          {list.length === 0 ? (
+            <TableBody>
+              <TableRow key={0}>
+                <TableCell align="center" colSpan={5}>
+                  현재 라이브퀴즈가 없습니다.
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          ) : (
+            <TableBody>
+              {list.map(row => (
+                <TableRow key={row.code}>
+                  <TableCell component="th" scope="row">
+                    {row.title}
+                  </TableCell>
+                  <TableCell align="right">{row.quizzes_num}</TableCell>
+                  <TableCell align="right">{row.date}</TableCell>
+                  <TableCell align="right">
+                    <Button component={Link} to={`${url}/livequiz/${row.code}`}>
+                      입장하기
+                    </Button>
+                  </TableCell>
+                  {isTeacher ? (
+                    <TableCell align="right">
+                      <Button
+                        style={{ background: "rgb(225, 0, 80)" }}
+                        component={Link}
+                        to={`${url}/livequiz/${row.code}`}
+                      >
+                        삭제하기
+                      </Button>
+                    </TableCell>
+                  ) : null}
+                </TableRow>
+              ))}
+            </TableBody>
+          )}
+        </Table>
       </Paper>
     </main>
   );
 };
 
-ExamBoard.propTypes = {
-  classes: PropTypes.object.isRequired,
-  subject: PropTypes.string,
-  onclickExample: PropTypes.func,
-  onclickBack: PropTypes.func,
-  onclickNext: PropTypes.func,
-  onclickCreate: PropTypes.func
+QuizList.propTypes = {
+  onclickCreate: PropTypes.func,
+  list: PropTypes.array,
+  isTeacher: PropTypes.bool,
+  url: PropTypes.string
 };
 
-ExamBoard.defaultProps = {
-  subject: "테스트 과목명",
-  onclickExample: num => alert(num + "번 보기 선택"),
-  onclickBack: () => alert("이전 문제 클릭"),
-  onclickNext: () => alert("다음 문제 클릭"),
-  onclickCreate: () => alert("문제 풀기 선택")
+QuizList.defaultProps = {
+  onclickCreate: () => alert("문제 만들기 선택"),
+  list: [
+    { code: 0, title: "라이브퀴즈 명", quizzes_num: 3, date: "2019-06-03" }
+  ],
+  isTeacher: false,
+  url: "class/0"
 };
 
-export default withStyles(styles, { withTheme: true })(ExamBoard);
+export default withStyles(styles, { withTheme: true })(QuizList);
