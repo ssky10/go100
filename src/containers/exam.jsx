@@ -83,7 +83,7 @@ class Exam extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { token, location: newLocation, match, questions } = nextProps;
+    const { token, location: newLocation, match } = nextProps;
     const { location: oldLocation } = this.props;
     console.log(newLocation, oldLocation);
     if (newLocation !== oldLocation) {
@@ -121,6 +121,7 @@ class Exam extends Component {
     }
   }
 
+  /** 문제 랜더링을 위해 api주소로 부터 값 가져오기 */
   updateAllQ = (token, subject, num, code) => {
     const { addQuestion, removeQuestion } = this.props;
     const setState = this.setState.bind(this);
@@ -142,6 +143,7 @@ class Exam extends Component {
     });
   };
 
+  //보기 정답을 선택했을 때 함수
   onclickExample = (code, choice) => {
     const { token, questions, addAnswer } = this.props;
     const { nowIdx } = this.state;
@@ -236,6 +238,7 @@ class Exam extends Component {
     }
   };
 
+  /**문제 풀기에서 작성완료된 내용 서버로 전달 */
   onClickMakeQ = e => {
     e.preventDefault();
     const { token } = this.props;
@@ -373,6 +376,7 @@ class Exam extends Component {
           user={ID}
           token={this.props.token}
         >
+          {/**현재 페이지가 쓰기 모드인 경우 쓰기 화면 컴포넌트실행 */}
           {this.state.isWrite ? (
             <WriteExam
               subject={

@@ -20,7 +20,7 @@ class LiveQuiz extends Component {
         choice: -1,
         example: []
       },
-      scoreView: {},
+      scoreView: [],
       state: "wait"
     };
   }
@@ -44,20 +44,20 @@ class LiveQuiz extends Component {
     const { location, match } = this.props;
     const sendWSMessage = this.sendWSMessage.bind(this);
     console.log("match", match);
-    // this is an "echo" websocket service
+
+    // 웹소켓 생성
     this.connection = new WebSocket(
       `wss://golony.dev/ws/livequiz/${match.params.id}/`
     );
+
+    //웹소켓 연결완료 후 수행작업 설정
     this.connection.onopen = function(event) {
       sendWSMessage("c2s_init");
     };
 
-    // listen to onmessage event
+    // 웹소켓 서버로 부터 메시지가 도착하는 경우 실행되는 함수
     this.connection.onmessage = evt => {
-      // add the new message to state
       const data = JSON.parse(evt.data);
-      console.log(data);
-      console.log(this.state);
       switch (data.method) {
         case "s2c_init":
           this.setState({
@@ -98,23 +98,17 @@ class LiveQuiz extends Component {
           }));
           break;
         case "s2c_result":
-          //최종결과
+          //최종결과(학생)
           this.setState(state => ({
             state: "result",
-            quiz: {
-              ...state.quiz,
-              answer: data.answer
-            }
+            scoreView: data.list
           }));
           break;
         case "s2c_report":
-          //최종결과
+          //최종결과(교사)
           this.setState(state => ({
             state: "result",
-            quiz: {
-              ...state.quiz,
-              answer: data.answer
-            }
+            scoreView: data.list
           }));
           break;
         default:
@@ -123,6 +117,7 @@ class LiveQuiz extends Component {
     };
   }
 
+  //웹소켓서버로 데이터 전송시 호출 함수
   sendWSMessage = (msg, answer = 0) => {
     const { token } = this.props;
     const { nowIdx } = this.state;

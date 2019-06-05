@@ -37,12 +37,13 @@ class LiveQuizBoard extends Component {
     };
   }
 
+  //화면의 마운트가 완료되면 서버로부터
+  //라이브 퀴즈 목록을 가져옴
   componentDidMount() {
     const setState = this.setState.bind(this);
     service
       .getList(this.props.token, this.props.match.params.id)
       .then(function(response) {
-        console.log(response.data);
         if (response.data.status) {
           setState(state => ({
             list: response.data.list,
@@ -55,7 +56,6 @@ class LiveQuizBoard extends Component {
   onChangeValue = e => {
     const target = e.target;
     const name = target.name === undefined ? target.id : target.name;
-    console.log(name, this.state.writeExam);
     switch (name) {
       case "title":
         this.setState(state => ({
@@ -84,10 +84,6 @@ class LiveQuizBoard extends Component {
         if (/^example(\d+)/.test(name)) {
           const result = /^example(\d+)/.exec(name);
           const idx = parseInt(result[1]);
-          console.log(
-            this.state.quizList.get(this.state.idx).example.get(idx) !==
-              target.value
-          );
           if (
             this.state.quizList.get(this.state.idx).example.get(idx) !==
             target.value
@@ -137,6 +133,7 @@ class LiveQuizBoard extends Component {
     }
   };
 
+  //사용자가 폼에서 작성한 값을 서버에 전송
   onClickMakeQ = e => {
     e.preventDefault();
     const setState = this.setState.bind(this);
@@ -207,9 +204,7 @@ class LiveQuizBoard extends Component {
         onclickAdd={this.onclickAdd}
         isReset={this.state.isReset}
         title={title}
-      >
-        {console.log("isReset", this.isReset)}
-      </QuizWrite>
+      />
     ) : (
       <QuizList
         url={match.url}

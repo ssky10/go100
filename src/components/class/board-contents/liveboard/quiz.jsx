@@ -220,6 +220,8 @@ const Result = ({ classes, isTeacher, scoreView }) => {
   );
 };
 
+//state의 값(현재상태)에 따라 각각 다른 화면을 랜더링
+// 이하 생략
 const Quiz = ({
   classes,
   user_num,

@@ -22,6 +22,7 @@ export const initializeFirebase = () => {
   );
 };
 
+//사용자 권한 요구
 export const requestPermission = () => {
   const messaging = firebase.messaging();
 
@@ -49,6 +50,7 @@ export const requestPermission = () => {
     });
 };
 
+//
 export const upDatePermissionState = () => {
   const messaging = firebase.messaging();
 
@@ -66,6 +68,7 @@ export const upDatePermissionState = () => {
     });
 };
 
+//파이어베이스 기본 설정 함수
 export const settingFirebase = () => {
   const messaging = firebase.messaging();
 
@@ -87,6 +90,7 @@ export const settingFirebase = () => {
   });
 };
 
+//파이어베이스 기능 제거
 export const deleteToken = () => {
   const messaging = firebase.messaging();
 

@@ -71,14 +71,9 @@ const styles = theme => ({
 });
 
 const makeQuiz = ({
-  subject,
   classes,
-  question,
-  examples,
   value,
-  changeValue,
   onChangeValue,
-  onclickExample,
   onclickBack,
   onclickNext,
   onselectAnswer,

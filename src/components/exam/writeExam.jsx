@@ -103,45 +103,22 @@ const styles = theme => ({
   }
 });
 
+{
+  /**화면 랜더링 컴포넌트(이하 생략) */
+}
 const writeExam = ({
-  subject,
   classes,
-  question,
-  examples,
   value,
-  changeValue,
   onChangeValue,
-  onclickExample,
-  onclickBack,
-  onclickNext,
   onselectAnswer,
-  onSubmit,
-  test
+  onSubmit
 }) => {
   return (
     <main className={classes.content}>
       <Paper className={classes.paper} elevation={1}>
-        <Grid container spacing={8}>
-          <Grid item xs={9}>
-            <Typography className={classes.title} variant="h4" gutterBottom>
-              문제 만들기
-            </Typography>
-          </Grid>
-          <Grid item xs={3}>
-            <div className={classes.search}>
-              <div className={classes.searchIcon}>
-                <SearchIcon />
-              </div>
-              <InputBase
-                placeholder="문제번호"
-                classes={{
-                  root: classes.inputRoot,
-                  input: classes.inputInput
-                }}
-              />
-            </div>
-          </Grid>
-        </Grid>
+        <Typography className={classes.title} variant="h4" gutterBottom>
+          문제 만들기
+        </Typography>
       </Paper>
       <Slide direction="left" in={true} mountOnEnter unmountOnExit>
         <Paper className={classes.paper} elevation={1}>

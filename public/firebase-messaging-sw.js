@@ -16,30 +16,8 @@ firebase.initializeApp(config);
 
 const messaging = firebase.messaging();
 
-/*
-messaging.setBackgroundMessageHandler(function(payload) {
-  console.log(
-    "[firebase-messaging-sw.js] Received background message ",
-    payload
-  );
-  // Customize notification here
-  var notificationTitle = payload.notification.title;
-  var notificationOptions = {
-    body: payload.notification.body,
-    icon: "/favicon.ico"
-  };
-
-  return self.registration.showNotification(
-    notificationTitle,
-    notificationOptions
-  );
-});
-*/
-
+// 푸시 메시지 전달시 실행 이벤트 리스너
 self.addEventListener("push", function(event) {
-  console.log("[Service Worker] Push Received.");
-  console.log(event.data.json());
-
   const title = event.data.json().notification.title;
   const options = {
     body: event.data.json().notification.body,
@@ -52,9 +30,8 @@ self.addEventListener("push", function(event) {
   event.waitUntil(notificationPromise);
 });
 
+// 푸시 메시지 클릭시 실행 이벤트 리스너
 self.addEventListener("notificationclick", function(event) {
-  console.log("[Service Worker] Notification click Received.");
-
   event.notification.close();
 
   var urlToOpen = new URL("/", self.location.origin).href;

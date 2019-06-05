@@ -123,33 +123,6 @@ class editor extends React.Component {
     });
   };
 
-  setCaret = node => {
-    var caretID = "caret";
-    var cc = document.createElement("span");
-    cc.id = caretID;
-
-    window
-      .getSelection()
-      .getRangeAt(0)
-      .insertNode(cc);
-
-    node.blur();
-  };
-
-  getCaret = node => {
-    var caretID = "caret";
-
-    node.focus();
-
-    var range = document.createRange();
-    var cc = document.getElementById(caretID);
-    range.selectNode(cc);
-    var selection = window.getSelection();
-    selection.removeAllRanges();
-    selection.addRange(range);
-    range.deleteContents();
-  };
-
   render() {
     const { id, classes, ableImg, onChange, value, isReset } = this.props;
 
