@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Card from  '@material-ui/core/Card';
 import Typography from '@material-ui/core/Typography';
@@ -26,102 +26,156 @@ const styles = theme => ({
     contents:{
         padding: theme.spacing.unit * 1,
         height: `200px`
+    },
+    due:{
+        textAlign:'right'
     }
 })
 
-const NoticeCard = (props) => {
-    const { classes, user, date, contents } = props;
-    return (
-        <Card
-            className={classes.layout}
-        >
-            <Grid
-                container
-                spacing={0}
-            >
-                <Grid
-                    className={classes.fisrtrow}
-                    container
-                    item
-                    xs={12}
+class PostCard extends Component {
+    constructor(props) {
+        super(props);
+    }
+    
+    render() {        
+        const { classes, posts } = this.props;
+        
+        const PostItems=({title, user, date, deadline, contents}) => {
+            const {classes, isNotice} = this.props;
+            
+            return (
+                <Card
+                    className={classes.layout}
                 >
                     <Grid
-                        item
-                        xs={false}
-                    >
-                        <Avatar
-                            className={classes.avatar}
-                        >
-                        T
-                        </Avatar>
-                    </Grid>
-                    <Grid
-                        className={classes.writer}
-                        item
-                        xs = {9}
-                    >
-                        <List
-                            className={classes.list}
-                        >
-                            <ListItem>
-                                <ListItemText
-                                    className={classes.listitem} 
-                                    primary={user} 
-                                    secondary={date}
-                                />
-                            </ListItem>
-                        </List>
-                    </Grid>
-                    <Grid
-                        className={classes.due}
                         container
-                        item
-                        xs = {2}
+                        spacing={0}
                     >
                         <Grid
+                            className={classes.fisrtrow}
+                            container
                             item
                             xs={12}
                         >
-                            <Typography
-                                variant="overline"
+                            <Grid
+                                item
+                                xs={false}
                             >
-                                Due
-                            </Typography>
+                                <Avatar
+                                    className={classes.avatar}
+                                >
+                                T
+                                </Avatar>
+                            </Grid>
+                            <Grid
+                                className={classes.writer}
+                                item
+                                xs = {2}
+                            >
+                                {isNotice ?
+                                <ListItem>
+                                    <ListItemText
+                                        className={classes.listitem} 
+                                        primary={user} 
+                                        secondary={date}
+                                    />
+                                </ListItem>
+                                :null}         
+                            </Grid>
+                            <Grid
+                                item
+                                xs = {9}
+                            >
+                                {title}
+                            </Grid>
+                            {!isNotice?
+                            <Grid
+                                className={classes.due}
+                                container
+                                item
+                                xs = {2}
+                            >
+                                <Grid
+                                    item
+                                    xs={12}
+                                >
+                                    <Typography
+                                        variant="overline"
+                                    >
+                                        Due
+                                    </Typography>
+                                </Grid>
+                                <Grid
+                                    item
+                                    xs={12}
+                                >
+                                    <Typography
+                                        variant="overline"
+                                    >
+                                        ~{deadline}
+                                    </Typography>
+                                </Grid>
+                            </Grid>
+                            : null}
                         </Grid>
                         <Grid
                             item
                             xs={12}
                         >
-                            <Typography
-                                variant="overline"
-                            >
-                                ~{date}
+                            <Divider
+                                variant='fullWidth'
+                            />
+                        </Grid>
+                        
+                        <Grid
+                            className={classes.contents}
+                            item
+                            xs={12}
+                            zeroMinWidth
+                        >
+                            <Typography >
+                                {contents}
                             </Typography>
                         </Grid>
                     </Grid>
-                </Grid>
-                <Grid
-                    item
-                    xs={12}
-                >
-                    <Divider
-                        variant='fullWidth'
+                </Card>
+            )
+        }
+
+        const PostList = posts.map((post, index)=>{
+            const { isNotice } = this.props;
+            if(isNotice){
+                const { user, title, date, contents } = post.toJS();
+                return (
+                    <PostItems
+                        key={index}
+                        title={title}
+                        user={user}
+                        date={date}
+                        contents={contents}
                     />
-                </Grid>
-                
-                <Grid
-                    className={classes.contents}
-                    item
-                    xs={12}
-                    zeroMinWidth
-                >
-                    <Typography >
-                        {contents}
-                    </Typography>
-                </Grid>
-            </Grid>
-        </Card>
-    );
+                )
+            }else{
+                const { title, DeadLine, content  } = post.toJS();
+                return (
+                    <PostItems
+                        key={index}
+                        title={title}
+                        deadline={DeadLine}
+                        contents={content}
+                    />
+                )
+            }
+        })
+
+        return (
+            <div
+                className={classes.layout}
+            >
+                {PostList}
+            </div>
+        );
+    }
 }
  
-export default withStyles(styles)(NoticeCard);
+export default withStyles(styles)(PostCard);

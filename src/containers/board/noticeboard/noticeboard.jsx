@@ -7,8 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import { Grid } from '@material-ui/core';
 
 //components
-import NoticeCard from 'components/class/board-contents/noticeboard/notice-card';
-import NoticeWrite from 'components/class/board-contents/noticeboard/notice-write';
+import PostCard from 'components/commons/postcard'
 import Write from 'components/commons/write';
 
 //sevices
@@ -111,12 +110,6 @@ class NoticeBoard extends Component {
                             item
                             xs={12}
                         >
-                            {/* <NoticeWrite
-                                title={this.state.posttitle}
-                                contents={this.state.textfield}
-                                onChange={this.handleChange}
-                                onSubmit={this.handleSubmit}
-                            /> */}
                             <Write
                                 isCard="Notice"
                                 title={this.state.posttitle}
@@ -130,7 +123,8 @@ class NoticeBoard extends Component {
                             item
                             xs={12}
                         >
-                                <NoticeCard
+                            <PostCard
+                                isNotice={true}
                                 posts={this.state.postlists}
                             />
                         </Grid>

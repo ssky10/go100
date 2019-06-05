@@ -7,8 +7,6 @@ import { withStyles, Paper, Grid, Typography } from '@material-ui/core';
 //components
 import Write from 'components/commons/write';
 import PostCard from 'components/commons/postcard';
-import WorkCard from 'components/class/board-contents/workboard/work-card';
-
 //service
 import * as axios from 'services/post'
 
@@ -128,7 +126,8 @@ class WorkBoard extends Component {
                             item
                             xs={12}
                         >
-                            <WorkCard
+                            <PostCard
+                                isNotice={false}
                                 posts={this.state.postList}
                             />
                         </Grid>
