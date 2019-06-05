@@ -37,7 +37,6 @@ class NoticeCardPost extends Component {
     }
     render() { 
         const { classes, posts } = this.props;
-        console.log(posts);
         const PostItems = ({date, contents}) => {
             return(
                 <Card

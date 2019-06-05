@@ -44,3 +44,11 @@ export const modifyClassAbout = (token, classIdx, about) => {
         about: about
     })
 }
+
+export const getClassInfo = (token, classIdx) =>{
+    return axios.post(URL+"classroom/getclassinfo",{
+        Origin: window.location.hostname,
+        user_token: token,
+        class_id: classIdx
+    })
+}

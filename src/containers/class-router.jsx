@@ -18,6 +18,7 @@ import { TemplateContainer } from "containers";
 
 //services
 import { useAuth } from 'context/loginProvider';
+import * as axios from 'services/classroom';
 
 //Icons
 import HomeIcon from "@material-ui/icons/Home";
@@ -31,10 +32,23 @@ class ClassRouter extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isTeacher: true
+            classname:'',
+            isTeacher: false,
         }
     }
-
+    componentDidMount(){
+        const { match, token } = this.props;
+        const classIdx = match.params.id;
+        console.log(classIdx);
+        axios.getClassInfo(token, classIdx)
+        .then(res=>{
+            if(res.data.isSuccess){
+                this.setState({
+                    isTeacher: res.data.is_teacher
+                })
+            }
+        })
+    }
     render() { 
         const { theme, match, token } = this.props;
         console.log(this.props);
