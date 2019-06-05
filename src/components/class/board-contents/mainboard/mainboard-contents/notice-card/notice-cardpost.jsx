@@ -37,7 +37,7 @@ class NoticeCardPost extends Component {
     }
     render() { 
         const { classes, posts } = this.props;
-        
+        console.log(posts);
         const PostItems = ({date, contents}) => {
             return(
                 <Card
@@ -73,7 +73,7 @@ class NoticeCardPost extends Component {
         const PostList = posts.map(
             (post) => {
                 const { noticeid, username, update_date, title} = post.toJS();
-
+                console.log(post);
                 return (
                     <PostItems 
                         key={noticeid}
@@ -84,6 +84,7 @@ class NoticeCardPost extends Component {
                 )
             }
         )
+        
         return (
             <div className={classes.layout}>
                 {PostList}
