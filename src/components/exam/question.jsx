@@ -11,11 +11,18 @@ import Slide from "@material-ui/core/Slide";
 import TextField from "@material-ui/core/TextField";
 import CorrectIcon from "@material-ui/icons/RadioButtonUnchecked";
 import Tooltip from "@material-ui/core/Tooltip";
+import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
 
 //Icon
 import WrongIcon from "@material-ui/icons/Close";
 import SolutionIcon from "@material-ui/icons/AddComment";
+import SolutionViewIcon from "@material-ui/icons/InsertComment";
 
 const styles = theme => ({
   paper: {
@@ -184,12 +191,26 @@ const BeforeSolve = ({ classes, question, onclickExample }) => {
   );
 };
 
-const MyQuestion = ({ classes, question }) => {
+const MyQuestion = ({
+  classes,
+  question,
+  solutionView,
+  handleSolutionView
+}) => {
   return (
     <Slide direction="left" in={true} mountOnEnter unmountOnExit>
       <Paper className={classes.paper} elevation={1}>
         <div>
           <Typography className={classes.code} variant="h6" gutterBottom>
+            <Tooltip title="첨삭확인하기">
+              <IconButton
+                color="inherit"
+                aria-label="set Notification"
+                onClick={handleSolutionView}
+              >
+                <SolutionViewIcon />
+              </IconButton>
+            </Tooltip>
             #{question.get("code")}
           </Typography>
           <div className={classes.context}>
@@ -236,6 +257,27 @@ const MyQuestion = ({ classes, question }) => {
             </Typography>
           </Paper>
         </div>
+        <Dialog
+          open={solutionView.isOpen}
+          onClose={handleSolutionView}
+          aria-labelledby="form-dialog-title"
+        >
+          <DialogTitle id="form-dialog-title">첨삭 내용</DialogTitle>
+          <DialogContent>
+            {question.get("solutions").length === 0 ? (
+              <DialogContentText>작성된 첨삭이 없습니다.</DialogContentText>
+            ) : (
+              question.get("solutions").map((val, idx) => (
+                <DialogContentText>
+                  {val.context}({val.score})
+                </DialogContentText>
+              ))
+            )}
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleSolutionView}>닫기</Button>
+          </DialogActions>
+        </Dialog>
       </Paper>
     </Slide>
   );
@@ -247,12 +289,19 @@ const Question = ({
   onclickExample,
   myQ,
   isTeacher,
-  handleCreateSolotion
+  handleCreateSolotion,
+  solutionView,
+  handleSolutionView
 }) => {
   return (
     <React.Fragment>
       {myQ ? (
-        <MyQuestion classes={classes} question={question} />
+        <MyQuestion
+          classes={classes}
+          question={question}
+          solutionView={solutionView}
+          handleSolutionView={handleSolutionView}
+        />
       ) : question.get("choice") === -1 ? (
         <BeforeSolve
           classes={classes}
@@ -268,12 +317,6 @@ const Question = ({
         />
       )}
     </React.Fragment>
-  );
-};
-
-Question.componentDidMount = () => {
-  document.getElementById("context").innerHTML = this.props.question.get(
-    "context"
   );
 };
 

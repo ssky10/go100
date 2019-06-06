@@ -47,6 +47,7 @@ class Exam extends Component {
       total: 0,
       subject: -1,
       ID: "user1",
+      isTeacher: true,
       isRefresh: false,
       writeExam: {
         type: "choiceable",
@@ -60,6 +61,9 @@ class Exam extends Component {
         context: "",
         img: null,
         score: 0
+      },
+      solutionView: {
+        isOpen: false
       },
       template: {
         searchCode: null
@@ -142,6 +146,7 @@ class Exam extends Component {
             const element = array[index];
             addQuestion(element);
           }
+          console.log(response.data);
           setState(state => ({
             ID: response.data.id,
             isTeacher: response.data.is_teacher,
@@ -388,6 +393,15 @@ class Exam extends Component {
     this.setState({ isSolutionMode: true });
   };
 
+  handleSolutionView = () => {
+    this.setState(state => ({
+      solutionView: {
+        ...state.solutionView,
+        isOpen: !state.solutionView.isOpen
+      }
+    }));
+  };
+
   subjectNames = ["국어", "영어", "수학", "한국사", "사회", "과학"];
   subjectIcons = [
     <HangleIcon size="24" />,
@@ -416,7 +430,8 @@ class Exam extends Component {
       template,
       isTeacher,
       writeExam,
-      writeSolution
+      writeSolution,
+      solutionView
     } = this.state;
     const drawer = (
       <Drawer
@@ -480,7 +495,9 @@ class Exam extends Component {
               onclickNext={this.onclickNext}
               onclickCreate={this.onclickCreate}
               handleCreateSolotion={this.handleCreateSolotion}
+              handleSolutionView={this.handleSolutionView}
               isTeacher={isTeacher}
+              solutionView={solutionView}
             />
           )}
           <Snackbar

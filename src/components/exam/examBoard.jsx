@@ -113,6 +113,8 @@ const ExamBoard = ({
   onclickNext,
   onclickCreate,
   handleCreateSolotion,
+  handleSolutionView,
+  solutionView,
   isTeacher
 }) => {
   return (
@@ -157,6 +159,8 @@ const ExamBoard = ({
           isTeacher={isTeacher}
           myQ={subject === "내가 작성한 문제"}
           handleCreateSolotion={handleCreateSolotion}
+          handleSolutionView={handleSolutionView}
+          solutionView={solutionView}
         />
       )}
       <Paper className={classes.paper} elevation={1}>
