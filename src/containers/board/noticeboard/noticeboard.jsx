@@ -125,6 +125,8 @@ class NoticeBoard extends Component {
                         >
                             <PostCard
                                 isNotice={true}
+                                classIdx={this.props.classIdx}
+                                token={this.props.token}
                                 posts={this.state.postlists}
                             />
                         </Grid>
