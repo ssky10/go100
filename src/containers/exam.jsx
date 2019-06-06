@@ -53,7 +53,7 @@ class Exam extends Component {
         type: "choiceable",
         context: "",
         img: null,
-        answer: 0,
+        answer: null,
         explanation: "",
         example: List(["", ""])
       },

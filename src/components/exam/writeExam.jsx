@@ -142,30 +142,41 @@ const writeExam = ({
               />
 
               <List className={classes.root}>
-                {value.example.toArray().map((item, idx) => (
-                  <ListItem alignItems="flex-start">
-                    <Chip
-                      className={
-                        idx === value.answer
-                          ? `${classes.example} ${classes.exampleAnswer}`
-                          : classes.example
-                      }
-                      avatar={<Avatar>{idx + 1}</Avatar>}
-                      key={idx}
-                      label={
-                        <FormControl>
-                          <Input
-                            name={`example${idx}`}
-                            fullWidth
-                            onChange={onChangeValue}
-                            value={item}
-                          />
-                        </FormControl>
-                      }
-                      onClick={() => onselectAnswer(idx)}
+                {value.type === "choiceable" ? (
+                  value.example.toArray().map((item, idx) => (
+                    <ListItem alignItems="flex-start">
+                      <Chip
+                        className={
+                          idx === value.answer
+                            ? `${classes.example} ${classes.exampleAnswer}`
+                            : classes.example
+                        }
+                        avatar={<Avatar>{idx + 1}</Avatar>}
+                        key={idx}
+                        label={
+                          <FormControl>
+                            <Input
+                              name={`example${idx}`}
+                              fullWidth
+                              onChange={onChangeValue}
+                              value={item}
+                            />
+                          </FormControl>
+                        }
+                        onClick={() => onselectAnswer(idx)}
+                      />
+                    </ListItem>
+                  ))
+                ) : (
+                  <FormControl>
+                    <Input
+                      name="answer"
+                      fullWidth
+                      onChange={onChangeValue}
+                      value={value.answer}
                     />
-                  </ListItem>
-                ))}
+                  </FormControl>
+                )}
               </List>
               <FormLabel component="legend">해설</FormLabel>
               <Editor
