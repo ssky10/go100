@@ -18,6 +18,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import InputBase from "@material-ui/core/InputBase";
 
 //Icon
 import WrongIcon from "@material-ui/icons/Close";
@@ -125,7 +126,15 @@ const AfterSolve = ({ classes, question, isTeacher, handleCreateSolotion }) => {
             ))}
           </List>
         ) : (
-          <TextField id="standard-dense" label="정답" margin="dense" />
+          <TextField
+            id="standard-dense"
+            label="정답"
+            margin="dense"
+            vlaue={question.get("answer")}
+            InputProps={{
+              readOnly: true
+            }}
+          />
         )}
         <Paper
           className={classes.paper}
@@ -178,7 +187,12 @@ const BeforeSolve = ({ classes, question, onclickExample }) => {
             ))}
           </List>
         ) : (
-          <TextField id="standard-dense" label="정답" margin="dense" />
+          <Paper className={classes.root} elevation={1}>
+            <InputBase className={classes.input} placeholder="정답" />
+            <Button onClick={() => onclickExample(question.get("code"), false)}>
+              제출
+            </Button>
+          </Paper>
         )}
       </div>
     </Paper>
