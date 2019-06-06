@@ -38,3 +38,14 @@ export const findStudent=( user_token, stu_id )=>{
     stu_id:stu_id
   })
 }
+
+export const createUser=(token, userId, firstname, lastname, password)=>{
+  return axios.post("https://golony.dev/api/auth/createuser",{
+    Origin: window.location.hostname,
+    user_token: token,
+    user_name: userId,
+    first_name: firstname,
+    last_name: lastname,
+    password: password
+  })
+}

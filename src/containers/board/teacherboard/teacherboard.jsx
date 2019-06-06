@@ -149,14 +149,14 @@ class TeacherBoard extends Component {
         super(props);
         this.state = {
             about: '소개글',
-            student_id: '',
+            studentId: '',
             password: '',
             firstname:'',
             lastname:'',
             studentList: List(),
             BeforeApplyStudentList: List(),
             open: false,
-            isAbout: '',
+            isAbout: this.props.about,
             isDelete: true,
         }
     }
@@ -166,8 +166,7 @@ class TeacherBoard extends Component {
         const name = target.name;
         const value = target.value;
         
-        console.log(name);
-        if(name==='student_id'){
+        if(name==='studentId'){
             auth
                 .findStudent(this.props.token, value)
                 .then(res => {
@@ -257,7 +256,17 @@ class TeacherBoard extends Component {
         else
             return null;
     }
-
+    handleCreateUser = (e, token, userId, firstname, lastname, password) => {
+        auth.createUser(token, userId, firstname, lastname, password)
+        .then(res=>{
+            e.preventDefault()
+        })
+    }
+    handleChangeAbout = (token, classIdx, about) => {
+        if(window.confirm("학급 소개글을 정말로 수정하시겠습니까?")){
+            axios.modifyClassAbout(token, classIdx, about)
+        }
+    }
     handleDeleteClass = (token, classIdx) => {
         if(window.confirm("학급 삭제를 정말로 하시겠습니까?")){
             axios.deleteClass(token, classIdx)
@@ -266,12 +275,22 @@ class TeacherBoard extends Component {
 
     componentDidMount(){
         const { classIdx, token } = this.props;
+        console.log(this.props.about);
         axios
             .getStudentList(classIdx, token)
             .then(res=>{
                 if(res.data){
                     this.setState({
-                        studentList: fromJS(res.data.list)
+                        studentList: fromJS(res.data.list),
+                    })
+                }
+            })
+        axios
+            .getClassInfo(token,classIdx)
+            .then(res => {
+                if(res.data){
+                    this.setState({
+                        about: res.data.about
                     })
                 }
             })
@@ -290,7 +309,7 @@ class TeacherBoard extends Component {
             <Button
                 className={(isAbout==="About") ? `${classes.btnmodal} ${classes.btncreate}`: classes.btnregister }
                 size="large"
-                onClick={()=>this.handleClose}
+                type="submit"
             >
                 commit
             </Button>
@@ -299,7 +318,7 @@ class TeacherBoard extends Component {
 
     render() { 
         const { classes, token, classIdx } = this.props;
-        const { about, student_id, studentList, open, isAbout } = this.state;
+        const { about, studentId, firstname, lastname, password, studentList, open, isAbout } = this.state;
 
         console.log(studentList);
         return (
@@ -307,7 +326,8 @@ class TeacherBoard extends Component {
                 className={classes.root}
             >
                 { open ?
-                    <div
+                    <form
+                        onSubmit={(isAbout==="About") ? (e)=>this.handleClose(e) : (e)=>this.handleCreateUser(e, token, studentId, firstname, lastname, password)}
                         className={classes.modalbackground}
                     >
                         <Paper
@@ -335,20 +355,20 @@ class TeacherBoard extends Component {
                             />
                             {(!(isAbout==="Register"))? 
                             <TextField
-                                name={(isAbout==="About") ? "about" : "student_id"}
+                                name={(isAbout==="About") ? "about" : "studentId"}
                                 variant="outlined"
                                 className={classes.modalinput}
-                                value={(isAbout==="About") ? about : student_id}
+                                value={(isAbout==="About") ? about : studentId}
                                 placeholder={( isAbout==="About" ) ? null : "학생 아이디"}
                                 fullWidth
                                 onChange={this.handleChange}
                             /> : 
                             <div>
                                 <TextField
-                                    name={"student_id"}
+                                    name={"studentId"}
                                     variant="outlined"
                                     className={classes.modalinput}
-                                    value={(isAbout==="About") ? about : student_id}
+                                    value={(isAbout==="About") ? about : studentId}
                                     placeholder={( isAbout==="About" ) ? null : "학생 아이디"}
                                     fullWidth
                                     onChange={this.handleChange}
@@ -398,7 +418,7 @@ class TeacherBoard extends Component {
                             /> : null}
                             {(isAbout==="About") ? this.btnCommit(isAbout) : (isAbout==="Register") ? this.btnCommit(isAbout) : null}
                         </Paper>
-                    </div>
+                    </form>
                 :
                 null}
                 <Paper
@@ -436,12 +456,16 @@ class TeacherBoard extends Component {
                                 >원생 등록
                                 </Button>
                             </div>
-                            <div>
+                            <form
+                                onSubmit={()=>this.handleChangeAbout(token, classIdx, about)}
+                            >
                                 <Button
                                     size="large"
+                                    type="submit"
                                     style={{backgroundColor:"#DBDBDB"}}
+                                    
                                 >학급 수정</Button>
-                            </div>
+                            </form>
                             <div>
                                 <Button
                                     size="large"

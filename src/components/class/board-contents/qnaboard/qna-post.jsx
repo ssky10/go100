@@ -63,7 +63,10 @@ const PostItem = ({classes, title, isAnswered, writer_id, date, q_contents}) => 
                     item
                     xs={12}
                 >
-                    {q_contents}
+                    <div
+                        dangerouslySetInnerHTML={{__html: q_contents}}
+                    > 
+                    </div>
                 </Grid>
             </Grid>
         </Paper>

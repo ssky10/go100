@@ -52,13 +52,12 @@ class QnAPost extends Component{
     }
 
     componentDidMount() {
-        const { token } = this.props;
+        const { token, classIdx } = this.props;
+        console.log(classIdx);
         const postId = this.props.match.params.id;
-        console.log(this.props)
         axios
-        .getQnAPost(token, 1, postId)
+        .getQnAPost(token, classIdx, postId)
         .then(res => {
-            console.log(res.data);
             if(res.data){
                 this.setState({
                 qpost: fromJS(res.data)
@@ -70,8 +69,7 @@ class QnAPost extends Component{
     render(){
         const { classes, match } = this.props
         const qpost = this.state.qpost;
-
-        console.log("After toJS");   
+        console.log(this.props);
 
         if(qpost){
             const { title, writer_id, date,  isAnswered, is_teacher, q_contents} = qpost.toJS();

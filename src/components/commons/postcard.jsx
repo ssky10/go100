@@ -84,7 +84,7 @@ class PostCard extends Component {
                             </Grid>
                             <Grid
                                 item
-                                xs = {9}
+                                xs = {7}
                             >
                                 {title}
                             </Grid>

@@ -107,7 +107,6 @@ class QnABoard extends Component {
     render() { 
         const { classes, qnaPostList } = this.props;
         const qnaPosts = this.state.qnaPosts;
-        const { classIdx } = this.props
 
         const PostItems = ({idx, isAnswered, title, date}) => {
             return (
@@ -166,7 +165,6 @@ class QnABoard extends Component {
         const PostList = qnaPosts.map(
             (post) => {
                 const { post_id, isAnswered, title, reg_date} = post.toJS();
-                console.log("classid2 :"+classIdx);
                 return (
                     <Link
                         className={classes.link}
@@ -184,7 +182,6 @@ class QnABoard extends Component {
                 )
             }
         )
-        console.log("classid1:"+classIdx)
         return (
             <div
                 className={classes.root}

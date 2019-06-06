@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import { withStyles, Typography, Paper, Button } from '@material-ui/core';
 
@@ -44,15 +43,17 @@ class QnAWrite extends Component {
         const target = e.target;
         const value = target.value;
         const name = target.name;
-        console.log(value);
         this.setState({
             [name]: value
         })
     }
 
     handleSubmit = (e) => {
-        const { token, classIdx, user_id, title } = this.props
-        axios.writeQnAPost(token, classIdx, user_id, title, this.state.contents)
+        const { token, classIdx, userid } = this.props
+        if(window.confirm("글 작성을 완료하시겠습니까?")){
+            axios
+                .writeQnAPost(token, classIdx, userid, this.state.title, this.state.contents)
+        }
     }
 
     excuteEditButton = (e, exc) => {
@@ -74,8 +75,9 @@ class QnAWrite extends Component {
     render() { 
         const { classes } = this.props;
         return (
-            <div
+            <form
                 className={classes.root}
+                onSubmit={(e)=>this.handleSubmit(e)}
             >
                 <Paper
                     className={classes.boardheader}
@@ -99,7 +101,7 @@ class QnAWrite extends Component {
                             className={classes.csbuttons}
                             variant="contained"
                             color="primary"
-                            onClick={(e)=>this.handleSubmit(e)}
+                            type="submit"
                         >
                             Post
                         </Button>
@@ -111,7 +113,7 @@ class QnAWrite extends Component {
                         </Button>
                     </div>
                 </form>
-            </div>
+            </form>
         );
     }
 }

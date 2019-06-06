@@ -78,8 +78,6 @@ class Write extends Component {
         const { classes, isCard, title, contents, handleChange, handleSubmit } = this.props;
         const { deadline } = (isCard==="Homework") ? this.props : '';
 
-        console.log(deadline);
-
         const cardTitle =
         (isCard==="Notice") ? "Click for writing something that sharing in your class...." : 
         (isCard==="Homework") ? "Click for writing homework that sharing in your class...." : 
