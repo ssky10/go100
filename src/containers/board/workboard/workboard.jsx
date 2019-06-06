@@ -48,9 +48,9 @@ class WorkBoard extends Component {
         const { classIdx, token } = this.props
         const target = e.target;
         console.log("전송 시작");
-        e.preventDefault();
         if (target.name === "post") {
             axios.writeHomework(classIdx, token, this.state.posttitle, this.state.textfield,this.state.deadline)
+            e.preventDefault();
         }
     }
 
@@ -117,7 +117,7 @@ class WorkBoard extends Component {
                                 contents={this.state.textfield}
                                 deadline={this.state.deadline}
                                 handleChange={this.handleChange}
-                                handleSumbit={this.handleSumbit}
+                                handleSubmit={this.handleSubmit}
                             />
                         </Grid>
                         }

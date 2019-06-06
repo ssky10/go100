@@ -77,7 +77,7 @@ class Write extends Component {
     render() { 
         const { classes, isCard, title, contents, handleChange, handleSubmit } = this.props;
         const { deadline } = (isCard==="Homework") ? this.props : '';
-
+        
         const cardTitle =
         (isCard==="Notice") ? "Click for writing something that sharing in your class...." : 
         (isCard==="Homework") ? "Click for writing homework that sharing in your class...." : 
@@ -152,7 +152,7 @@ class Write extends Component {
                             name="deadline"
                             label="DeadLine"
                             type="datetime-local"
-                            value={deadline}
+                            value={`${deadline.getFullYear()}-${deadline.getMonth()}-${deadline.getDay()}T${(deadline.getMonth()+1)}:${deadline.getDate()}:${deadline.getSeconds()}`}
                             InputLabelProps={{
                             shrink: true,
                             }}

@@ -210,8 +210,8 @@ class MainBoard extends Component {
                                     className={classes.posts}
                                 >
                                     <QnACard 
-                                    posts={qnaPosts}
-                                    classIdx={classIdx}
+                                        posts={qnaPosts}
+                                        classIdx={classIdx}
                                     />
                                 </div>
                             </Paper>
