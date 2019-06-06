@@ -34,16 +34,25 @@ class ClassRouter extends Component {
         this.state = {
             classname:'',
             isTeacher: false,
+            userid: '',
+            about: '',
         }
     }
     componentDidMount(){
         const { match, token } = this.props;
         const classIdx = match.params.id;
-        console.log(classIdx);
         axios.getClassInfo(token, classIdx)
         .then(res=>{
             if(res.data.isSuccess){
                 this.setState({
+                    userid: res.data.id,
+                    isTeacher: res.data.is_teacher,
+                    classname: res.data.class_name,
+                    about: res.data.about,
+                })
+            }else{
+                this.setState({
+                    userid: res.data.id,
                     isTeacher: res.data.is_teacher
                 })
             }
@@ -51,9 +60,7 @@ class ClassRouter extends Component {
     }
     render() { 
         const { theme, match, token } = this.props;
-        console.log(this.props);
-        
-        console.log(match.params.id);
+
         let boardNames = ["Main","공지사항", "과제", "Q&A", "LiveQuiz"];
 
         this.state.isTeacher ? boardNames.push("강사") : boardNames = boardNames;
@@ -93,14 +100,13 @@ class ClassRouter extends Component {
               ))}
             </div>
         );
-        console.log("router: "+token);
         return (
             <TemplateContainer 
                 theme={theme}
                 drawer={drawer}
-                title='우효'
+                title={this.state.classname}
                 isLogin={true}
-                user={"user1"}
+                user={this.state.userid}
             >
                 <Switch>
                     <Route exact path={match.url} render={()=>(
@@ -116,14 +122,17 @@ class ClassRouter extends Component {
                         <QnABoard classIdx={match.params.id} boardIdx={3} token={token}/>
                     )}/>
                     <Route path={`${match.url}/qna/write`} render={()=>(
-                        <QnAWrite classIdx={match.params.id} token={token}/>
-                    )}/>
-                    <Route path={`${match.url}/qna/post/:id`} component={QnAPost}/>
+                        <QnAWrite classIdx={match.params.id} token={token} userid={this.state.userid}/>
+                        )}
+                    />
+                    <Route path={`${match.url}/qna/post/:id`} render={(props)=>(
+                        <QnAPost classIdx={match.params.id} token={token} {...props}/>
+                        )}/>
                     <Route path={`${match.url}/livequiz`} render={()=>(
                         <LiveQuizBoard boardIdx={4}  token={token}/>
                     )}/>
                     <Route path={`${match.url}/teacher`} render={()=>(
-                        <TeacherBoard classIdx={match.params.id} boardIdx={5}  token={token}/>
+                        <TeacherBoard classIdx={match.params.id} boardIdx={5}  token={token} about={this.state.about}/>
                     )}/> 
                 </Switch>
             </TemplateContainer>            

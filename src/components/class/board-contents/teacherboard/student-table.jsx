@@ -53,7 +53,6 @@ const StudentTable = ({ classes, studentList, classIdx, token, handleStudentOpen
                 <TableBody>
                     {studentList.map((post, index) => {
                         const { user_id, name } = post.toJS();
-                        console.log("학생 리스트 row 생성")
                         return(
                             <TableRow key={index}>
                                 <TableCell align="right">
