@@ -1,11 +1,11 @@
 import * as React from "react";
 import * as PropTypes from "prop-types";
 
-function normalizeHtml(str: string): string {
+function normalizeHtml(str) {
   return str && str.replace(/&nbsp;|\u202F|\u00A0/g, " ");
 }
 
-function findLastTextNode(node: Node): Node | null {
+function findLastTextNode(node) {
   if (node.nodeType === Node.TEXT_NODE) return node;
   let children = node.childNodes;
   for (let i = children.length - 1; i >= 0; i--) {
@@ -15,7 +15,7 @@ function findLastTextNode(node: Node): Node | null {
   return null;
 }
 
-function replaceCaret(el: HTMLElement) {
+function replaceCaret(el) {
   // Place the caret at the end of the element
   const target = findLastTextNode(el);
   // do not move caret if element was not focused
@@ -34,12 +34,12 @@ function replaceCaret(el: HTMLElement) {
 /**
  * A simple component for an html element with editable contents.
  */
-export default class ContentEditable extends React.Component<Props> {
-  lastHtml: string = this.props.html;
-  el: any =
+export default class ContentEditable extends React.Component {
+  lastHtml = this.props.html;
+  el =
     typeof this.props.innerRef === "function"
       ? { current: null }
-      : React.createRef<HTMLElement>();
+      : React.createRef();
 
   getEl = () =>
     (this.props.innerRef && typeof this.props.innerRef !== "function"
@@ -50,29 +50,30 @@ export default class ContentEditable extends React.Component<Props> {
   render() {
     const { tagName, html, innerRef, ...props } = this.props;
 
-    return React.createElement(
-      tagName || "div",
-      {
-        ...props,
-        ref:
+    return (
+      <div
+        {...props}
+        ref={
           typeof innerRef === "function"
-            ? (current: HTMLElement) => {
+            ? current => {
                 innerRef(current);
                 this.el.current = current;
               }
-            : innerRef || this.el,
-        onInput: this.emitChange,
-        onBlur: this.props.onBlur || this.emitChange,
-        onKeyUp: this.props.onKeyUp || this.emitChange,
-        onKeyDown: this.props.onKeyDown || this.emitChange,
-        contentEditable: !this.props.disabled,
-        dangerouslySetInnerHTML: { __html: html }
-      },
-      this.props.children
+            : innerRef || this.el
+        }
+        onInput={this.emitChange}
+        onBlur={this.props.onBlur || this.emitChange}
+        onKeyUp={this.props.onKeyUp || this.emitChange}
+        onKeyDown={this.props.onKeyDown || this.emitChange}
+        contentEditable={!this.props.disabled}
+        dangerouslySetInnerHTML={{ __html: html }}
+      >
+        {this.props.children}
+      </div>
     );
   }
 
-  shouldComponentUpdate(nextProps: Props): boolean {
+  shouldComponentUpdate(nextProps) {
     const { props } = this;
     const el = this.getEl();
 
@@ -109,7 +110,7 @@ export default class ContentEditable extends React.Component<Props> {
     replaceCaret(el);
   }
 
-  emitChange = (originalEvt: React.SyntheticEvent<any>) => {
+  emitChange = originalEvt => {
     const el = this.getEl();
     if (!el) return;
 
@@ -139,17 +140,4 @@ export default class ContentEditable extends React.Component<Props> {
     style: PropTypes.object,
     innerRef: PropTypes.oneOfType([PropTypes.object, PropTypes.func])
   };
-}
-
-export interface Props {
-  html: string;
-  onChange?: Function;
-  onBlur?: Function;
-  onKeyUp?: Function;
-  onKeyDown?: Function;
-  disabled?: boolean;
-  tagName?: string;
-  className?: string;
-  style?: Object;
-  innerRef?: React.RefObject<HTMLElement> | Function;
 }

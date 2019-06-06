@@ -32,15 +32,19 @@ export function markQuestion(userToken, code, mark) {
 }
 
 export function makeQuestion(userToken, subject, writeExam) {
-  const example = writeExam.example.pop().map((value, idx) => ({
-    code: idx,
-    Context: value
-  }));
+  const choiceable = writeExam.type === "choiceable" ? true : false;
+  let example;
+  if (choiceable) {
+    example = writeExam.example.pop().map((value, idx) => ({
+      code: idx,
+      Context: value
+    }));
+  }
 
   return axios.post("https://golony.dev/api/exam/create", {
     Origin: window.location.hostname,
     user_token: userToken,
-    choiceable: writeExam.type === "choiceable" ? true : false,
+    choiceable: choiceable,
     subject: subject,
     context: writeExam.context,
     //img: writeExam.img == null ? null : writeExam.img,
