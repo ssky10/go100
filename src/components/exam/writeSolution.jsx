@@ -103,13 +103,7 @@ const styles = theme => ({
   }
 });
 
-const writeSolution = ({
-  classes,
-  value,
-  onChangeValue,
-  onselectAnswer,
-  onSubmit
-}) => {
+const writeSolution = ({ classes, value, onChangeValue, onSubmit }) => {
   return (
     <main className={classes.content}>
       <Paper className={classes.paper} elevation={1}>
@@ -123,11 +117,12 @@ const writeSolution = ({
             <FormControl margin="normal" required fullWidth>
               <FormLabel component="legend">점수</FormLabel>
               <TextField
-                label="Dense"
+                label="0~10점"
                 id="margin-dense"
                 type="number"
                 name="score"
                 margin="dense"
+                onChange={onChangeValue}
               />
               <FormLabel component="legend">첨삭내용</FormLabel>
               <Editor

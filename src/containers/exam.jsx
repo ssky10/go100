@@ -56,6 +56,11 @@ class Exam extends Component {
         explanation: "",
         example: List(["", ""])
       },
+      writeSolution: {
+        context: "",
+        img: null,
+        score: 0
+      },
       template: {
         searchCode: null
       }
@@ -246,6 +251,32 @@ class Exam extends Component {
     }
   };
 
+  onChangeSolutionValue = e => {
+    const target = e.target;
+    const name = target.name === undefined ? target.id : target.name;
+
+    switch (name) {
+      case "context":
+        this.setState(state => ({
+          writeSolution: {
+            ...state.writeSolution,
+            context: e.srcElement.innerHTML
+          }
+        }));
+        break;
+      case "img":
+        this.setState(state => ({
+          writeSolution: { ...state.writeSolution, img: e.target.files[0] }
+        }));
+        break;
+      default:
+        this.setState(state => ({
+          writeSolution: { ...state.writeSolution, [name]: target.value }
+        }));
+        break;
+    }
+  };
+
   /**문제 풀기에서 작성완료된 내용 서버로 전달 */
   onClickMakeQ = e => {
     e.preventDefault();
@@ -265,12 +296,34 @@ class Exam extends Component {
             explanation: "",
             example: List(["", ""])
           },
-          isTeacher: false,
-          isSolutionMode: false,
           snack: { open: true, msg: "문제가 등록되었습니다." }
         }));
       }
     });
+  };
+
+  onClickMakeS = e => {
+    e.preventDefault();
+    const { token, questions } = this.props;
+    const { nowIdx, writeSolution } = this.state;
+    const setState = this.setState.bind(this);
+    service
+      .writeSolution(token, questions.get(nowIdx).get("code"), writeSolution)
+      .then(function(response) {
+        console.log(response);
+        if (response.data.status) {
+          setState(state => ({
+            isSolutionMode: false,
+            writeSolution: {
+              score: 0,
+              context: "",
+              img: null
+            },
+            isTeacher: false,
+            snack: { open: true, msg: "첨삭이 등록되었습니다." }
+          }));
+        }
+      });
   };
 
   onselectAnswer = idx => {
@@ -362,7 +415,8 @@ class Exam extends Component {
       subject,
       template,
       isTeacher,
-      writeExam
+      writeExam,
+      writeSolution
     } = this.state;
     const drawer = (
       <Drawer
@@ -392,7 +446,11 @@ class Exam extends Component {
         >
           {/**현재 페이지가 쓰기 모드인 경우 쓰기 화면 컴포넌트실행 */}
           {this.state.isSolutionMode ? (
-            <WriteSolution />
+            <WriteSolution
+              onChangeValue={this.onChangeSolutionValue}
+              value={writeSolution}
+              onSubmit={this.onClickMakeS}
+            />
           ) : this.state.isWrite ? (
             <WriteExam
               subject={

@@ -40,13 +40,22 @@ export function makeQuestion(userToken, subject, writeExam) {
   return axios.post("https://golony.dev/api/exam/create", {
     Origin: window.location.hostname,
     user_token: userToken,
-    type: "choiceable",
     choiceable: writeExam.type === "choiceable" ? true : false,
     subject: subject,
     context: writeExam.context,
-    img: writeExam.img == null ? null : writeExam.img,
+    //img: writeExam.img == null ? null : writeExam.img,
     answer: String(writeExam.answer),
     explanation: writeExam.explanation,
     example: example
+  });
+}
+
+export function writeSolution(userToken, code, writeSolution) {
+  return axios.post("https://golony.dev/api/exam/writecorrection", {
+    Origin: window.location.hostname,
+    user_token: userToken,
+    code: code,
+    score: writeSolution.score,
+    context: writeSolution.context
   });
 }
