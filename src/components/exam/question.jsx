@@ -24,6 +24,8 @@ import InputBase from "@material-ui/core/InputBase";
 import WrongIcon from "@material-ui/icons/Close";
 import SolutionIcon from "@material-ui/icons/AddComment";
 import SolutionViewIcon from "@material-ui/icons/InsertComment";
+import StarIcon from "@material-ui/icons/Star";
+import StarHalfIcon from "@material-ui/icons/StarHalf";
 
 const styles = theme => ({
   paper: {
@@ -86,6 +88,9 @@ const AfterSolve = ({ classes, question, isTeacher, handleCreateSolotion }) => {
             </Tooltip>
           ) : null}
           #{question.get("code")}
+          {question.get("solution_avg_score") === undefined
+            ? " (작성된 첨삭이 없습니다.)"
+            : " (첨삭평균 점수 : " + question.get("solution_avg_score") + ")"}
         </Typography>
         <div className={classes.context}>
           {question.get("choice") == question.get("answer") ? (
@@ -154,6 +159,9 @@ const BeforeSolve = ({ classes, question, onclickExample }) => {
       <div>
         <Typography className={classes.code} variant="h6" gutterBottom>
           #{question.get("code")}
+          {question.get("solution_avg_score") === undefined
+            ? " (작성된 첨삭이 없습니다.)"
+            : " (첨삭평균 점수 : " + question.get("solution_avg_score") + ")"}
         </Typography>
         <div className={classes.context}>
           <div
@@ -219,6 +227,9 @@ const MyQuestion = ({
             </IconButton>
           </Tooltip>
           #{question.get("code")}
+          {question.get("solution_avg_score") === undefined
+            ? " (작성된 첨삭이 없습니다.)"
+            : " (첨삭평균 점수 : " + question.get("solution_avg_score") + ")"}
         </Typography>
         <div className={classes.context}>
           <div
