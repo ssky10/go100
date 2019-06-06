@@ -4,6 +4,8 @@ import Card from  '@material-ui/core/Card';
 import Typography from '@material-ui/core/Typography';
 import { Grid, Avatar, Divider, List, ListItem, ListItemText } from '@material-ui/core';
 
+import * as axios from 'services/post';
+
 const styles = theme => ({
     layout:{
         marginBottom: theme.spacing.unit * 2,
@@ -16,6 +18,10 @@ const styles = theme => ({
     avatar:{
         height: 60,
         width: 60        
+    },
+    title:{
+        cursor:"pointer",
+        textDecoration: 'none'
     },
     list: {
         padding: 0
@@ -35,12 +41,36 @@ const styles = theme => ({
 class PostCard extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            isOpen: false,
+            openIndex: undefined,
+            contents: '',
+        }
     }
-    
+
+    handleOpen = (idx) => {
+        const {classIdx, token} = this.props;
+        const {posts} = this.props;
+        console.log(posts.size)
+        this.setState({
+            isOpen: !this.state.isOpen,
+            openIndex: idx
+        })
+        axios.getNoticePost( token, classIdx, idx)
+        .then(res => {
+            console.log(res)
+            if(res){
+                this.setState({
+                    contents: res.data.content
+                })
+            }
+        })
+    }
+
     render() {        
         const { classes, posts } = this.props;
         
-        const PostItems=({title, user, date, deadline, contents}) => {
+        const PostItems=({title, idx, user, date, deadline, contents}) => {
             const {classes, isNotice} = this.props;
             
             return (
@@ -86,7 +116,13 @@ class PostCard extends Component {
                                 item
                                 xs = {7}
                             >
-                                {title}
+                                <Typography
+                                    variant="subtitle1"
+                                    className={classes.title}
+                                    onClick={()=>this.handleOpen(idx)}
+                                >
+                                    {title}
+                                </Typography>
                             </Grid>
                             {!isNotice?
                             <Grid
@@ -126,8 +162,7 @@ class PostCard extends Component {
                                 variant='fullWidth'
                             />
                         </Grid>
-                        
-                        <Grid
+                        {(!isNotice) ? <Grid
                             className={classes.contents}
                             item
                             xs={12}
@@ -136,7 +171,18 @@ class PostCard extends Component {
                             <Typography >
                                 {contents}
                             </Typography>
-                        </Grid>
+                        </Grid> : (idx===this.state.openIndex&&this.state.isOpen) ?
+                        <Grid
+                            className={classes.contents}
+                            item
+                            xs={12}
+                            zeroMinWidth
+                        >
+                            <Typography >
+                                {this.state.contents}
+                            </Typography>
+                        </Grid>:null}
+                        
                     </Grid>
                 </Card>
             )
@@ -145,10 +191,11 @@ class PostCard extends Component {
         const PostList = posts.map((post, index)=>{
             const { isNotice } = this.props;
             if(isNotice){
-                const { user, title, date, contents } = post.toJS();
+                const { noticeid, user, title, date, contents } = post.toJS();
                 return (
                     <PostItems
                         key={index}
+                        idx={noticeid}
                         title={title}
                         user={user}
                         date={date}

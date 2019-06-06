@@ -24,6 +24,14 @@ export const getNoticePostList = (token, classIdx, boardIdx) => {
   });
 }
 
+export const getNoticePost = (token, classIdx, postIdx ) => {
+  return axios.post(URL+"classroom/noticepost",{
+    Origin: window.location.hostname,
+    class: classIdx,
+    user_token: token,
+    idx: postIdx
+  })
+}
 export const setQnAPostList = (token, class_id) => {
   return axios.post(DummyURL+"setQnAPostList.php",{
     Origin: window.location.hostname,
@@ -65,6 +73,15 @@ export const writeQnAPost = (token, class_id, user_id, title, content) => {
     user_id: user_id,
     title: title,
     content: content
+  })
+}
+
+export const writeQnAAnswer = (token, postIdx, answer) => {
+  return axios.post(URL+"classroom/answer",{
+    Origin: window.location.hostname,
+    user_token: token,
+    post_id: postIdx,
+    a_contents: answer
   })
 }
 

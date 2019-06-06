@@ -47,7 +47,8 @@ class QnAPost extends Component{
     constructor(props) {
         super(props);
         this.state = {
-            qpost: List()
+            qpost: List(),
+            answer: ''
         }
     }
 
@@ -66,8 +67,21 @@ class QnAPost extends Component{
         })
     }
 
+    handleSubmit = () => {
+        const { token, idx } = this.props
+        return axios.writeQnAAnswer(token, idx, this.state.answer)
+    }
+
+    handleChange = (e) => {
+        const target=e.target;
+        const name = target.name;
+
+        this.setState({
+            [name]: target.value
+        })
+    }
+
     render(){
-        const { classes, match } = this.props
         const qpost = this.state.qpost;
         console.log(this.props);
 
@@ -119,9 +133,15 @@ class QnAPost extends Component{
                                 item
                                 xs={8}
                             >
-                                <Write
-                                    isCard={"Answer"}
-                                />
+                                <form 
+                                    onSubmit={this.handleSubmit}
+                                    method="post"
+                                >
+                                    <Write
+                                        isCard={"Answer"}
+                                        handleContentChange={this.handleContentChange}
+                                    />
+                                </form>
                             </Grid>
                             <Grid
                                 item

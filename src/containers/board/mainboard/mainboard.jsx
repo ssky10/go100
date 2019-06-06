@@ -63,7 +63,6 @@ class MainBoard extends Component {
 
     componentDidMount(){
         const { getNoticePostList, getWorkPostList, getQnAPostList, token, classIdx, boardIdx } = this.props;
-
         
         console.log("mainboard: "+token);
 

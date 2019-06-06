@@ -111,37 +111,32 @@ class ClassRouter extends Component {
             >
                 <Switch>
                     <Route exact path={match.url} render={()=>(
-                        <MainBoard classIdx={match.params.id} boardIdx={0} token={token}/>
-                    )}/>
+                        <MainBoard classIdx={match.params.id} boardIdx={0} token={token}/>)}
+                    />
                     <Route path={`${match.url}/notice`} render={()=>(
-                        <NoticeBoard classIdx={match.params.id} boardIdx={1} token={token}/>
-                    )}/>
+                        <NoticeBoard classIdx={match.params.id} boardIdx={1} token={token}/>)}
+                    />
                     <Route path={`${match.url}/work`} render={()=>(
-                        <WorkBoard classIdx={match.params.id} boardIdx={2} token={token}/>
-                    )}/>
+                        <WorkBoard classIdx={match.params.id} boardIdx={2} token={token}/>)}
+                    />
                     <Route exact path={`${match.url}/qna`} render={()=>(
-                        <QnABoard classIdx={match.params.id} boardIdx={3} token={token}/>
-                    )}/>
+                        <QnABoard classIdx={match.params.id} boardIdx={3} token={token}/>)}
+                    />
                     <Route path={`${match.url}/qna/write`} render={()=>(
-                        <QnAWrite classIdx={match.params.id} token={token} userid={this.state.userid}/>
-                        )}
+                        <QnAWrite classIdx={match.params.id} token={token} userid={this.state.userid}/>)}
                     />
                     <Route path={`${match.url}/qna/post/:id`} render={(props)=>(
-                        <QnAPost classIdx={match.params.id} token={token} {...props}/>
-                        )}/>
-                    <Route
-                        path={`${match.url}/livequiz/:id`}
-                        render={props => <LiveQuiz token={token} {...props} />}
+                        <QnAPost classIdx={match.params.id} token={token} {...props}/>)}
                     />
-                    <Route
-                        path={`${match.url}/livequiz`}
-                        render={() => (
-                        <LiveQuizBoard boardIdx={4} token={token} match={match} />
-                        )}
+                    <Route path={`${match.url}/livequiz/:id`} render={props=> 
+                        <LiveQuiz token={token} {...props} />}
+                    />
+                    <Route path={`${match.url}/livequiz`}render={()=>(
+                        <LiveQuizBoard boardIdx={4} token={token} match={match} />)}
                     />
                     <Route path={`${match.url}/teacher`} render={()=>(
-                        <TeacherBoard classIdx={match.params.id} boardIdx={5}  token={token} about={this.state.about}/>
-                    )}/> 
+                        <TeacherBoard classIdx={match.params.id} boardIdx={5}  token={token} about={this.state.about}/>)}
+                    /> 
                 </Switch>
             </TemplateContainer>            
         );

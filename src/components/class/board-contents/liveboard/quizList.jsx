@@ -160,7 +160,7 @@ const QuizList = ({ classes, list, onclickCreate, isTeacher, url }) => {
                   {isTeacher ? (
                     <TableCell align="right">
                       <Button
-                        style={{ background: "rgb(225, 0, 80)" }}
+                        style={{ background: "rgb(225, 0, 80)", color: "#FFFFFF" }}
                         component={Link}
                         to={`${url}/livequiz/${row.code}`}
                       >
