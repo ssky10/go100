@@ -102,15 +102,6 @@ class App extends Component {
       <Provider store={store}>
         <BrowserRouter>
           <LoginProvider>
-            <LoginConsumer>
-              {state => {
-                if (!(page === state.page)) {
-                  this.setState({
-                    page: state.page
-                  });
-                }
-              }}
-            </LoginConsumer>
             <MuiThemeProvider theme={theme}>
               <Switch>
                 <Route exact path="/" component={Login} />
