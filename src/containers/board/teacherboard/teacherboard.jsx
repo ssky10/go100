@@ -133,14 +133,57 @@ const styles = theme => ({
         cursor: "pointer"
     },
     classconfig:{
-        marginLeft: theme.spacing.unit * 2,
+        marginLeft: theme.spacing.unit * 30,
         '&> div + div': {
-            marginTop: theme.spacing.unit * 1
+            marginTop: theme.spacing.unit * 3
+        }
+    },
+    boxbtns:{
+        borderWidth: "2px",
+        borderStyle: "solid",
+        borderRadius:"5px",
+        width: "500px",
+        height: "100px",
+        padding: theme.spacing.unit,
+        '&:first-child':{
+            borderColor: "#75A7E8",
+        },
+        '&:nth-child(2)':{
+            borderColor: "#DBDBDB"
+        },
+        '&:last-child':{
+            borderColor: "#E81D35",
+        },
+    },
+    btnconfig:{
+        position: "relative",
+        width: '230px',
+        left:"50%",
+        top:"100%",
+        transform: 'translate(-50%, 110%)'
+    },
+    btnregisterstudent:{
+        backgroundColor:"#75A7E8",
+        color: "#FFFFFF",
+        transition: "background-color 0.3s",
+        '&:hover':{
+            backgroundColor:"#3271C2"
+        }
+    },
+    btnmodifyclass:{
+        backgroundColor:"#DBDBDB",
+        transition: "background-color 0.3s",
+        '&:hover':{
+            backgroundColor:"#828181"
         }
     },
     btnclassdelete:{
         backgroundColor: "#E81D35",
-        color: "#FFFFFF"
+        color: "#FFFFFF",
+        transition: "background-color 0.3s",
+        '&:hover':{
+            backgroundColor:"#950011"
+        }
     }
 })
 
@@ -446,30 +489,55 @@ class TeacherBoard extends Component {
                         <div
                             className={classes.classconfig}
                         >
-                            <div>
+                            <div
+                                className={classes.boxbtns}
+                            >
+                                <Typography
+                                    variant="subtitle2"
+                                    component="h6"
+                                >
+                                    본 서비스를 이용한 이력이 없는 원생의 경우, 먼저 회원 등록을 해주세요.
+                                </Typography>
                                 <Button
                                     size="large"
-                                    style={{backgroundColor:"#75A7E8",
-                                    color: "#FFFFFF"
-                                    }}
+                                    className={`${classes.btnconfig} ${classes.btnregisterstudent}`}
                                     onClick={()=>this.handleRegisterOpen()}
+                                    style={{
+                                    }}
                                 >원생 등록
                                 </Button>
                             </div>
-                            <form
-                                onSubmit={()=>this.handleChangeAbout(token, classIdx, about)}
+                            <div
+                                className={classes.boxbtns}
                             >
+                                <Typography
+                                    variant="subtitle2"
+                                    component="h6"
+                                >
+                                    학원 소개글이 수정되었을 경우, 수정사항을 저장해주세요.
+                                </Typography>
+                                <form
+                                    onSubmit={()=>this.handleChangeAbout(token, classIdx, about)}
+                                >
+                                    <Button
+                                        size="large"
+                                        type="submit"
+                                        className={`${classes.btnconfig} ${classes.btnmodifyclass}`}
+                                    >학급 수정</Button>
+                                </form>
+                            </div>
+                            <div
+                                className={classes.boxbtns}
+                            >
+                                <Typography
+                                    variant="subtitle2"
+                                    component="h6"
+                                >
+                                    본 서비스 이용을 끝마치고 학급을 삭제하고 싶으시다면 삭제해주세요.
+                                </Typography>
                                 <Button
                                     size="large"
-                                    type="submit"
-                                    style={{backgroundColor:"#DBDBDB"}}
-                                    
-                                >학급 수정</Button>
-                            </form>
-                            <div>
-                                <Button
-                                    size="large"
-                                    className={classes.btnclassdelete}
+                                    className={`${classes.btnconfig} ${classes.btnclassdelete}`}
                                     onClick={()=>this.handleDeleteClass(token, classIdx)}
                                 >
                                 학급 삭제
