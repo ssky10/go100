@@ -195,17 +195,22 @@ class Exam extends Component {
 
   onChangeValue = e => {
     const target = e.target;
-    const name = target.name === undefined ? target.id : target.name;
-    console.log(name, this.state.writeExam);
+    const name =
+      target.name !== undefined
+        ? target.name
+        : target.id !== undefined
+        ? target.id
+        : e.currentTarget.id;
+    console.log(e, this.state.writeExam);
     switch (name) {
       case "context":
         this.setState(state => ({
-          writeExam: { ...state.writeExam, context: e.srcElement.innerHTML }
+          writeExam: { ...state.writeExam, context: target.value }
         }));
         break;
       case "explanation":
         this.setState(state => ({
-          writeExam: { ...state.writeExam, explanation: e.srcElement.innerHTML }
+          writeExam: { ...state.writeExam, explanation: target.value }
         }));
         break;
       case "img":
@@ -258,14 +263,19 @@ class Exam extends Component {
 
   onChangeSolutionValue = e => {
     const target = e.target;
-    const name = target.name === undefined ? target.id : target.name;
+    const name =
+      target.name !== undefined
+        ? target.name
+        : target.id !== undefined
+        ? target.id
+        : e.currentTarget.id;
 
     switch (name) {
       case "context":
         this.setState(state => ({
           writeSolution: {
             ...state.writeSolution,
-            context: e.srcElement.innerHTML
+            context: target.value
           }
         }));
         break;
@@ -282,7 +292,6 @@ class Exam extends Component {
     }
   };
 
-  /**문제 풀기에서 작성완료된 내용 서버로 전달 */
   onClickMakeQ = e => {
     e.preventDefault();
     const { token } = this.props;

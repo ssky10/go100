@@ -3,10 +3,7 @@ import PropTypes from "prop-types";
 import Typography from "@material-ui/core/Typography";
 import { withStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
-import InputBase from "@material-ui/core/InputBase";
 import { fade } from "@material-ui/core/styles/colorManipulator";
-import SearchIcon from "@material-ui/icons/Search";
-import Grid from "@material-ui/core/Grid";
 import Chip from "@material-ui/core/Chip";
 import Avatar from "@material-ui/core/Avatar";
 import List from "@material-ui/core/List";
@@ -19,12 +16,7 @@ import FormLabel from "@material-ui/core/FormLabel";
 import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import FormGroup from "@material-ui/core/FormGroup";
 import Divider from "@material-ui/core/Divider";
-import BoldIcon from "@material-ui/icons/FormatBold";
-import UnderLineIcon from "@material-ui/icons/FormatUnderlined";
-import ItalicIcon from "@material-ui/icons/FormatItalic";
-import FncIcon from "@material-ui/icons/Functions";
 
 import Editor from "./editor";
 import { Input } from "@material-ui/core";
@@ -103,9 +95,6 @@ const styles = theme => ({
   }
 });
 
-{
-  /**화면 랜더링 컴포넌트(이하 생략) */
-}
 const writeExam = ({
   classes,
   value,
@@ -125,7 +114,6 @@ const writeExam = ({
           <form className={classes.form} onSubmit={onSubmit}>
             <FormControl margin="normal" required fullWidth>
               <FormLabel component="legend">문제 유형</FormLabel>
-              {console.log(value.type)}
               <RadioGroup
                 aria-label="문제 유형"
                 name="type"

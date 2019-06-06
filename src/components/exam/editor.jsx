@@ -14,6 +14,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import TextField from "@material-ui/core/TextField";
+import ContentEditable from "./reactContenteditable.tsx";
 
 const styles = theme => ({
   paper: {
@@ -47,21 +48,30 @@ const styles = theme => ({
 });
 
 class editor extends React.Component {
-  state = {
-    open: false,
-    formula: "x+y",
-    anchorNode: null,
-    anchorOffset: 0
-  };
+  constructor(props) {
+    super(props);
+    this.myRef = React.createRef();
+    this.state = {
+      isReset: false,
+      open: false,
+      formula: "x+y",
+      anchorNode: null,
+      anchorOffset: 0
+    };
+  }
 
   componentDidMount() {
-    document
-      .getElementById(this.props.id)
-      .addEventListener("input", this.props.onChange);
+    // document
+    //   .getElementById(this.props.id)
+    //   .addEventListener("input", this.onChangeEdit);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({ isReset: nextProps.isReset });
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    if (!nextProps.isReset) return false;
+    //if (!nextProps.isReset) return false;
     return true;
   }
 
@@ -123,8 +133,17 @@ class editor extends React.Component {
     });
   };
 
+  setCaret = () => {
+    const { anchorNode, anchorOffset } = this.state;
+    //console.log("anchorNode", anchorNode);
+    //console.log("anchorOffset", anchorOffset);
+    //window.getSelection().setPosition(anchorNode, anchorOffset);
+  };
+
   render() {
     const { id, classes, ableImg, onChange, value, isReset } = this.props;
+
+    this.setCaret();
 
     return (
       <Paper
@@ -332,14 +351,13 @@ class editor extends React.Component {
         </Dialog>
         <Divider />
         {console.log(isReset, value)}
-        <div
+        <ContentEditable
+          innerRef={this.myRef}
           className={classes.editorDiv}
           id={id}
-          autoFocus
-          contentEditable="true"
-          suppressContentEditableWarning={true}
-          onChange={onChange}
-          dangerouslySetInnerHTML={{ __html: value }}
+          html={value} // innerHTML of the editable div
+          disabled={false} // use true to disable editing
+          onChange={onChange} // handle innerHTML change
         />
         <Divider />
         {ableImg ? (

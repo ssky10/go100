@@ -55,7 +55,13 @@ class LiveQuizBoard extends Component {
 
   onChangeValue = e => {
     const target = e.target;
-    const name = target.name === undefined ? target.id : target.name;
+    const name =
+      target.name !== undefined
+        ? target.name
+        : target.id !== undefined
+        ? target.id
+        : e.currentTarget.id;
+
     switch (name) {
       case "title":
         this.setState(state => ({
