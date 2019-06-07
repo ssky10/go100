@@ -125,6 +125,7 @@ class NoticeBoard extends Component {
                         >
                             <PostCard
                                 isNotice={true}
+                                isAnswer={false}
                                 classIdx={this.props.classIdx}
                                 token={this.props.token}
                                 posts={this.state.postlists}

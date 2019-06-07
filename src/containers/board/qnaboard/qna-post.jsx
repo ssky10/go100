@@ -11,6 +11,7 @@ import * as axios from 'services/post'
 //components
 import PostItem from 'components/class/board-contents/qnaboard/qna-post'
 import Write from 'components/commons/write'
+import PostCard from 'components/commons/postcard'
 
 const styles = theme => ({
     root:{
@@ -40,6 +41,9 @@ const styles = theme => ({
         height:'400px',
         padding: theme.spacing.unit * 1,
         borderBottom: '1px solid #e9e9e9',
+    },
+    write:{
+        margin: theme.spacing.unit * 1
     }
 })
 
@@ -48,7 +52,7 @@ class QnAPost extends Component{
         super(props);
         this.state = {
             qpost: List(),
-            answer: ''
+            textfield: ''
         }
     }
 
@@ -68,14 +72,15 @@ class QnAPost extends Component{
     }
 
     handleSubmit = () => {
-        const { token, idx } = this.props
-        return axios.writeQnAAnswer(token, idx, this.state.answer)
+        const { token } = this.props;
+        axios.writeQnAAnswer(token,  this.props.match.params.id, this.state.textfield);
     }
 
     handleChange = (e) => {
         const target=e.target;
         const name = target.name;
-
+        console.log(name);
+        console.log(target.value);
         this.setState({
             [name]: target.value
         })
@@ -86,7 +91,7 @@ class QnAPost extends Component{
         console.log(this.props);
 
         if(qpost){
-            const { title, writer_id, date,  isAnswered, is_teacher, q_contents} = qpost.toJS();
+            const { title, writer_id, date,  isAnswered, is_teacher, q_contents, a_contents} = qpost.toJS();
             return (
                 <div>
                     <Grid
@@ -133,15 +138,39 @@ class QnAPost extends Component{
                                 item
                                 xs={8}
                             >
-                                <form 
-                                    onSubmit={this.handleSubmit}
-                                    method="post"
-                                >
-                                    <Write
-                                        isCard={"Answer"}
-                                        handleContentChange={this.handleContentChange}
-                                    />
-                                </form>
+                                <Write
+                                    className={this.props.classes.write}
+                                    isCard={"Answer"}
+                                    contents={this.state.textfield}
+                                    handleChange={this.handleChange}
+                                    handleSubmit={this.handleSubmit}
+                                />
+                            </Grid>
+                            <Grid
+                                item
+                                xs={2}
+                            />
+                        </Grid>
+                        <Grid
+                            container
+                            item
+                            xs={12}
+                        >
+                            <Grid
+                                item
+                                xs={2}
+                            />
+                            <Grid
+                                item
+                                xs={8}
+                            >
+                                <PostCard
+                                    isNotice={false}
+                                    isAnswer={true}
+                                    classIdx={this.props.classIdx}
+                                    token={this.props.token}
+                                    posts={a_contents}
+                                />
                             </Grid>
                             <Grid
                                 item

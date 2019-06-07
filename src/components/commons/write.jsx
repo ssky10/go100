@@ -69,15 +69,15 @@ class Write extends Component {
     }
 
     handleChange = (e) => {
-        console.log(e.target.id);
         if(!(e.target.id))
             this.setState({checked: !this.state.checked})
     };
 
     render() { 
         const { classes, isCard, title, contents, handleChange, handleSubmit } = this.props;
+        console.log(handleSubmit);
         const { deadline } = (isCard==="Homework") ? this.props : '';
-
+        
         const cardTitle =
         (isCard==="Notice") ? "Click for writing something that sharing in your class...." : 
         (isCard==="Homework") ? "Click for writing homework that sharing in your class...." : 
@@ -126,7 +126,6 @@ class Write extends Component {
         }
 
         const cardWrite = () => {
-            const { handleChange } = this.props
             return(
                 <Grid
                     className={classes.footer}
@@ -152,11 +151,10 @@ class Write extends Component {
                             name="deadline"
                             label="DeadLine"
                             type="datetime-local"
-                            value={deadline}
+                            defaultValue={deadline}
                             InputLabelProps={{
                             shrink: true,
                             }}
-                            onChange={(e)=>handleChange}
                         />
                     </Grid> : <Grid
                     item
@@ -176,7 +174,7 @@ class Write extends Component {
 
         return (
             <form
-                onSubmit={handleSubmit}
+                onSubmit={(e)=>handleSubmit(e)}
                 name="post"
                 autoComplete="off"
             >
