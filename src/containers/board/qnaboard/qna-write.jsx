@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles, Typography, Paper, Button } from '@material-ui/core';
-
+import {Redirect} from 'react-router-dom';
 import QnAEditor from "components/class/board-contents/qnaboard/qna-write";
 
 import * as axios from "services/post";
@@ -48,11 +48,15 @@ class QnAWrite extends Component {
         })
     }
 
-    handleSubmit = (e) => {
+    handleSubmit = e => {
         const { token, classIdx, userid } = this.props
         if(window.confirm("글 작성을 완료하시겠습니까?")){
             axios
                 .writeQnAPost(token, classIdx, userid, this.state.title, this.state.contents)
+                .then(res=>{
+                    return(<Redirect to={`class/${classIdx}/login`} />)
+                })
+            e.preventDefault();
         }
     }
 

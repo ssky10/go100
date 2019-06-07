@@ -39,20 +39,17 @@ class WorkBoard extends Component {
             posttitle: '',
             isTeacher: true,
             textfield: '',
-            deadline:new Date(),
+            deadline:new Date().toISOString().slice(0,16),
             postList: List()
         }
     }
 
-    handleSumbit = e => {
-        const { classIdx, token } = this.props
-        const target = e.target;
-        console.log("전송 시작");
-        if (target.name === "post") {
-            axios.writeHomework(classIdx, token, this.state.posttitle, this.state.textfield,this.state.deadline)
-            e.preventDefault();
-        }
+    handleSubmit = (e) => {
+        this.setState({
+            deadline: document.getElementById('datetime-local').value
+        })
     }
+
 
     handleChange = e => {
         const target = e.target
@@ -78,6 +75,16 @@ class WorkBoard extends Component {
             }
         })
     }
+
+    shouldComponentUpdate(nextProps, nextState){
+        if(this.state.deadline!==nextState.deadline){
+            axios.writeHomework(this.props.classIdx, this.props.token, this.state.posttitle, this.state.textfield, nextState.deadline)
+            
+            return true
+        }
+        return true
+    }
+
     render() {
         const { classes } = this.props;
         const title = this.state.title;

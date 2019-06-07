@@ -188,8 +188,8 @@ class PostCard extends Component {
             )
         }
 
-        const PostList = posts.map((post, index)=>{
-            const { isNotice } = this.props;
+        const PostList = (posts) ? posts.map((post, index)=>{
+            const { isNotice, isAnswer } = this.props;
             if(isNotice){
                 const { noticeid, user, title, date, contents } = post.toJS();
                 return (
@@ -202,7 +202,7 @@ class PostCard extends Component {
                         contents={contents}
                     />
                 )
-            }else{
+            }else if(!isAnswer){
                 const { title, DeadLine, content  } = post.toJS();
                 return (
                     <PostItems
@@ -212,8 +212,17 @@ class PostCard extends Component {
                         contents={content}
                     />
                 )
+            }else{
+                const {user_id, contents} = post;
+                return (
+                    <PostItems
+                        key={index}
+                        title={user_id}
+                        contents={contents}
+                    />
+                )
             }
-        })
+        }) : console.log(posts);
 
         return (
             <div

@@ -127,13 +127,13 @@ const styles = theme => ({
         padding: theme.spacing.unit * 1
     },
     studenttable:{
-        minWidth: 650
+        minWidth: 500
     },
     btndelete:{
         cursor: "pointer"
     },
     classconfig:{
-        marginLeft: theme.spacing.unit * 30,
+        marginLeft: theme.spacing.unit * 5,
         '&> div + div': {
             marginTop: theme.spacing.unit * 3
         }
@@ -142,7 +142,7 @@ const styles = theme => ({
         borderWidth: "2px",
         borderStyle: "solid",
         borderRadius:"5px",
-        width: "500px",
+        minWidth: "300px",
         height: "100px",
         padding: theme.spacing.unit,
         '&:first-child':{
@@ -160,7 +160,7 @@ const styles = theme => ({
         width: '230px',
         left:"50%",
         top:"100%",
-        transform: 'translate(-50%, 110%)'
+        transform: 'translate(-50%, 60%)'
     },
     btnregisterstudent:{
         backgroundColor:"#75A7E8",
