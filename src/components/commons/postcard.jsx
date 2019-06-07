@@ -71,7 +71,7 @@ class PostCard extends Component {
         const { classes, posts } = this.props;
         
         const PostItems=({title, idx, user, date, deadline, contents}) => {
-            const {classes, isNotice} = this.props;
+            const {classes, isNotice, isAnswer} = this.props;
             
             return (
                 <Card
@@ -124,7 +124,7 @@ class PostCard extends Component {
                                     {title}
                                 </Typography>
                             </Grid>
-                            {!isNotice?
+                            {(!isNotice&&!isAnswer)?
                             <Grid
                                 className={classes.due}
                                 container

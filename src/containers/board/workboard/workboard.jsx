@@ -135,6 +135,7 @@ class WorkBoard extends Component {
                         >
                             <PostCard
                                 isNotice={false}
+                                isAnswer={false}
                                 posts={this.state.postList}
                             />
                         </Grid>

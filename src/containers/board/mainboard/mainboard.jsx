@@ -161,7 +161,7 @@ class MainBoard extends Component {
                     >
                         <Grid
                             item
-                            xs={2}
+                            xs={4}
                         >
                             <Paper
                                 className={classes.paper}
@@ -188,7 +188,7 @@ class MainBoard extends Component {
                         </Grid>
                         <Grid
                             item
-                            xs={10}
+                            xs={8}
                         >
                             <Paper
                                 className={classes.paper}
