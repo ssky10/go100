@@ -10,7 +10,7 @@
     "create-react-app": "^3.0.1",
     "firebase": "^5.11.1",
     "immutable": "^4.0.0-rc.12",
-    "node-sass": "^4.12.0",
+    "node-sass": "^7.0.0",
     "react": "^16.8.5",
     "react-dom": "^16.8.5",
     "react-redux": "^7.0.3",
